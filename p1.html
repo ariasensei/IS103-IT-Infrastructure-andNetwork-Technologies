@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IS103 - Computer Basics Review</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    .font-display {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    
+    .font-body {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #2d1b4e 0%, #3d2563 50%, #1f1235 100%);
+    }
+    
+    .card-gradient {
+      background: linear-gradient(145deg, rgba(61, 37, 99, 0.9) 0%, rgba(45, 27, 78, 0.95) 100%);
+      backdrop-filter: blur(10px);
+    }
+    
+    .glow-border {
+      box-shadow: 0 0 20px rgba(147, 51, 234, 0.2), inset 0 1px 0 rgba(88, 28, 135, 0.1);
+    }
+    
+    .section-header {
+      position: relative;
+    }
+    
+    .section-header::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #a855f7, #ec4899);
+    }
+    
+    .network-pattern {
+      background-image: 
+        radial-gradient(circle at 20% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.03) 0%, transparent 30%);
+    }
+    
+    .component-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .component-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(168, 85, 247, 0.3);
+    }
+    
+    .component-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s;
+    }
+    
+    .component-card:hover::before {
+      left: 100%;
+    }
+    
+    .real-world-box {
+      border-left: 4px solid #f59e0b;
+      padding: 1.25rem;
+      background: rgba(245, 158, 11, 0.05);
+    }
+    
+    .activity-section {
+      border-radius: 1rem;
+      padding: 1.5rem;
+      background: rgba(236, 72, 153, 0.1);
+      border: 1px solid rgba(236, 72, 153, 0.3);
+    }
+    
+    .time-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #a855f7, #ec4899);
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    
+    .ilo-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .system-unit-svg {
+      filter: drop-shadow(0 10px 20px rgba(168, 85, 247, 0.2));
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .animate-fade-in {
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+    
+    .stagger-1 { animation-delay: 0.1s; }
+    .stagger-2 { animation-delay: 0.2s; }
+    .stagger-3 { animation-delay: 0.3s; }
+    .stagger-4 { animation-delay: 0.4s; }
+    .stagger-5 { animation-delay: 0.5s; }
+    
+    .tab-button {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .tab-button.active {
+      border-bottom: 3px solid #a855f7;
+      color: #a855f7;
+    }
+    
+    .tab-button:not(.active) {
+      border-bottom: 2px solid transparent;
+      color: #9ca3af;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full font-body gradient-bg network-pattern text-gray-50">
+  <div class="h-full w-full overflow-auto">
+   <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8"><!-- Header -->
+    <header class="mb-12 animate-fade-in">
+     <div class="text-center mb-8">
+      <h1 class="font-display text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">IS103 - IT INFRASTRUCTURE AND NETWORK TECHNOLOGIES</h1>
+      <p class="text-gray-400 text-lg">Instructor: MKDB</p>
+      <p class="text-gray-500">Lyceum de San Pablo - College of Information Systems</p>
+     </div>
+    </header><!-- Week 1 Module -->
+    <section class="mb-12 animate-fade-in stagger-1">
+     <div class="flex items-center justify-between mb-8">
+      <div>
+       <div class="flex flex-wrap gap-3 mb-4"><span class="time-badge">📅 WEEK 1</span> <span class="time-badge">2 hrs Lecture + 3 hrs Lab</span>
+       </div>
+       <h2 class="font-display text-3xl sm:text-4xl font-bold section-header">Computer Basics Review</h2>
+      </div>
+     </div><!-- ILOs -->
+     <div class="card-gradient glow-border rounded-2xl p-6 sm:p-8 mb-8">
+      <h3 class="font-display text-2xl font-semibold mb-4 text-cyan-400 flex items-center gap-3"><span class="text-2xl">🎯</span> Intended Learning Outcomes (ILOs)</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+       <div class="p-4 bg-rgba(6, 182, 212, 0.1) rounded-lg border border-cyan-500/30">
+        <p class="text-gray-300 font-semibold mb-2">✓ Identify Major Computer Components</p>
+        <p class="text-gray-400 text-sm">Students will be able to recognize and name the main hardware components of a computer system</p>
+       </div>
+       <div class="p-4 bg-rgba(6, 182, 212, 0.1) rounded-lg border border-cyan-500/30">
+        <p class="text-gray-300 font-semibold mb-2">✓ Explain System Unit Functions</p>
+        <p class="text-gray-400 text-sm">Students will understand the purpose and role of each component in the system unit</p>
+       </div>
+      </div>
+     </div><!-- Tabs -->
+     <div class="mb-8">
+      <div class="flex border-b border-gray-700 mb-6 gap-4"><button class="tab-button active px-4 py-3 font-semibold text-sm sm:text-base" data-tab="overview"> 📖 Overview </button> <button class="tab-button px-4 py-3 font-semibold text-sm sm:text-base" data-tab="components"> 🖥️ Components </button> <button class="tab-button px-4 py-3 font-semibold text-sm sm:text-base" data-tab="realworld"> 🌍 Real-World </button> <button class="tab-button px-4 py-3 font-semibold text-sm sm:text-base" data-tab="lecture"> 📚 Lecture </button> <button class="tab-button px-4 py-3 font-semibold text-sm sm:text-base" data-tab="lab"> 🔧 Lab Activity </button>
+      </div><!-- OVERVIEW TAB -->
+      <div id="overview" class="tab-content active">
+       <div class="card-gradient glow-border rounded-2xl p-6 sm:p-8">
+        <h3 class="font-display text-2xl font-semibold mb-6 text-purple-400">Computer System Overview</h3>
+        <div class="space-y-6">
+         <div class="p-6 bg-rgba(168, 85, 247, 0.1) rounded-lg border border-purple-500/30">
+          <h4 class="font-semibold text-lg text-purple-300 mb-3">What is a Computer?</h4>
+          <p class="text-gray-300 mb-3">A computer is an electronic device that processes, stores, and retrieves data. Modern computers have become essential tools in every aspect of our lives—from personal productivity to managing critical infrastructure.</p>
+          <p class="text-gray-400 text-sm">Today's IT professionals must understand the foundational hardware that supports network infrastructure, cloud services, and enterprise systems.</p>
+         </div>
+         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-4 bg-rgba(59, 130, 246, 0.1) rounded-lg border border-blue-500/30">
+           <p class="font-semibold text-blue-400 mb-2">💾 Input/Process/Output</p>
+           <p class="text-gray-400 text-sm">Computers operate on the fundamental I/O model: receive data, process it, and produce results</p>
+          </div>
+          <div class="p-4 bg-rgba(16, 185, 129, 0.1) rounded-lg border border-emerald-500/30">
+           <p class="font-semibold text-emerald-400 mb-2">⚡ Hardware &amp; Software</p>
+           <p class="text-gray-400 text-sm">Hardware provides the physical infrastructure; software provides the instructions for what to do</p>
+          </div>
+          <div class="p-4 bg-rgba(168, 85, 247, 0.1) rounded-lg border border-purple-500/30">
+           <p class="font-semibold text-purple-400 mb-2">🔄 Integration</p>
+           <p class="text-gray-400 text-sm">Modern networks rely on understanding how hardware components work together seamlessly</p>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div><!-- COMPONENTS TAB -->
+      <div id="components" class="tab-content">
+       <div class="space-y-6">
+        <h3 class="font-display text-2xl font-semibold text-purple-400">Major Computer Components</h3><!-- System Unit Diagram -->
+        <div class="card-gradient glow-border rounded-2xl p-6 sm:p-8 mb-8">
+         <h4 class="font-semibold text-lg text-cyan-400 mb-6">System Unit Components</h4>
+         <div class="bg-black/30 rounded-lg p-8 mb-6">
+          <svg viewbox="0 0 400 500" class="w-full max-w-md mx-auto system-unit-svg" xmlns="http://www.w3.org/2000/svg"><!-- System Unit Case --> <rect x="50" y="50" width="300" height="400" fill="none" stroke="#a855f7" stroke-width="3" rx="10" /> <!-- Motherboard --> <rect x="70" y="80" width="260" height="180" fill="rgba(168, 85, 247, 0.2)" stroke="#10b981" stroke-width="2" /> <text x="200" y="175" text-anchor="middle" fill="#10b981" font-weight="bold" font-size="14">
+            Motherboard
+           </text> <!-- CPU --> <rect x="80" y="100" width="60" height="60" fill="rgba(59, 130, 246, 0.3)" stroke="#3b82f6" stroke-width="2" /> <text x="110" y="138" text-anchor="middle" fill="#3b82f6" font-weight="bold" font-size="11">
+            CPU
+           </text> <!-- RAM --> <rect x="160" y="110" width="50" height="50" fill="rgba(236, 72, 153, 0.3)" stroke="#ec4899" stroke-width="2" /> <text x="185" y="142" text-anchor="middle" fill="#ec4899" font-weight="bold" font-size="10">
+            RAM
+           </text> <!-- GPU --> <rect x="230" y="110" width="60" height="50" fill="rgba(245, 158, 11, 0.3)" stroke="#f59e0b" stroke-width="2" /> <text x="260" y="142" text-anchor="middle" fill="#f59e0b" font-weight="bold" font-size="10">
+            GPU
+           </text> <!-- Power Supply --> <rect x="70" y="290" width="80" height="120" fill="rgba(168, 85, 247, 0.1)" stroke="#ec4899" stroke-width="2" /> <text x="110" y="350" text-anchor="middle" fill="#ec4899" font-weight="bold" font-size="12">
+            Power Supply
+           </text> <!-- Storage --> <rect x="170" y="290" width="80" height="120" fill="rgba(168, 85, 247, 0.1)" stroke="#06b6d4" stroke-width="2" /> <text x="210" y="335" text-anchor="middle" fill="#06b6d4" font-weight="bold" font-size="11">
+            Storage
+           </text> <text x="210" y="350" text-anchor="middle" fill="#06b6d4" font-weight="bold" font-size="10">
+            (HDD/SSD)
+           </text> <!-- Cooling System --> <rect x="270" y="290" width="80" height="120" fill="rgba(168, 85, 247, 0.1)" stroke="#a855f7" stroke-width="2" /> <text x="310" y="350" text-anchor="middle" fill="#a855f7" font-weight="bold" font-size="12">
+            Cooling
+           </text>
+          </svg>
+         </div>
+         <p class="text-gray-400 text-sm text-center">Interactive component diagram - hover over each part to learn more</p>
+        </div><!-- Component Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+         <div class="component-card card-gradient glow-border rounded-xl p-6 border border-blue-500/30">
+          <div class="flex items-start gap-4"><span class="text-3xl">🧠</span>
+           <div class="flex-1">
+            <h5 class="font-semibold text-blue-400 text-lg mb-2">CPU (Processor)</h5>
+            <p class="text-gray-400 text-sm mb-3">The "brain" of the computer - executes all instructions</p>
+            <p class="text-xs text-gray-500"><strong>Modern Reality:</strong> Multi-core processors dominate, enabling parallel processing for network applications</p>
+           </div>
+          </div>
+         </div>
+         <div class="component-card card-gradient glow-border rounded-xl p-6 border border-pink-500/30">
+          <div class="flex items-start gap-4"><span class="text-3xl">💾</span>
+           <div class="flex-1">
+            <h5 class="font-semibold text-pink-400 text-lg mb-2">RAM (Memory)</h5>
+            <p class="text-gray-400 text-sm mb-3">Temporary, high-speed storage for active programs</p>
+            <p class="text-xs text-gray-500"><strong>Modern Reality:</strong> Servers have 64GB+ RAM to handle multiple services simultaneously</p>
+           </div>
+          </div>
+         </div>
+         <div class="component-card card-gradient glow-border rounded-xl p-6 border border-cyan-500/30">
+          <div class="flex items-start gap-4"><span class="text-3xl">💿</span>
+           <div class="flex-1">
+            <h5 class="font-semibold text-cyan-400 text-lg mb-2">Storage Devices</h5>
+            <p class="text-gray-400 text-sm mb-3">Permanent storage (HDD, SSD, NVMe)</p>
+            <p class="text-xs text-gray-500"><strong>Modern Reality:</strong> Enterprise systems use NVMe SSDs for ultra-fast data access in data centers</p>
+           </div>
+          </div>
+         </div>
+         <div class="component-card card-gradient glow-border rounded-xl p-6 border border-amber-500/30">
+          <div class="flex items-start gap-4"><span class="text-3xl">⚡</span>
+           <div class="flex-1">
+            <h5 class="font-semibold text-amber-400 text-lg mb-2">Power Supply Unit (PSU)</h5>
+            <p class="text-gray-400 text-sm mb-3">Converts and distributes electrical power</p>
+            <p class="text-xs text-gray-500"><strong>Modern Reality:</strong> Redundant PSUs are critical in server infrastructure for 99.99% uptime</p>
+           </div>
+          </div>
+         </div>
+         <div class="component-card card-gradient glow-border rounded-xl p-6 border border-emerald-500/30">
+          <div class="flex items-start gap-4"><span class="text-3xl">🎮</span>
+           <div class="flex-1">
+            <h5 class="font-semibold text-emerald-400 text-lg mb-2">GPU (Graphics Card)</h5>
+            <p class="text-gray-400 text-sm mb-3">Processes graphics and parallel computations</p>
+            <p class="text-xs text-gray-500"><strong>Modern Reality:</strong> GPUs power AI/ML workloads and cryptocurrency mining infrastructure</p>
+           </div>
+          </div>
+         </div>
+         <div class="component-card card-gradient glow-border rounded-xl p-6 border border-purple-500/30">
+          <div class="flex items-start gap-4"><span class="text-3xl">🌡️</span>
+           <div class="flex-1">
+            <h5 class="font-semibold text-purple-400 text-lg mb-2">Cooling System</h5>
+            <p class="text-gray-400 text-sm mb-3">Maintains optimal operating temperatures</p>
+            <p class="text-xs text-gray-500"><strong>Modern Reality:</strong> Data centers use advanced cooling systems (liquid cooling) to manage heat from thousands of servers</p>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div><!-- REAL-WORLD TAB -->
+      <div id="realworld" class="tab-content">
+       <div class="space-y-6">
+        <h3 class="font-display text-2xl font-semibold text-amber-400">Real-World Case Studies</h3><!-- Case Study 1 -->
+        <div class="card-gradient glow-border rounded-2xl p-6 sm:p-8">
+         <div class="flex items-start gap-4 mb-4"><span class="text-4xl">🏢</span>
+          <div>
+           <h4 class="font-semibold text-xl text-amber-400 mb-2">Case Study 1: Data Center Infrastructure</h4>
+           <p class="text-gray-400">How Google, Amazon, and Microsoft build global infrastructure</p>
+          </div>
+         </div>
+         <div class="real-world-box mb-4">
+          <p class="text-gray-300 mb-3"><strong>The Challenge:</strong> Google processes over 99,000 search queries per second. Each query requires massive computational resources.</p>
+          <p class="text-gray-300 mb-3"><strong>The Solution:</strong></p>
+          <ul class="text-gray-400 text-sm space-y-2 ml-4">
+           <li>✓ Custom-built servers with optimized CPUs</li>
+           <li>✓ Massive amounts of distributed RAM across data centers</li>
+           <li>✓ NVMe SSDs for instant data retrieval</li>
+           <li>✓ Redundant power supplies with UPS backup systems</li>
+           <li>✓ Advanced cooling systems (some use water cooling)</li>
+          </ul>
+          <p class="text-gray-400 text-sm mt-3"><strong>Learning Point:</strong> Understanding component functions helps you troubleshoot network issues and plan infrastructure scalability.</p>
+         </div>
+        </div><!-- Case Study 2 -->
+        <div class="card-gradient glow-border rounded-2xl p-6 sm:p-8">
+         <div class="flex items-start gap-4 mb-4"><span class="text-4xl">🎮</span>
+          <div>
+           <h4 class="font-semibold text-xl text-purple-400 mb-2">Case Study 2: Gaming Industry Impact</h4>
+           <p class="text-gray-400">How component upgrades change the entire ecosystem</p>
+          </div>
+         </div>
+         <div class="real-world-box border-l-4 border-purple-500 bg-rgba(168, 85, 247, 0.05) mb-4">
+          <p class="text-gray-300 mb-3"><strong>The Situation:</strong> NVIDIA's RTX 4090 GPU was released in October 2022, causing shortages and price inflation.</p>
+          <p class="text-gray-300 mb-3"><strong>Real-World Impact:</strong></p>
+          <ul class="text-gray-400 text-sm space-y-2 ml-4">
+           <li>✓ AI/ML researchers couldn't get GPUs for model training</li>
+           <li>✓ Cloud providers (AWS, Azure) had to adjust pricing</li>
+           <li>✓ Network bandwidth increased due to GPU compute workloads</li>
+           <li>✓ Data centers redesigned cooling systems for GPU density</li>
+          </ul>
+          <p class="text-gray-400 text-sm mt-3"><strong>Your Role:</strong> As an IT Infrastructure professional, you'll need to understand component limitations to design appropriate network bandwidth and power management.</p>
+         </div>
+        </div><!-- Case Study 3 -->
+        <div class="card-gradient glow-border rounded-2xl p-6 sm:p-8">
+         <div class="flex items-start gap-4 mb-4"><span class="text-4xl">🌍</span>
+          <div>
+           <h4 class="font-semibold text-xl text-cyan-400 mb-2">Case Study 3: Philippines' Tech Infrastructure</h4>
+           <p class="text-gray-400">Local IT challenges and opportunities</p>
+          </div>
+         </div>
+         <div class="real-world-box border-l-4 border-cyan-500 bg-rgba(6, 182, 212, 0.05) mb-4">
+          <p class="text-gray-300 mb-3"><strong>Current Scenario:</strong> The Philippines is a growing BPO hub with increasing demand for IT infrastructure.</p>
+          <p class="text-gray-300 mb-3"><strong>Challenges &amp; Opportunities:</strong></p>
+          <ul class="text-gray-400 text-sm space-y-2 ml-4">
+           <li>✓ Power fluctuations require robust PSU systems</li>
+           <li>✓ Heat and humidity demand efficient cooling solutions</li>
+           <li>✓ Rising demand for local data centers creates job opportunities</li>
+           <li>✓ Companies like Globe Telecom and PLDT expanding infrastructure</li>
+          </ul>
+          <p class="text-gray-400 text-sm mt-3"><strong>Career Path:</strong> Understanding computer hardware fundamentals opens doors to server administration, data center management, and network infrastructure roles in the Philippine tech industry.</p>
+         </div>
+        </div>
+       </div>
+      </div><!-- LECTURE TAB -->
+      <div id="lecture" class="tab-content">
+       <div class="space-y-6">
+        <h3 class="font-display text-2xl font-semibold text-emerald-400">Lecture Notes (2 Hours)</h3>
+        <div class="card-gradient glow-border rounded-2xl p-6 sm:p-8">
+         <div class="space-y-8"><!-- Hour 1 -->
+          <div>
+           <div class="flex items-center gap-3 mb-4"><span class="text-2xl">⏱️</span>
+            <h4 class="font-semibold text-xl text-emerald-400">Hour 1: Foundations &amp; System Overview (60 minutes)</h4>
+           </div>
+           <div class="space-y-4 ml-4">
+            <div class="p-4 bg-rgba(16, 185, 129, 0.1) rounded-lg border border-emerald-500/30">
+             <p class="font-semibold text-emerald-300 mb-2">🎯 Segment 1: What is a Computer? (15 min)</p>
+             <ul class="text-gray-400 text-sm space-y-1 ml-4">
+              <li>• Definition and basic concept</li>
+              <li>• Historical evolution (room-sized to pocket-sized)</li>
+              <li>• Classification (Personal, Workstation, Server, Mainframe)</li>
+              <li>• Why this matters for networking professionals</li>
+             </ul>
+            </div>
+            <div class="p-4 bg-rgba(16, 185, 129, 0.1) rounded-lg border border-emerald-500/30">
+             <p class="font-semibold text-emerald-300 mb-2">🔧 Segment 2: System Unit Overview (20 min)</p>
+             <ul class="text-gray-400 text-sm space-y-1 ml-4">
+              <li>• What goes inside a system unit</li>
+              <li>• Motherboard as the central hub</li>
+              <li>• Form factors (ATX, Mini-ITX, BTX)</li>
+              <li>• Internal vs. External components</li>
+              <li>• <strong>Interactive Demo:</strong> Show actual system unit images</li>
+             </ul>
+            </div>
+            <div class="p-4 bg-rgba(16, 185, 129, 0.1) rounded-lg border border-emerald-500/30">
+             <p class="font-semibold text-emerald-300 mb-2">💡 Segment 3: Component Functions Intro (25 min)</p>
+             <ul class="text-gray-400 text-sm space-y-1 ml-4">
+              <li>• CPU/Processor roles and specifications</li>
+              <li>• Memory hierarchy (CPU cache → RAM → Storage)</li>
+              <li>• Input/Output understanding</li>
+              <li>• <strong>Key Concept:</strong> Tell students "You'll need to memorize component locations for the lab activity - watch carefully!"</li>
+             </ul>
+            </div>
+           </div>
+          </div><!-- Hour 2 -->
+          <div>
+           <div class="flex items-center gap-3 mb-4"><span class="text-2xl">⏱️</span>
+            <h4 class="font-semibold text-xl text-purple-400">Hour 2: Deep Dive into Components (60 minutes)</h4>
+           </div>
+           <div class="space-y-4 ml-4">
+            <div class="p-4 bg-rgba(168, 85, 247, 0.1) rounded-lg border border-purple-500/30">
+             <p class="font-semibold text-purple-300 mb-2">🧠 Segment 4: Processing Components (20 min)</p>
+             <ul class="text-gray-400 text-sm space-y-1 ml-4">
+              <li>• CPU specifications (Cores, Threads, GHz, Cache)</li>
+              <li>• GPU and its increasing importance</li>
+              <li>• Comparing Intel vs AMD processors</li>
+              <li>• Current market leaders (2024)</li>
+             </ul>
+            </div>
+            <div class="p-4 bg-rgba(168, 85, 247, 0.1) rounded-lg border border-purple-500/30">
+             <p class="font-semibold text-purple-300 mb-2">💾 Segment 5: Memory &amp; Storage (20 min)</p>
+             <ul class="text-gray-400 text-sm space-y-1 ml-4">
+              <li>• RAM types (DDR4, DDR5, ECC RAM)</li>
+              <li>• Storage technologies (HDD vs SSD vs NVMe)</li>
+              <li>• Speed comparisons and why it matters</li>
+              <li>• Enterprise vs Consumer grade</li>
+             </ul>
+            </div>
+            <div class="p-4 bg-rgba(168, 85, 247, 0.1) rounded-lg border border-purple-500/30">
+             <p class="font-semibold text-purple-300 mb-2">⚡ Segment 6: Power &amp; Cooling (15 min)</p>
+             <ul class="text-gray-400 text-sm space-y-1 ml-4">
+              <li>• Power supply requirements and calculations</li>
+              <li>• Redundancy in enterprise systems</li>
+              <li>• Thermal management importance</li>
+              <li>• Server room requirements</li>
+             </ul>
+            </div>
+            <div class="p-4 bg-rgba(168, 85, 247, 0.1) rounded-lg border border-purple-500/30">
+             <p class="font-semibold text-purple-300 mb-2">🎯 Segment 7: Review &amp; Lab Preparation (5 min)</p>
+             <ul class="text-gray-400 text-sm space-y-1 ml-4">
+              <li>• Q&amp;A Session</li>
+              <li>• <strong>Pre-Lab Activity:</strong> Show students the unlabeled system unit diagram they'll use in lab</li>
+              <li>• "Get familiar with component locations - your memory will be tested!"</li>
+             </ul>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div><!-- Teaching Tips -->
+        <div class="card-gradient glow-border rounded-2xl p-6 sm:p-8 border border-amber-500/30">
+         <h4 class="font-semibold text-lg text-amber-400 mb-4">💡 Teaching Tips</h4>
+         <ul class="text-gray-300 space-y-2 text-sm">
+          <li>✓ Use visual aids and component samples if available</li>
+          <li>✓ Emphasize that students MUST memorize component locations</li>
+          <li>✓ Connect each component to real-world networking scenarios</li>
+          <li>✓ Show how component failure affects network services</li>
+          <li>✓ Use the real-world case studies to engage students</li>
+         </ul>
+        </div>
+       </div>
+      </div><!-- LAB ACTIVITY TAB -->
+      <div id="lab" class="tab-content">
+       <div class="space-y-6">
+        <h3 class="font-display text-2xl font-semibold text-pink-400">Lab Activity (3 Hours)</h3><!-- Lab Overview -->
+        <div class="card-gradient glow-border rounded-2xl p-6 sm:p-8 mb-6">
+         <h4 class="font-semibold text-lg text-pink-400 mb-4">🔬 Lab Activity: "Blind Identification Challenge"</h4>
+         <div class="activity-section">
+          <p class="text-gray-300 mb-4"><strong>Objective:</strong> Students will draw and label computer components from memory without looking at reference materials, then identify real components by touch and sight.</p>
+          <div class="mt-4 pt-4 border-t border-pink-500/30">
+           <p class="text-gray-300 mb-3"><strong>Format:</strong> Can be Individual or Group (2-3 students per group)</p>
+           <p class="text-gray-400 text-sm">This activity tests comprehension and creates peer learning opportunities</p>
+          </div>
+         </div>
+        </div><!-- Phase 1 -->
+        <div class="card-gradient glow-border rounded-2xl p-6 sm:p-8">
+         <div class="flex items-start gap-4 mb-4"><span class="text-3xl">1️⃣</span>
+          <div>
+           <h4 class="font-semibold text-xl text-cyan-400">Phase 1: Blind Drawing (60 minutes)</h4>
+           <p class="text-gray-400">No reference materials allowed</p>
+          </div>
+         </div>
+         <div class="space-y-4 ml-8">
+          <div class="p-4 bg-rgba(6, 182, 212, 0.1) rounded-lg">
+           <p class="font-semibold text-cyan-300 mb-2">📋 Task:</p>
+           <p class="text-gray-300 text-sm mb-3">Students draw a labeled system unit showing:</p>
+           <ul class="text-gray-400 text-sm space-y-1 ml-4">
+            <li>✓ System unit case outline</li>
+            <li>✓ Motherboard position</li>
+            <li>✓ CPU location</li>
+            <li>✓ RAM slots</li>
+            <li>✓ GPU/expansion slots</li>
+            <li>✓ Storage drives</li>
+            <li>✓ Power supply location</li>
+            <li>✓ Cooling fan placement</li>
+           </ul>
+          </div>
+          <div class="p-4 bg-rgba(6, 182, 212, 0.1) rounded-lg border-l-4 border-cyan-500">
+           <p class="font-semibold text-cyan-300 mb-2">🎯 Evaluation Criteria (Phase 1):</p>
+           <ul class="text-gray-400 text-sm space-y-1 ml-4">
+            <li>• Correct component placement: 40 points</li>
+            <li>• Proper labeling: 30 points</li>
+            <li>• Drawing clarity: 20 points</li>
+            <li>• Completeness: 10 points</li>
+            <li><strong>Total: 100 points</strong></li>
+           </ul>
+          </div>
+         </div>
+        </div><!-- Phase 2 -->
+        <div class="card-gradient glow-border rounded-2xl p-6 sm:p-8">
+         <div class="flex items-start gap-4 mb-4"><span class="text-3xl">2️⃣</span>
+          <div>
+           <h4 class="font-semibold text-xl text-emerald-400">Phase 2: Physical Component Identification (90 minutes)</h4>
+           <p class="text-gray-400">Hands-on component recognition</p>
+          </div>
+         </div>
+         <div class="space-y-4 ml-8">
+          <div class="p-4 bg-rgba(16, 185, 129, 0.1) rounded-lg">
+           <p class="font-semibold text-emerald-300 mb-2">🔧 Activity Setup:</p>
+           <ul class="text-gray-400 text-sm space-y-2 ml-4">
+            <li>✓ Prepare a disassembled system unit with labeled components</li>
+            <li>✓ Each student/group gets 30 seconds per component</li>
+            <li>✓ They can touch, examine, but not flip components over</li>
+            <li>✓ Document observations on provided worksheet</li>
+           </ul>
+          </div>
+          <div class="p-4 bg-rgba(16, 185, 129, 0.1) rounded-lg border-l-4 border-emerald-500">
+           <p class="font-semibold text-emerald-300 mb-2">   Component Stations:</p>
+           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+            <div class="p-3 bg-black/20 rounded">
+             <p class="text-emerald-400 font-semibold mb-1">Station 1: CPU</p>
+             <p class="text-gray-400 text-xs">Identify: Type, Socket, Specs</p>
+            </div>
+            <div class="p-3 bg-black/20 rounded">
+             <p class="text-emerald-400 font-semibold mb-1">Station 2: RAM</p>
+             <p class="text-gray-400 text-xs">Identify: Type (DDR4/5), Speed, Capacity</p>
+            </div>
+            <div class="p-3 bg-black/20 rounded">
+             <p class="text-emerald-400 font-semibold mb-1">Station 3: Storage</p>
+             <p class="text-gray-400 text-xs">Identify: HDD vs SSD, Form Factor</p>
+            </div>
+            <div class="p-3 bg-black/20 rounded">
+             <p class="text-emerald-400 font-semibold mb-1">Station 4: PSU</p>
+             <p class="text-gray-400 text-xs">Identify: Wattage, Connector Types</p>
+            </div>
+            <div class="p-3 bg-black/20 rounded">
+             <p class="text-emerald-400 font-semibold mb-1">Station 5: GPU</p>
+             <p class="text-gray-400 text-xs">Identify: Type, VRAM, Bus Interface</p>
+            </div>
+            <div class="p-3 bg-black/20 rounded">
+             <p class="text-emerald-400 font-semibold mb-1">Station 6: Motherboard</p>
+             <p class="text-gray-400 text-xs">Identify: Form Factor, Chipset, Connections</p>
+            </div>
+           </div>
+          </div>
+          <div class="p-4 bg-rgba(16, 185, 129, 0.1) rounded-lg border-l-4 border-emerald-500">
+           <p class="font-semibold text-emerald-300 mb-2">🎯 Evaluation Criteria (Phase 2):</p>
+           <ul class="text-gray-400 text-sm space-y-1 ml-4">
+            <li>• Component identification accuracy: 50 points</li>
+            <li>• Specification accuracy: 30 points</li>
+            <li>• Worksheet completion: 20 points</li>
+            <li><strong>Total: 100 points</strong></li>
+           </ul>
+          </div>
+         </div>
+        </div><!-- Phase 3 -->
+        <div class="card-gradient glow-border rounded-2xl p-6 sm:p-8">
+         <div class="flex items-start gap-4 mb-4"><span class="text-3xl">3️⃣</span>
+          <div>
+           <h4 class="font-semibold text-xl text-purple-400">Phase 3: System Assembly &amp; Documentation (30 minutes)</h4>
+           <p class="text-gray-400">Putting it all together</p>
+          </div>
+         </div>
+         <div class="space-y-4 ml-8">
+          <div class="p-4 bg-rgba(168, 85, 247, 0.1) rounded-lg">
+           <p class="font-semibold text-purple-300 mb-2">📝 Final Task:</p>
+           <ul class="text-gray-400 text-sm space-y-2 ml-4">
+            <li>✓ Write a 2-3 page reflection report</li>
+            <li>✓ Discuss component functions and relationships</li>
+            <li>✓ Explain why understanding components matters for networking</li>
+            <li>✓ Describe challenges encountered and how they overcame them</li>
+           </ul>
+          </div>
+          <div class="p-4 bg-rgba(168, 85, 247, 0.1) rounded-lg border-l-4 border-purple-500">
+           <p class="font-semibold text-purple-300 mb-2">📊 Grading Breakdown:</p>
+           <div class="space-y-2">
+            <div class="flex justify-between text-gray-200 text-sm"><span>Phase 1 (Blind Drawing)</span> <span class="font-semibold">10 pts</span>
+            </div>
+            <div class="flex justify-between text-gray-200 text-sm"><span>Phase 2 (Physical Identification)</span> <span class="font-semibold">10 pts</span>
+            </div>
+            <div class="flex justify-between text-gray-200 text-sm"><span>Phase 3 (Report)</span> <span class="font-semibold">5 pts</span>
+            </div>
+            <div class="flex justify-between text-gray-50 text-sm pt-2 border-t border-purple-500/30"><span><strong>Total Activity Score</strong></span> <span class="font-semibold">25 pts</span>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div><!-- Lab Safety & Tips -->
+        <div class="card-gradient glow-border rounded-2xl p-6 sm:p-8 border border-amber-500/30">
+         <h4 class="font-semibold text-lg text-amber-400 mb-4">⚠️ Lab Safety &amp; Important Notes</h4>
+         <div class="space-y-4">
+          <div>
+           <p class="text-amber-300 font-semibold mb-2">Safety Precautions:</p>
+           <ul class="text-gray-400 text-sm space-y-1 ml-4">
+            <li>✓ No power supplies should be connected</li>
+            <li>✓ Avoid touching component pins and connectors</li>
+            <li>✓ Use anti-static wrist strap if handling sensitive components</li>
+            <li>✓ Report any damaged components immediately</li>
+           </ul>
+          </div>
+          <div>
+           <p class="text-emerald-300 font-semibold mb-2">Teaching Tips:</p>
+           <ul class="text-gray-400 text-sm space-y-1 ml-4">
+            <li>✓ Circulate during activity to provide feedback</li>
+            <li>✓ Ask probing questions: "Why do you think this component is here?"</li>
+            <li>✓ Encourage peer discussion and learning</li>
+            <li>✓ Connect findings back to networking concepts</li>
+           </ul>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- Footer -->
+    <footer class="text-center text-gray-500 text-sm pb-8 mt-16 border-t border-gray-700 pt-8">
+     <p class="mb-2">IS103 - IT Infrastructure and Network Technologies</p>
+     <p>© 2026 Lyceum de San Pablo - College of Information Systems</p>
+    </footer>
+   </div>
+  </div>
+  <script>
+    // Tab functionality
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const tabName = button.getAttribute('data-tab');
+        
+        // Remove active class from all buttons and contents
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+        
+        // Add active class to clicked button and corresponding content
+        button.classList.add('active');
+        document.getElementById(tabName).classList.add('active');
+      });
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c4e28515188dd51',t:'MTc2OTU3ODg1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

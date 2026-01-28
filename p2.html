@@ -1,0 +1,1477 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IS103 - Week 2: System Unit Assembly &amp; Networking Fundamentals</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    }
+    
+    .card-gradient {
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    .glow {
+      box-shadow: 0 0 30px rgba(59, 130, 246, 0.15);
+    }
+    
+    .nav-item {
+      transition: all 0.3s ease;
+    }
+    
+    .nav-item:hover {
+      transform: translateX(4px);
+    }
+    
+    .nav-item.active {
+      background: linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, transparent 100%);
+      border-left: 3px solid #3b82f6;
+    }
+    
+    .component-card {
+      transition: all 0.3s ease;
+    }
+    
+    .component-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 40px rgba(59, 130, 246, 0.2);
+    }
+    
+    .pulse-dot {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .slide-in {
+      animation: slideIn 0.5s ease forwards;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .quiz-option {
+      transition: all 0.2s ease;
+    }
+    
+    .quiz-option:hover:not(.selected):not(.correct):not(.incorrect) {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.1);
+    }
+    
+    .quiz-option.selected {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.2);
+    }
+    
+    .quiz-option.correct {
+      border-color: #22c55e;
+      background: rgba(34, 197, 94, 0.2);
+    }
+    
+    .quiz-option.incorrect {
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.2);
+    }
+    
+    .progress-bar {
+      transition: width 0.5s ease;
+    }
+    
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #3b82f6;
+      border-radius: 4px;
+    }
+    
+    .tab-btn {
+      transition: all 0.3s ease;
+    }
+    
+    .tab-btn.active {
+      background: #3b82f6;
+      color: white;
+    }
+    
+    .assembly-step {
+      transition: all 0.3s ease;
+    }
+    
+    .assembly-step.completed {
+      border-color: #22c55e;
+    }
+    
+    .assembly-step.completed .step-icon {
+      background: #22c55e;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full gradient-bg text-gray-100 overflow-auto">
+  <div id="app" class="h-full w-full"><!-- Header -->
+   <header id="main-header" class="bg-slate-900/80 backdrop-blur-sm border-b border-blue-500/20 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4">
+     <div class="flex items-center justify-between">
+      <div class="flex items-center gap-4">
+       <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
+        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+       </div>
+       <div>
+        <h1 id="header-title" class="text-xl font-bold text-white">IS103 - IT Infrastructure &amp; Network Technologies</h1>
+        <p class="text-sm text-blue-400">Week 2: System Unit Assembly &amp; Networking Fundamentals</p>
+       </div>
+      </div>
+      <div class="text-right hidden md:block">
+       <p id="header-instructor" class="text-sm text-gray-400">Instructor: <span class="text-cyan-400 font-medium">MKDB</span></p>
+       <p id="header-institution" class="text-xs text-gray-500">Lyceum de San Pablo - College of Information Systems</p>
+      </div>
+     </div>
+    </div>
+   </header>
+   <div class="flex h-full"><!-- Sidebar Navigation -->
+    <nav class="w-64 bg-slate-900/50 border-r border-blue-500/10 hidden lg:block fixed top-20 left-0 bottom-0 overflow-y-auto">
+     <div class="p-4">
+      <div class="mb-6">
+       <div class="flex items-center gap-2 mb-2"><span class="pulse-dot w-2 h-2 rounded-full bg-green-400"></span> <span class="text-xs text-green-400 uppercase tracking-wider">Module Progress</span>
+       </div>
+       <div class="w-full bg-slate-700 rounded-full h-2">
+        <div id="progress-bar" class="progress-bar bg-gradient-to-r from-blue-500 to-cyan-400 h-2 rounded-full" style="width: 0%"></div>
+       </div>
+       <p id="progress-text" class="text-xs text-gray-400 mt-1">0% Complete</p>
+      </div>
+      <div class="space-y-1"><button onclick="showSection('overview')" class="nav-item active w-full text-left px-4 py-3 rounded-lg text-sm flex items-center gap-3" data-section="overview"> <span class="text-lg">📋</span> <span>Module Overview</span> </button> <button onclick="showSection('lecture1')" class="nav-item w-full text-left px-4 py-3 rounded-lg text-sm flex items-center gap-3" data-section="lecture1"> <span class="text-lg">🔧</span> <span>Lecture: Assembly</span> </button> <button onclick="showSection('lecture2')" class="nav-item w-full text-left px-4 py-3 rounded-lg text-sm flex items-center gap-3" data-section="lecture2"> <span class="text-lg">🌐</span> <span>Lecture: Networking</span> </button> <button onclick="showSection('casestudy')" class="nav-item w-full text-left px-4 py-3 rounded-lg text-sm flex items-center gap-3" data-section="casestudy"> <span class="text-lg">📰</span> <span>Case Study</span> </button> <button onclick="showSection('lab')" class="nav-item w-full text-left px-4 py-3 rounded-lg text-sm flex items-center gap-3" data-section="lab"> <span class="text-lg">🧪</span> <span>Lab Activity</span> </button> <button onclick="showSection('quiz')" class="nav-item w-full text-left px-4 py-3 rounded-lg text-sm flex items-center gap-3" data-section="quiz"> <span class="text-lg">✅</span> <span>Knowledge Check</span> </button>
+      </div>
+     </div>
+    </nav><!-- Mobile Navigation -->
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-sm border-t border-blue-500/20 z-50">
+     <div class="flex justify-around py-2"><button onclick="showSection('overview')" class="flex flex-col items-center p-2 text-xs" data-section="overview"> <span class="text-xl">📋</span> <span class="text-gray-400">Overview</span> </button> <button onclick="showSection('lecture1')" class="flex flex-col items-center p-2 text-xs" data-section="lecture1"> <span class="text-xl">🔧</span> <span class="text-gray-400">Assembly</span> </button> <button onclick="showSection('lecture2')" class="flex flex-col items-center p-2 text-xs" data-section="lecture2"> <span class="text-xl">🌐</span> <span class="text-gray-400">Network</span> </button> <button onclick="showSection('lab')" class="flex flex-col items-center p-2 text-xs" data-section="lab"> <span class="text-xl">🧪</span> <span class="text-gray-400">Lab</span> </button> <button onclick="showSection('quiz')" class="flex flex-col items-center p-2 text-xs" data-section="quiz"> <span class="text-xl">✅</span> <span class="text-gray-400">Quiz</span> </button>
+     </div>
+    </div><!-- Main Content -->
+    <main class="flex-1 lg:ml-64 pb-20 lg:pb-8"><!-- Overview Section -->
+     <section id="overview" class="section-content p-6 max-w-5xl mx-auto">
+      <div class="slide-in">
+       <div class="card-gradient rounded-2xl p-8 glow mb-8">
+        <div class="flex items-start gap-4 mb-6">
+         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-3xl">
+          📚
+         </div>
+         <div>
+          <h2 class="text-2xl font-bold text-white mb-2">Week 2: Module Overview</h2>
+          <p class="text-gray-400">System Unit Assembly &amp; Networking Fundamentals</p>
+         </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+         <div class="bg-slate-800/50 rounded-xl p-5 border border-blue-500/10">
+          <h3 class="text-lg font-semibold text-cyan-400 mb-3 flex items-center gap-2"><span>🎯</span> Intended Learning Outcomes</h3>
+          <ul class="space-y-2 text-gray-300 text-sm">
+           <li class="flex items-start gap-2"><span class="text-green-400 mt-1">✓</span> <span>Assemble a basic system unit correctly following proper procedures</span></li>
+           <li class="flex items-start gap-2"><span class="text-green-400 mt-1">✓</span> <span>Apply safety procedures when handling computer components</span></li>
+           <li class="flex items-start gap-2"><span class="text-green-400 mt-1">✓</span> <span>Explain basic networking and data transmission concepts</span></li>
+           <li class="flex items-start gap-2"><span class="text-green-400 mt-1">✓</span> <span>Identify different types of computer networks</span></li>
+          </ul>
+         </div>
+         <div class="bg-slate-800/50 rounded-xl p-5 border border-blue-500/10">
+          <h3 class="text-lg font-semibold text-purple-400 mb-3 flex items-center gap-2"><span>⏰</span> Time Allocation</h3>
+          <div class="space-y-3">
+           <div class="flex items-center justify-between bg-slate-700/50 rounded-lg p-3"><span class="text-gray-300">Lecture Session</span> <span class="text-blue-400 font-mono font-bold">2 Hours</span>
+           </div>
+           <div class="flex items-center justify-between bg-slate-700/50 rounded-lg p-3"><span class="text-gray-300">Laboratory Session</span> <span class="text-cyan-400 font-mono font-bold">3 Hours</span>
+           </div>
+           <div class="flex items-center justify-between bg-slate-700/50 rounded-lg p-3"><span class="text-gray-300">Total</span> <span class="text-green-400 font-mono font-bold">5 Hours</span>
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="bg-gradient-to-r from-amber-500/10 to-orange-500/10 rounded-xl p-5 border border-amber-500/20">
+         <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center gap-2"><span>📌</span> Topics Covered</h3>
+         <div class="grid md:grid-cols-2 gap-4">
+          <div>
+           <h4 class="text-sm font-medium text-gray-300 mb-2">Part 1: System Unit Assembly</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• Computer components identification</li>
+            <li>• Safety procedures &amp; ESD prevention</li>
+            <li>• Step-by-step assembly process</li>
+            <li>• POST and troubleshooting basics</li>
+           </ul>
+          </div>
+          <div>
+           <h4 class="text-sm font-medium text-gray-300 mb-2">Part 2: Networking Fundamentals</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• Data transmission basics</li>
+            <li>• Network types (LAN, WAN, MAN)</li>
+            <li>• Network topologies</li>
+            <li>• Basic networking devices</li>
+           </ul>
+          </div>
+         </div>
+        </div>
+       </div><!-- Quick Start Guide -->
+       <div class="card-gradient rounded-2xl p-6">
+        <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><span>🚀</span> How to Use This Module</h3>
+        <div class="grid md:grid-cols-3 gap-4">
+         <div class="bg-slate-800/50 rounded-xl p-4 text-center">
+          <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-3"><span class="text-2xl">1️⃣</span>
+          </div>
+          <h4 class="font-medium text-gray-200 mb-1">Read the Lectures</h4>
+          <p class="text-xs text-gray-400">Go through both lecture sections to understand the concepts</p>
+         </div>
+         <div class="bg-slate-800/50 rounded-xl p-4 text-center">
+          <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-3"><span class="text-2xl">2️⃣</span>
+          </div>
+          <h4 class="font-medium text-gray-200 mb-1">Study the Case</h4>
+          <p class="text-xs text-gray-400">Analyze real-world scenarios and applications</p>
+         </div>
+         <div class="bg-slate-800/50 rounded-xl p-4 text-center">
+          <div class="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center mx-auto mb-3"><span class="text-2xl">3️⃣</span>
+          </div>
+          <h4 class="font-medium text-gray-200 mb-1">Complete Lab &amp; Quiz</h4>
+          <p class="text-xs text-gray-400">Apply your knowledge in hands-on activities</p>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section><!-- Lecture 1: System Unit Assembly -->
+     <section id="lecture1" class="section-content hidden p-6 max-w-5xl mx-auto">
+      <div class="slide-in">
+       <div class="card-gradient rounded-2xl p-8 glow mb-6">
+        <div class="flex items-center gap-4 mb-6">
+         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-2xl">
+          🔧
+         </div>
+         <div>
+          <h2 class="text-2xl font-bold text-white">Part 1: System Unit Assembly</h2>
+          <p class="text-gray-400">Lecture Duration: 1 Hour</p>
+         </div>
+        </div><!-- Safety Section -->
+        <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-5 mb-6">
+         <h3 class="text-lg font-bold text-red-400 mb-3 flex items-center gap-2"><span>⚠️</span> Safety Procedures First!</h3>
+         <div class="grid md:grid-cols-2 gap-4">
+          <div>
+           <h4 class="font-medium text-gray-200 mb-2">ESD (Electrostatic Discharge) Prevention</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• Always wear an anti-static wrist strap</li>
+            <li>• Work on an anti-static mat</li>
+            <li>• Touch a grounded metal object before handling</li>
+            <li>• Handle components by edges only</li>
+            <li>• Keep components in anti-static bags until needed</li>
+           </ul>
+          </div>
+          <div>
+           <h4 class="font-medium text-gray-200 mb-2">General Safety Rules</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• Disconnect power before working</li>
+            <li>• Keep workspace clean and organized</li>
+            <li>• Use proper tools (magnetic screwdriver, etc.)</li>
+            <li>• Never force components into slots</li>
+            <li>• Document cable connections before disconnecting</li>
+           </ul>
+          </div>
+         </div>
+        </div><!-- Components Section -->
+        <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><span>🖥️</span> Essential Components</h3>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+         <div class="component-card bg-slate-800/50 rounded-xl p-4 border border-blue-500/20">
+          <div class="flex items-center gap-3 mb-3">
+           <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+            </svg>
+           </div>
+           <h4 class="font-semibold text-gray-200">CPU (Processor)</h4>
+          </div>
+          <p class="text-sm text-gray-400">The "brain" of the computer. Handles all calculations and instructions. Modern CPUs: Intel Core i9, AMD Ryzen 9</p>
+          <div class="mt-3 text-xs text-cyan-400">
+           💡 Handle by edges, align with socket markers
+          </div>
+         </div>
+         <div class="component-card bg-slate-800/50 rounded-xl p-4 border border-green-500/20">
+          <div class="flex items-center gap-3 mb-3">
+           <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
+            <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+           </div>
+           <h4 class="font-semibold text-gray-200">Motherboard</h4>
+          </div>
+          <p class="text-sm text-gray-400">The main circuit board connecting all components. Contains CPU socket, RAM slots, expansion slots, and chipset.</p>
+          <div class="mt-3 text-xs text-cyan-400">
+           💡 Install standoffs first to prevent short circuits
+          </div>
+         </div>
+         <div class="component-card bg-slate-800/50 rounded-xl p-4 border border-purple-500/20">
+          <div class="flex items-center gap-3 mb-3">
+           <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+            </svg>
+           </div>
+           <h4 class="font-semibold text-gray-200">RAM (Memory)</h4>
+          </div>
+          <p class="text-sm text-gray-400">Temporary storage for active programs. Current standard: DDR5 (4800-8400 MHz). More RAM = better multitasking.</p>
+          <div class="mt-3 text-xs text-cyan-400">
+           💡 Align notch with slot, push until clips snap
+          </div>
+         </div>
+         <div class="component-card bg-slate-800/50 rounded-xl p-4 border border-yellow-500/20">
+          <div class="flex items-center gap-3 mb-3">
+           <div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+            <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+            </svg>
+           </div>
+           <h4 class="font-semibold text-gray-200">Storage (SSD/HDD)</h4>
+          </div>
+          <p class="text-sm text-gray-400">Permanent data storage. NVMe SSDs (7000+ MB/s) vs SATA SSDs (550 MB/s) vs HDDs (150 MB/s).</p>
+          <div class="mt-3 text-xs text-cyan-400">
+           💡 NVMe goes in M.2 slot, SATA needs data + power cables
+          </div>
+         </div>
+         <div class="component-card bg-slate-800/50 rounded-xl p-4 border border-red-500/20">
+          <div class="flex items-center gap-3 mb-3">
+           <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
+            <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+           </div>
+           <h4 class="font-semibold text-gray-200">Power Supply (PSU)</h4>
+          </div>
+          <p class="text-sm text-gray-400">Converts AC to DC power. Choose wattage based on components. 80+ Gold efficiency recommended.</p>
+          <div class="mt-3 text-xs text-cyan-400">
+           💡 Calculate total wattage, add 20% headroom
+          </div>
+         </div>
+         <div class="component-card bg-slate-800/50 rounded-xl p-4 border border-cyan-500/20">
+          <div class="flex items-center gap-3 mb-3">
+           <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center">
+            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+           </div>
+           <h4 class="font-semibold text-gray-200">Case (Chassis)</h4>
+          </div>
+          <p class="text-sm text-gray-400">Houses all components. Consider: form factor (ATX, mATX, ITX), airflow, cable management, front I/O.</p>
+          <div class="mt-3 text-xs text-cyan-400">
+           💡 Match case size with motherboard form factor
+          </div>
+         </div>
+        </div><!-- Assembly Steps -->
+        <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><span>📝</span> Assembly Steps (Proper Order)</h3>
+        <div class="space-y-3" id="assembly-steps">
+         <div class="assembly-step bg-slate-800/50 rounded-lg p-4 border border-slate-600/50 flex items-start gap-4">
+          <div class="step-icon w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold flex-shrink-0">
+           1
+          </div>
+          <div>
+           <h4 class="font-semibold text-gray-200">Prepare Workspace &amp; Install CPU</h4>
+           <p class="text-sm text-gray-400 mt-1">Set up anti-static measures. Lift CPU socket lever, align CPU triangle marker with socket marker, gently place CPU (zero force), close lever.</p>
+          </div>
+         </div>
+         <div class="assembly-step bg-slate-800/50 rounded-lg p-4 border border-slate-600/50 flex items-start gap-4">
+          <div class="step-icon w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold flex-shrink-0">
+           2
+          </div>
+          <div>
+           <h4 class="font-semibold text-gray-200">Install CPU Cooler</h4>
+           <p class="text-sm text-gray-400 mt-1">Apply thermal paste (pea-sized dot) if not pre-applied. Mount cooler, connect fan header to CPU_FAN on motherboard.</p>
+          </div>
+         </div>
+         <div class="assembly-step bg-slate-800/50 rounded-lg p-4 border border-slate-600/50 flex items-start gap-4">
+          <div class="step-icon w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold flex-shrink-0">
+           3
+          </div>
+          <div>
+           <h4 class="font-semibold text-gray-200">Install RAM</h4>
+           <p class="text-sm text-gray-400 mt-1">Open slot clips, align RAM notch, insert at slight angle, push down firmly until clips snap. Use slots A2/B2 for dual-channel.</p>
+          </div>
+         </div>
+         <div class="assembly-step bg-slate-800/50 rounded-lg p-4 border border-slate-600/50 flex items-start gap-4">
+          <div class="step-icon w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold flex-shrink-0">
+           4
+          </div>
+          <div>
+           <h4 class="font-semibold text-gray-200">Install M.2 SSD (if applicable)</h4>
+           <p class="text-sm text-gray-400 mt-1">Remove M.2 heatsink, insert SSD at 30° angle into slot, push down and secure with screw, replace heatsink.</p>
+          </div>
+         </div>
+         <div class="assembly-step bg-slate-800/50 rounded-lg p-4 border border-slate-600/50 flex items-start gap-4">
+          <div class="step-icon w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold flex-shrink-0">
+           5
+          </div>
+          <div>
+           <h4 class="font-semibold text-gray-200">Prepare Case &amp; Install Motherboard</h4>
+           <p class="text-sm text-gray-400 mt-1">Install I/O shield, mount standoffs matching motherboard holes, carefully lower motherboard, secure with screws (don't overtighten).</p>
+          </div>
+         </div>
+         <div class="assembly-step bg-slate-800/50 rounded-lg p-4 border border-slate-600/50 flex items-start gap-4">
+          <div class="step-icon w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold flex-shrink-0">
+           6
+          </div>
+          <div>
+           <h4 class="font-semibold text-gray-200">Install PSU</h4>
+           <p class="text-sm text-gray-400 mt-1">Mount PSU (fan facing down/up based on case design), secure with screws. Route cables before connecting.</p>
+          </div>
+         </div>
+         <div class="assembly-step bg-slate-800/50 rounded-lg p-4 border border-slate-600/50 flex items-start gap-4">
+          <div class="step-icon w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold flex-shrink-0">
+           7
+          </div>
+          <div>
+           <h4 class="font-semibold text-gray-200">Connect Power Cables</h4>
+           <p class="text-sm text-gray-400 mt-1">24-pin ATX to motherboard, 8-pin CPU power (top-left of board), GPU power (if needed), SATA power to drives.</p>
+          </div>
+         </div>
+         <div class="assembly-step bg-slate-800/50 rounded-lg p-4 border border-slate-600/50 flex items-start gap-4">
+          <div class="step-icon w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold flex-shrink-0">
+           8
+          </div>
+          <div>
+           <h4 class="font-semibold text-gray-200">Connect Front Panel &amp; Fans</h4>
+           <p class="text-sm text-gray-400 mt-1">Connect power switch, reset, HDD LED, power LED (check polarity), USB headers, audio header. Connect case fans.</p>
+          </div>
+         </div>
+         <div class="assembly-step bg-slate-800/50 rounded-lg p-4 border border-slate-600/50 flex items-start gap-4">
+          <div class="step-icon w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold flex-shrink-0">
+           9
+          </div>
+          <div>
+           <h4 class="font-semibold text-gray-200">First Boot &amp; POST</h4>
+           <p class="text-sm text-gray-400 mt-1">Connect monitor, keyboard, power. Press power button. Watch for POST (Power-On Self-Test). Enter BIOS to verify components detected.</p>
+          </div>
+         </div>
+        </div><!-- POST Codes -->
+        <div class="mt-8 bg-slate-800/50 rounded-xl p-5 border border-blue-500/20">
+         <h3 class="text-lg font-bold text-blue-400 mb-3 flex items-center gap-2"><span>🔊</span> Understanding POST Beep Codes</h3>
+         <div class="grid md:grid-cols-2 gap-4 text-sm">
+          <div>
+           <p class="text-green-400 font-medium">✓ 1 Short Beep</p>
+           <p class="text-gray-400">Normal POST - System OK</p>
+          </div>
+          <div>
+           <p class="text-red-400 font-medium">✗ Continuous Beeps</p>
+           <p class="text-gray-400">Memory (RAM) problem</p>
+          </div>
+          <div>
+           <p class="text-red-400 font-medium">✗ 1 Long, 2 Short</p>
+           <p class="text-gray-400">Video/Graphics card issue</p>
+          </div>
+          <div>
+           <p class="text-red-400 font-medium">✗ 1 Long, 3 Short</p>
+           <p class="text-gray-400">Memory or video problem</p>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section><!-- Lecture 2: Networking Fundamentals -->
+     <section id="lecture2" class="section-content hidden p-6 max-w-5xl mx-auto">
+      <div class="slide-in">
+       <div class="card-gradient rounded-2xl p-8 glow mb-6">
+        <div class="flex items-center gap-4 mb-6">
+         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center text-2xl">
+          🌐
+         </div>
+         <div>
+          <h2 class="text-2xl font-bold text-white">Part 2: Networking Fundamentals</h2>
+          <p class="text-gray-400">Lecture Duration: 1 Hour</p>
+         </div>
+        </div><!-- What is a Network -->
+        <div class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-xl p-5 border border-blue-500/20 mb-6">
+         <h3 class="text-lg font-bold text-cyan-400 mb-3">What is a Computer Network?</h3>
+         <p class="text-gray-300 mb-3">A computer network is a collection of interconnected devices (computers, servers, smartphones, IoT devices) that can communicate and share resources with each other.</p>
+         <div class="flex flex-wrap gap-3"><span class="px-3 py-1 bg-blue-500/20 rounded-full text-sm text-blue-300">📁 File Sharing</span> <span class="px-3 py-1 bg-green-500/20 rounded-full text-sm text-green-300">🖨️ Printer Sharing</span> <span class="px-3 py-1 bg-purple-500/20 rounded-full text-sm text-purple-300">💬 Communication</span> <span class="px-3 py-1 bg-yellow-500/20 rounded-full text-sm text-yellow-300">🌍 Internet Access</span>
+         </div>
+        </div><!-- Data Transmission Basics -->
+        <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><span>📡</span> Data Transmission Basics</h3>
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+         <div class="bg-slate-800/50 rounded-xl p-5 border border-purple-500/20">
+          <h4 class="font-semibold text-purple-400 mb-3">Transmission Modes</h4>
+          <div class="space-y-3">
+           <div class="bg-slate-700/50 rounded-lg p-3">
+            <p class="font-medium text-gray-200">Simplex</p>
+            <p class="text-sm text-gray-400">One-way only (e.g., TV broadcast, keyboard)</p>
+            <div class="flex items-center gap-2 mt-2 text-xs text-cyan-400 mono"><span>A</span> <span>→→→→→</span> <span>B</span>
+            </div>
+           </div>
+           <div class="bg-slate-700/50 rounded-lg p-3">
+            <p class="font-medium text-gray-200">Half-Duplex</p>
+            <p class="text-sm text-gray-400">Two-way, but one at a time (e.g., walkie-talkie)</p>
+            <div class="flex items-center gap-2 mt-2 text-xs text-cyan-400 mono"><span>A</span> <span>⟷⟷⟷⟷⟷</span> <span>B</span>
+            </div>
+           </div>
+           <div class="bg-slate-700/50 rounded-lg p-3">
+            <p class="font-medium text-gray-200">Full-Duplex</p>
+            <p class="text-sm text-gray-400">Two-way simultaneously (e.g., phone call, Ethernet)</p>
+            <div class="flex items-center gap-2 mt-2 text-xs text-cyan-400 mono"><span>A</span> <span>⇄⇄⇄⇄⇄</span> <span>B</span>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="bg-slate-800/50 rounded-xl p-5 border border-orange-500/20">
+          <h4 class="font-semibold text-orange-400 mb-3">Transmission Media</h4>
+          <div class="space-y-3">
+           <div class="bg-slate-700/50 rounded-lg p-3">
+            <p class="font-medium text-gray-200">🔌 Twisted Pair Cable</p>
+            <p class="text-sm text-gray-400">Cat5e (1Gbps), Cat6 (10Gbps), Cat6a (10Gbps extended)</p>
+           </div>
+           <div class="bg-slate-700/50 rounded-lg p-3">
+            <p class="font-medium text-gray-200">💡 Fiber Optic</p>
+            <p class="text-sm text-gray-400">Uses light pulses. Fastest, longest distance, immune to EMI</p>
+           </div>
+           <div class="bg-slate-700/50 rounded-lg p-3">
+            <p class="font-medium text-gray-200">📶 Wireless</p>
+            <p class="text-sm text-gray-400">Wi-Fi 6/6E (802.11ax), 5G, Bluetooth, Infrared</p>
+           </div>
+          </div>
+         </div>
+        </div><!-- Network Types -->
+        <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><span>🏢</span> Types of Networks</h3>
+        <div class="grid md:grid-cols-3 gap-4 mb-8">
+         <div class="component-card bg-gradient-to-br from-blue-900/50 to-blue-800/30 rounded-xl p-5 border border-blue-500/30">
+          <div class="text-4xl mb-3">
+           🏠
+          </div>
+          <h4 class="font-bold text-blue-300 text-lg">LAN</h4>
+          <p class="text-sm text-blue-200">Local Area Network</p>
+          <ul class="text-xs text-gray-400 mt-3 space-y-1">
+           <li>• Small geographic area</li>
+           <li>• Home, office, school</li>
+           <li>• High speed (1-10 Gbps)</li>
+           <li>• Low cost, private ownership</li>
+          </ul>
+          <div class="mt-3 p-2 bg-blue-500/10 rounded text-xs text-gray-300"><strong>Example:</strong> Your school computer lab
+          </div>
+         </div>
+         <div class="component-card bg-gradient-to-br from-green-900/50 to-green-800/30 rounded-xl p-5 border border-green-500/30">
+          <div class="text-4xl mb-3">
+           🏙️
+          </div>
+          <h4 class="font-bold text-green-300 text-lg">MAN</h4>
+          <p class="text-sm text-green-200">Metropolitan Area Network</p>
+          <ul class="text-xs text-gray-400 mt-3 space-y-1">
+           <li>• City-wide coverage</li>
+           <li>• Connects multiple LANs</li>
+           <li>• Medium speed</li>
+           <li>• Used by ISPs, universities</li>
+          </ul>
+          <div class="mt-3 p-2 bg-green-500/10 rounded text-xs text-gray-300"><strong>Example:</strong> Cable TV network in San Pablo
+          </div>
+         </div>
+         <div class="component-card bg-gradient-to-br from-purple-900/50 to-purple-800/30 rounded-xl p-5 border border-purple-500/30">
+          <div class="text-4xl mb-3">
+           🌍
+          </div>
+          <h4 class="font-bold text-purple-300 text-lg">WAN</h4>
+          <p class="text-sm text-purple-200">Wide Area Network</p>
+          <ul class="text-xs text-gray-400 mt-3 space-y-1">
+           <li>• Large geographic area</li>
+           <li>• Countries, continents</li>
+           <li>• Variable speeds</li>
+           <li>• Internet is largest WAN</li>
+          </ul>
+          <div class="mt-3 p-2 bg-purple-500/10 rounded text-xs text-gray-300"><strong>Example:</strong> The Internet, PLDT network
+          </div>
+         </div>
+        </div><!-- Network Topologies -->
+        <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><span>🔗</span> Network Topologies</h3>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+         <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-600/50">
+          <div class="flex justify-center mb-3">
+           <svg width="100" height="80" viewbox="0 0 100 80"><line x1="10" y1="40" x2="90" y2="40" stroke="#3b82f6" stroke-width="3" /> <circle cx="20" cy="40" r="8" fill="#1e40af" /> <circle cx="50" cy="40" r="8" fill="#1e40af" /> <circle cx="80" cy="40" r="8" fill="#1e40af" /> <text x="20" y="60" font-size="8" fill="#94a3b8" text-anchor="middle">
+             PC1
+            </text> <text x="50" y="60" font-size="8" fill="#94a3b8" text-anchor="middle">
+             PC2
+            </text> <text x="80" y="60" font-size="8" fill="#94a3b8" text-anchor="middle">
+             PC3
+            </text>
+           </svg>
+          </div>
+          <h4 class="font-semibold text-gray-200 text-center">Bus Topology</h4>
+          <p class="text-xs text-gray-400 text-center mt-1">Single cable, all devices connected. Simple but single point of failure.</p>
+         </div>
+         <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-600/50">
+          <div class="flex justify-center mb-3">
+           <svg width="100" height="80" viewbox="0 0 100 80"><circle cx="50" cy="40" r="12" fill="#059669" /> <line x1="50" y1="28" x2="50" y2="10" stroke="#10b981" stroke-width="2" /> <line x1="62" y1="40" x2="85" y2="40" stroke="#10b981" stroke-width="2" /> <line x1="38" y1="40" x2="15" y2="40" stroke="#10b981" stroke-width="2" /> <line x1="50" y1="52" x2="50" y2="70" stroke="#10b981" stroke-width="2" /> <circle cx="50" cy="10" r="6" fill="#047857" /> <circle cx="85" cy="40" r="6" fill="#047857" /> <circle cx="15" cy="40" r="6" fill="#047857" /> <circle cx="50" cy="70" r="6" fill="#047857" /> <text x="50" y="43" font-size="8" fill="white" text-anchor="middle">
+             Hub
+            </text>
+           </svg>
+          </div>
+          <h4 class="font-semibold text-gray-200 text-center">Star Topology</h4>
+          <p class="text-xs text-gray-400 text-center mt-1">Central hub/switch. Most common today. Easy troubleshooting.</p>
+         </div>
+         <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-600/50">
+          <div class="flex justify-center mb-3">
+           <svg width="100" height="80" viewbox="0 0 100 80"><circle cx="50" cy="15" r="8" fill="#7c3aed" /> <circle cx="80" cy="40" r="8" fill="#7c3aed" /> <circle cx="65" cy="70" r="8" fill="#7c3aed" /> <circle cx="35" cy="70" r="8" fill="#7c3aed" /> <circle cx="20" cy="40" r="8" fill="#7c3aed" /> <line x1="50" y1="23" x2="74" y2="35" stroke="#8b5cf6" stroke-width="2" /> <line x1="80" y1="48" x2="68" y2="63" stroke="#8b5cf6" stroke-width="2" /> <line x1="58" y1="70" x2="42" y2="70" stroke="#8b5cf6" stroke-width="2" /> <line x1="32" y1="63" x2="23" y2="48" stroke="#8b5cf6" stroke-width="2" /> <line x1="20" y1="32" x2="43" y2="20" stroke="#8b5cf6" stroke-width="2" />
+           </svg>
+          </div>
+          <h4 class="font-semibold text-gray-200 text-center">Ring Topology</h4>
+          <p class="text-xs text-gray-400 text-center mt-1">Circular connection. Data travels in one direction. Used in token ring.</p>
+         </div>
+         <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-600/50">
+          <div class="flex justify-center mb-3">
+           <svg width="100" height="80" viewbox="0 0 100 80"><line x1="20" y1="20" x2="50" y2="20" stroke="#f59e0b" stroke-width="2" /> <line x1="50" y1="20" x2="80" y2="20" stroke="#f59e0b" stroke-width="2" /> <line x1="20" y1="20" x2="50" y2="60" stroke="#f59e0b" stroke-width="2" /> <line x1="50" y1="20" x2="50" y2="60" stroke="#f59e0b" stroke-width="2" /> <line x1="80" y1="20" x2="50" y2="60" stroke="#f59e0b" stroke-width="2" /> <line x1="20" y1="20" x2="80" y2="20" stroke="#f59e0b" stroke-width="2" /> <circle cx="20" cy="20" r="6" fill="#d97706" /> <circle cx="50" cy="20" r="6" fill="#d97706" /> <circle cx="80" cy="20" r="6" fill="#d97706" /> <circle cx="50" cy="60" r="6" fill="#d97706" />
+           </svg>
+          </div>
+          <h4 class="font-semibold text-gray-200 text-center">Mesh Topology</h4>
+          <p class="text-xs text-gray-400 text-center mt-1">Every device connected to every other. High redundancy, expensive.</p>
+         </div>
+         <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-600/50 md:col-span-2 lg:col-span-1">
+          <div class="flex justify-center mb-3">
+           <svg width="100" height="80" viewbox="0 0 100 80"><circle cx="50" cy="15" r="8" fill="#ef4444" /> <circle cx="30" cy="45" r="6" fill="#dc2626" /> <circle cx="70" cy="45" r="6" fill="#dc2626" /> <circle cx="20" cy="70" r="5" fill="#b91c1c" /> <circle cx="40" cy="70" r="5" fill="#b91c1c" /> <circle cx="60" cy="70" r="5" fill="#b91c1c" /> <circle cx="80" cy="70" r="5" fill="#b91c1c" /> <line x1="50" y1="23" x2="30" y2="39" stroke="#f87171" stroke-width="2" /> <line x1="50" y1="23" x2="70" y2="39" stroke="#f87171" stroke-width="2" /> <line x1="30" y1="51" x2="20" y2="65" stroke="#f87171" stroke-width="2" /> <line x1="30" y1="51" x2="40" y2="65" stroke="#f87171" stroke-width="2" /> <line x1="70" y1="51" x2="60" y2="65" stroke="#f87171" stroke-width="2" /> <line x1="70" y1="51" x2="80" y2="65" stroke="#f87171" stroke-width="2" />
+           </svg>
+          </div>
+          <h4 class="font-semibold text-gray-200 text-center">Tree/Hybrid Topology</h4>
+          <p class="text-xs text-gray-400 text-center mt-1">Hierarchical structure. Combination of topologies. Used in large organizations.</p>
+         </div>
+        </div><!-- Network Devices -->
+        <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><span>🔌</span> Basic Network Devices</h3>
+        <div class="grid md:grid-cols-2 gap-4">
+         <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-600/50">
+          <h4 class="font-semibold text-cyan-400 mb-2">Hub</h4>
+          <p class="text-sm text-gray-400">Basic device that broadcasts data to all ports. No intelligence. Obsolete.</p>
+         </div>
+         <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-600/50">
+          <h4 class="font-semibold text-green-400 mb-2">Switch</h4>
+          <p class="text-sm text-gray-400">Intelligent device that forwards data only to intended recipient using MAC addresses.</p>
+         </div>
+         <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-600/50">
+          <h4 class="font-semibold text-purple-400 mb-2">Router</h4>
+          <p class="text-sm text-gray-400">Connects different networks. Uses IP addresses. Manages traffic between networks.</p>
+         </div>
+         <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-600/50">
+          <h4 class="font-semibold text-yellow-400 mb-2">Access Point (AP)</h4>
+          <p class="text-sm text-gray-400">Provides wireless connectivity. Bridges wired and wireless networks.</p>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section><!-- Case Study Section -->
+     <section id="casestudy" class="section-content hidden p-6 max-w-5xl mx-auto">
+      <div class="slide-in">
+       <div class="card-gradient rounded-2xl p-8 glow mb-6">
+        <div class="flex items-center gap-4 mb-6">
+         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-2xl">
+          📰
+         </div>
+         <div>
+          <h2 class="text-2xl font-bold text-white">Real-World Case Study</h2>
+          <p class="text-gray-400">Applying Concepts to Actual Scenarios</p>
+         </div>
+        </div><!-- Case Study 1 -->
+        <div class="bg-gradient-to-r from-blue-900/30 to-cyan-900/30 rounded-xl p-6 border border-blue-500/20 mb-6">
+         <div class="flex items-center gap-2 mb-3"><span class="px-3 py-1 bg-blue-500/30 rounded-full text-xs text-blue-300">CASE STUDY 1</span> <span class="px-3 py-1 bg-green-500/30 rounded-full text-xs text-green-300">2024-2025</span>
+         </div>
+         <h3 class="text-xl font-bold text-white mb-3">The Global Chip Shortage &amp; DIY PC Building</h3>
+         <div class="bg-slate-800/50 rounded-lg p-4 mb-4">
+          <h4 class="font-semibold text-cyan-400 mb-2">📋 Background</h4>
+          <p class="text-sm text-gray-300">The semiconductor shortage (2020-2023) dramatically affected PC builders worldwide. GPU prices skyrocketed 200-300% above MSRP. Understanding proper assembly became crucial as components became precious commodities.</p>
+         </div>
+         <div class="grid md:grid-cols-2 gap-4 mb-4">
+          <div class="bg-slate-800/50 rounded-lg p-4">
+           <h4 class="font-semibold text-amber-400 mb-2">⚠️ The Problem</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• Components cost 2-3x normal prices</li>
+            <li>• One mistake = expensive replacement</li>
+            <li>• Many first-time builders damaged parts</li>
+            <li>• ESD damage increased significantly</li>
+           </ul>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-4">
+           <h4 class="font-semibold text-green-400 mb-2">✅ The Solution</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• Proper training &amp; safety procedures</li>
+            <li>• Watch tutorial videos before building</li>
+            <li>• Use anti-static equipment always</li>
+            <li>• Double-check compatibility first</li>
+           </ul>
+          </div>
+         </div>
+         <div class="bg-amber-500/10 rounded-lg p-4 border border-amber-500/20">
+          <h4 class="font-semibold text-amber-400 mb-2">💡 Lesson Learned</h4>
+          <p class="text-sm text-gray-300">Proper assembly knowledge isn't just academic—it has real financial consequences. A ₱50,000 GPU damaged by ESD or improper handling is a costly mistake. The safety procedures we learn protect expensive investments.</p>
+         </div>
+        </div><!-- Case Study 2 -->
+        <div class="bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-xl p-6 border border-purple-500/20 mb-6">
+         <div class="flex items-center gap-2 mb-3"><span class="px-3 py-1 bg-purple-500/30 rounded-full text-xs text-purple-300">CASE STUDY 2</span> <span class="px-3 py-1 bg-pink-500/30 rounded-full text-xs text-pink-300">Philippines 2025</span>
+         </div>
+         <h3 class="text-xl font-bold text-white mb-3">Smart City Initiative: San Pablo's Network Infrastructure</h3>
+         <div class="bg-slate-800/50 rounded-lg p-4 mb-4">
+          <h4 class="font-semibold text-purple-400 mb-2">📋 Scenario</h4>
+          <p class="text-sm text-gray-300">Imagine San Pablo City implementing a smart city project. The city needs to connect government offices, schools (including Lyceum), hospitals, and public Wi-Fi zones. This requires understanding different network types and topologies.</p>
+         </div>
+         <div class="bg-slate-800/50 rounded-lg p-4 mb-4">
+          <h4 class="font-semibold text-cyan-400 mb-2">🌐 Network Design Solution</h4>
+          <div class="grid md:grid-cols-3 gap-3 mt-3">
+           <div class="bg-blue-500/10 rounded-lg p-3 border border-blue-500/20">
+            <p class="text-sm font-medium text-blue-300">LAN</p>
+            <p class="text-xs text-gray-400">Each building (offices, schools) has internal LAN using star topology with switches</p>
+           </div>
+           <div class="bg-green-500/10 rounded-lg p-3 border border-green-500/20">
+            <p class="text-sm font-medium text-green-300">MAN</p>
+            <p class="text-xs text-gray-400">Fiber optic backbone connects all city facilities using mesh topology</p>
+           </div>
+           <div class="bg-purple-500/10 rounded-lg p-3 border border-purple-500/20">
+            <p class="text-sm font-medium text-purple-300">WAN</p>
+            <p class="text-xs text-gray-400">Internet gateway connects city network to national/global networks</p>
+           </div>
+          </div>
+         </div>
+         <div class="bg-green-500/10 rounded-lg p-4 border border-green-500/20">
+          <h4 class="font-semibold text-green-400 mb-2">💡 Real-World Application</h4>
+          <p class="text-sm text-gray-300">Understanding network types helps IT professionals design scalable infrastructure. The concepts you learn today—LAN, MAN, WAN, topologies—are exactly what network engineers use when planning city-wide deployments.</p>
+         </div>
+        </div><!-- Current Events -->
+        <div class="bg-gradient-to-r from-red-900/30 to-orange-900/30 rounded-xl p-6 border border-red-500/20">
+         <div class="flex items-center gap-2 mb-3"><span class="px-3 py-1 bg-red-500/30 rounded-full text-xs text-red-300">TRENDING</span> <span class="px-3 py-1 bg-orange-500/30 rounded-full text-xs text-orange-300">2025 Update</span>
+         </div>
+         <h3 class="text-xl font-bold text-white mb-3">Current Trends in IT Infrastructure</h3>
+         <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-slate-800/50 rounded-lg p-4">
+           <h4 class="font-semibold text-orange-400 mb-2">🔥 DDR5 &amp; PCIe 5.0 Adoption</h4>
+           <p class="text-sm text-gray-400">New systems now use DDR5 RAM (up to 8400 MHz) and PCIe 5.0 SSDs (12,000+ MB/s). Understanding component compatibility is more important than ever.</p>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-4">
+           <h4 class="font-semibold text-cyan-400 mb-2">📶 Wi-Fi 7 (802.11be)</h4>
+           <p class="text-sm text-gray-400">The latest wireless standard offers up to 46 Gbps speeds. Networks are evolving rapidly, making networking fundamentals essential knowledge.</p>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-4">
+           <h4 class="font-semibold text-green-400 mb-2">🌱 Sustainable Computing</h4>
+           <p class="text-sm text-gray-400">Energy-efficient components and proper assembly for longevity reduce e-waste. Building systems that last is environmentally responsible.</p>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-4">
+           <h4 class="font-semibold text-purple-400 mb-2">☁️ Edge Computing</h4>
+           <p class="text-sm text-gray-400">Processing data closer to users requires distributed network architecture. Understanding network design helps in modern infrastructure.</p>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section><!-- Lab Activity Section -->
+     <section id="lab" class="section-content hidden p-6 max-w-5xl mx-auto">
+      <div class="slide-in">
+       <div class="card-gradient rounded-2xl p-8 glow mb-6">
+        <div class="flex items-center gap-4 mb-6">
+         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-2xl">
+          🧪
+         </div>
+         <div>
+          <h2 class="text-2xl font-bold text-white">Laboratory Activity</h2>
+          <p class="text-gray-400">Duration: 3 Hours | Group Activity (3-4 members)</p>
+         </div>
+        </div><!-- Lab Tabs -->
+        <div class="flex flex-wrap gap-2 mb-6"><button onclick="showLabTab('activity1')" class="tab-btn active px-4 py-2 rounded-lg bg-slate-700 text-sm" data-lab="activity1">Activity 1: Assembly</button> <button onclick="showLabTab('activity2')" class="tab-btn px-4 py-2 rounded-lg bg-slate-700 text-sm" data-lab="activity2">Activity 2: Network Mapping</button> <button onclick="showLabTab('rubric')" class="tab-btn px-4 py-2 rounded-lg bg-slate-700 text-sm" data-lab="rubric">Rubric</button>
+        </div><!-- Activity 1 -->
+        <div id="activity1" class="lab-content">
+         <div class="bg-blue-500/10 rounded-xl p-6 border border-blue-500/20 mb-6">
+          <h3 class="text-xl font-bold text-blue-400 mb-2">Activity 1: System Unit Assembly Simulation</h3>
+          <p class="text-gray-400 mb-4">Time: 1.5 Hours | Group Activity</p>
+          <div class="bg-slate-800/50 rounded-lg p-4 mb-4">
+           <h4 class="font-semibold text-white mb-2">📋 Objectives</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• Identify all major PC components</li>
+            <li>• Demonstrate proper safety procedures</li>
+            <li>• Execute correct assembly sequence</li>
+            <li>• Troubleshoot common assembly issues</li>
+           </ul>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-4 mb-4">
+           <h4 class="font-semibold text-white mb-2">📝 Instructions</h4>
+           <div class="space-y-3 text-sm text-gray-300">
+            <p><strong>Part A: Component Identification (20 mins)</strong></p>
+            <ol class="list-decimal list-inside space-y-1 text-gray-400 ml-4">
+             <li>Each group receives a set of PC components (or images if physical components unavailable)</li>
+             <li>Identify each component and write its function</li>
+             <li>Match components to their correct slots/connectors on the motherboard diagram</li>
+            </ol>
+            <p class="mt-4"><strong>Part B: Safety Checklist (15 mins)</strong></p>
+            <ol class="list-decimal list-inside space-y-1 text-gray-400 ml-4">
+             <li>Create a safety checklist for PC assembly</li>
+             <li>List at least 10 safety procedures</li>
+             <li>Explain why each procedure is important</li>
+            </ol>
+            <p class="mt-4"><strong>Part C: Assembly Sequence (30 mins)</strong></p>
+            <ol class="list-decimal list-inside space-y-1 text-gray-400 ml-4">
+             <li>Arrange component cards in correct assembly order</li>
+             <li>Document each step with brief explanation</li>
+             <li>Identify potential mistakes at each step</li>
+            </ol>
+            <p class="mt-4"><strong>Part D: Hands-On Assembly (35 mins)</strong></p>
+            <ol class="list-decimal list-inside space-y-1 text-gray-400 ml-4">
+             <li>If available, perform actual assembly under supervision</li>
+             <li>OR complete the interactive assembly simulator below</li>
+             <li>Document any issues encountered</li>
+            </ol>
+           </div>
+          </div><!-- Interactive Assembly Simulator -->
+          <div class="bg-slate-900 rounded-xl p-6 border border-cyan-500/30">
+           <h4 class="font-bold text-cyan-400 mb-4 flex items-center gap-2"><span>🎮</span> Interactive Assembly Simulator</h4>
+           <p class="text-sm text-gray-400 mb-4">Click the steps in the correct order to complete the assembly. Track your progress!</p>
+           <div id="simulator-steps" class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4"><!-- Steps will be populated by JavaScript -->
+           </div>
+           <div class="flex items-center justify-between">
+            <div>
+             <p class="text-sm text-gray-400">Progress: <span id="sim-progress" class="text-cyan-400 font-bold">0/9</span></p>
+             <p id="sim-message" class="text-sm text-gray-500 mt-1">Click the first step to begin...</p>
+            </div><button onclick="resetSimulator()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm transition-colors">Reset</button>
+           </div>
+          </div>
+         </div>
+         <div class="bg-slate-800/50 rounded-lg p-4">
+          <h4 class="font-semibold text-white mb-2">📄 Deliverables</h4>
+          <ul class="text-sm text-gray-400 space-y-1">
+           <li>✓ Component identification worksheet (completed)</li>
+           <li>✓ Safety checklist document</li>
+           <li>✓ Assembly sequence flowchart</li>
+           <li>✓ Simulator completion screenshot or hands-on assembly photo</li>
+          </ul>
+         </div>
+        </div><!-- Activity 2 -->
+        <div id="activity2" class="lab-content hidden">
+         <div class="bg-green-500/10 rounded-xl p-6 border border-green-500/20 mb-6">
+          <h3 class="text-xl font-bold text-green-400 mb-2">Activity 2: Network Mapping &amp; Design</h3>
+          <p class="text-gray-400 mb-4">Time: 1.5 Hours | Group Activity</p>
+          <div class="bg-slate-800/50 rounded-lg p-4 mb-4">
+           <h4 class="font-semibold text-white mb-2">📋 Objectives</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• Identify network types in real-world scenarios</li>
+            <li>• Design appropriate network topologies</li>
+            <li>• Select correct networking devices</li>
+            <li>• Understand data transmission concepts</li>
+           </ul>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-4 mb-4">
+           <h4 class="font-semibold text-white mb-2">📝 Scenario</h4>
+           <div class="bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-lg p-4 border border-purple-500/20">
+            <p class="text-gray-300 mb-3">Your group has been hired as IT consultants for <strong>"Lyceum de San Pablo - New Campus Expansion"</strong>. The expansion includes:</p>
+            <ul class="text-sm text-gray-400 space-y-2">
+             <li>🏫 <strong>Main Building:</strong> 5 floors with 20 classrooms, each needing 30 computer workstations</li>
+             <li>📚 <strong>Library:</strong> 50 workstations + public Wi-Fi for 200 students</li>
+             <li>🖥️ <strong>Computer Labs:</strong> 3 labs with 40 computers each</li>
+             <li>🏢 <strong>Administration:</strong> 30 workstations + secure network for records</li>
+             <li>☁️ <strong>Server Room:</strong> Needs to connect all buildings</li>
+            </ul>
+           </div>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-4 mb-4">
+           <h4 class="font-semibold text-white mb-2">📝 Tasks</h4>
+           <div class="space-y-4 text-sm text-gray-300">
+            <div class="bg-blue-500/10 rounded-lg p-3 border border-blue-500/20">
+             <p class="font-medium text-blue-300">Task 1: Network Type Classification (20 mins)</p>
+             <ul class="text-gray-400 mt-2 space-y-1">
+              <li>• Identify which areas use LAN, MAN, or WAN</li>
+              <li>• Justify your classification for each area</li>
+              <li>• Explain how these networks interconnect</li>
+             </ul>
+            </div>
+            <div class="bg-green-500/10 rounded-lg p-3 border border-green-500/20">
+             <p class="font-medium text-green-300">Task 2: Topology Design (30 mins)</p>
+             <ul class="text-gray-400 mt-2 space-y-1">
+              <li>• Draw network topology for each building/area</li>
+              <li>• Choose between star, bus, ring, mesh, or hybrid</li>
+              <li>• Explain why you chose each topology</li>
+             </ul>
+            </div>
+            <div class="bg-purple-500/10 rounded-lg p-3 border border-purple-500/20">
+             <p class="font-medium text-purple-300">Task 3: Device Selection (20 mins)</p>
+             <ul class="text-gray-400 mt-2 space-y-1">
+              <li>• List networking devices needed (switches, routers, APs)</li>
+              <li>• Specify quantity for each area</li>
+              <li>• Justify your device choices</li>
+             </ul>
+            </div>
+            <div class="bg-yellow-500/10 rounded-lg p-3 border border-yellow-500/20">
+             <p class="font-medium text-yellow-300">Task 4: Network Diagram (30 mins)</p>
+             <ul class="text-gray-400 mt-2 space-y-1">
+              <li>• Create a complete network diagram</li>
+              <li>• Show all connections and devices</li>
+              <li>• Include legend and labels</li>
+             </ul>
+            </div>
+           </div>
+          </div><!-- Interactive Network Designer Tool -->
+          <div class="bg-slate-900 rounded-xl p-6 border border-green-500/30">
+           <h4 class="font-bold text-green-400 mb-4 flex items-center gap-2"><span>🎨</span> Network Design Worksheet</h4>
+           <div class="grid md:grid-cols-2 gap-4">
+            <div><label class="block text-sm text-gray-400 mb-2">Building/Area Name</label> <input type="text" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white text-sm focus:border-green-500 focus:outline-none" placeholder="e.g., Main Building Floor 1">
+            </div>
+            <div><label class="block text-sm text-gray-400 mb-2">Network Type</label> <select class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white text-sm focus:border-green-500 focus:outline-none"> <option>LAN (Local Area Network)</option> <option>MAN (Metropolitan Area Network)</option> <option>WAN (Wide Area Network)</option> </select>
+            </div>
+            <div><label class="block text-sm text-gray-400 mb-2">Topology</label> <select class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white text-sm focus:border-green-500 focus:outline-none"> <option>Star Topology</option> <option>Bus Topology</option> <option>Ring Topology</option> <option>Mesh Topology</option> <option>Hybrid/Tree Topology</option> </select>
+            </div>
+            <div><label class="block text-sm text-gray-400 mb-2">Primary Device</label> <select class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white text-sm focus:border-green-500 focus:outline-none"> <option>Switch (Layer 2)</option> <option>Router (Layer 3)</option> <option>Wireless Access Point</option> <option>Firewall</option> </select>
+            </div>
+            <div class="md:col-span-2"><label class="block text-sm text-gray-400 mb-2">Justification</label> <textarea class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-3 text-white text-sm focus:border-green-500 focus:outline-none" rows="3" placeholder="Explain why you chose this network type, topology, and device..."></textarea>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="bg-slate-800/50 rounded-lg p-4">
+          <h4 class="font-semibold text-white mb-2">📄 Deliverables</h4>
+          <ul class="text-sm text-gray-400 space-y-1">
+           <li>✓ Network classification document</li>
+           <li>✓ Topology design with justifications</li>
+           <li>✓ Device inventory list</li>
+           <li>✓ Complete network diagram (hand-drawn or digital)</li>
+           <li>✓ Group presentation (5 minutes)</li>
+          </ul>
+         </div>
+        </div><!-- Rubric -->
+        <div id="rubric" class="lab-content hidden">
+         <div class="bg-amber-500/10 rounded-xl p-6 border border-amber-500/20">
+          <h3 class="text-xl font-bold text-amber-400 mb-4">Assessment Rubric</h3>
+          <div class="overflow-x-auto">
+           <table class="w-full text-sm">
+            <thead>
+             <tr class="border-b border-slate-600">
+              <th class="text-left p-3 text-gray-300">Criteria</th>
+              <th class="text-center p-3 text-gray-300">Excellent (5)</th>
+              <th class="text-center p-3 text-gray-300">Good (4)</th>
+              <th class="text-center p-3 text-gray-300">Satisfactory (3)</th>
+              <th class="text-center p-3 text-gray-300">Needs Work (1-2)</th>
+             </tr>
+            </thead>
+            <tbody class="text-gray-400">
+             <tr class="border-b border-slate-700">
+              <td class="p-3 font-medium text-white">Component Identification</td>
+              <td class="p-3 text-center">All correct with detailed functions</td>
+              <td class="p-3 text-center">Most correct with functions</td>
+              <td class="p-3 text-center">Some correct, basic functions</td>
+              <td class="p-3 text-center">Few correct, missing functions</td>
+             </tr>
+             <tr class="border-b border-slate-700">
+              <td class="p-3 font-medium text-white">Safety Procedures</td>
+              <td class="p-3 text-center">10+ procedures with explanations</td>
+              <td class="p-3 text-center">8-9 procedures with explanations</td>
+              <td class="p-3 text-center">6-7 procedures</td>
+              <td class="p-3 text-center">Less than 6 procedures</td>
+             </tr>
+             <tr class="border-b border-slate-700">
+              <td class="p-3 font-medium text-white">Assembly Sequence</td>
+              <td class="p-3 text-center">Perfect order with details</td>
+              <td class="p-3 text-center">Correct order, some details</td>
+              <td class="p-3 text-center">Minor sequence errors</td>
+              <td class="p-3 text-center">Multiple sequence errors</td>
+             </tr>
+             <tr class="border-b border-slate-700">
+              <td class="p-3 font-medium text-white">Network Design</td>
+              <td class="p-3 text-center">Optimal design with justification</td>
+              <td class="p-3 text-center">Good design, clear reasoning</td>
+              <td class="p-3 text-center">Acceptable design</td>
+              <td class="p-3 text-center">Incomplete or flawed design</td>
+             </tr>
+             <tr class="border-b border-slate-700">
+              <td class="p-3 font-medium text-white">Teamwork &amp; Presentation</td>
+              <td class="p-3 text-center">Excellent collaboration</td>
+              <td class="p-3 text-center">Good collaboration</td>
+              <td class="p-3 text-center">Adequate teamwork</td>
+              <td class="p-3 text-center">Poor coordination</td>
+             </tr>
+            </tbody>
+           </table>
+          </div>
+          <div class="mt-6 grid md:grid-cols-2 gap-4">
+           <div class="bg-slate-800/50 rounded-lg p-4">
+            <h4 class="font-semibold text-white mb-2">📊 Grading Scale</h4>
+            <div class="space-y-1 text-sm">
+             <p class="text-green-400">23-25 points: Excellent (A)</p>
+             <p class="text-blue-400">20-22 points: Very Good (B)</p>
+             <p class="text-yellow-400">17-19 points: Good (C)</p>
+             <p class="text-orange-400">14-16 points: Satisfactory (D)</p>
+             <p class="text-red-400">Below 14: Needs Improvement (F)</p>
+            </div>
+           </div>
+           <div class="bg-slate-800/50 rounded-lg p-4">
+            <h4 class="font-semibold text-white mb-2">⏰ Time Management</h4>
+            <div class="space-y-1 text-sm text-gray-400">
+             <p>Activity 1: 90 minutes</p>
+             <p>Activity 2: 90 minutes</p>
+             <p>Presentations: 20 minutes</p>
+             <p>Total: 3 hours</p>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section><!-- Quiz Section -->
+     <section id="quiz" class="section-content hidden p-6 max-w-5xl mx-auto">
+      <div class="slide-in">
+       <div class="card-gradient rounded-2xl p-8 glow">
+        <div class="flex items-center gap-4 mb-6">
+         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center text-2xl">
+          ✅
+         </div>
+         <div>
+          <h2 class="text-2xl font-bold text-white">Knowledge Check</h2>
+          <p class="text-gray-400">Test your understanding of the module</p>
+         </div>
+        </div>
+        <div id="quiz-container"><!-- Quiz will be populated by JavaScript -->
+        </div>
+        <div id="quiz-result" class="hidden mt-6 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-xl p-6 border border-green-500/30">
+         <h3 class="text-xl font-bold text-green-400 mb-2">🎉 Quiz Complete!</h3>
+         <p id="quiz-score" class="text-lg text-white"></p>
+         <p id="quiz-feedback" class="text-gray-400 mt-2"></p><button onclick="resetQuiz()" class="mt-4 px-6 py-2 bg-green-500 hover:bg-green-600 rounded-lg text-white font-medium transition-colors">Retake Quiz</button>
+        </div>
+       </div>
+      </div>
+     </section>
+    </main>
+   </div><!-- Footer -->
+   <footer class="bg-slate-900/80 border-t border-blue-500/20 py-4 lg:ml-64">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+     <p class="text-sm text-gray-500">© 2026 Lyceum de San Pablo - College of Information Systems</p>
+     <p class="text-xs text-gray-600 mt-1">IS103 - IT Infrastructure and Network Technologies | Instructor: MKDB</p>
+    </div>
+   </footer>
+  </div>
+  <script>
+    // Default configuration
+    const defaultConfig = {
+      course_title: 'IS103 - IT Infrastructure & Network Technologies',
+      instructor_name: 'MKDB',
+      institution_name: 'Lyceum de San Pablo',
+      background_color: '#0f172a',
+      surface_color: '#1e293b',
+      text_color: '#e2e8f0',
+      primary_action_color: '#3b82f6',
+      secondary_action_color: '#22d3ee'
+    };
+
+    let config = { ...defaultConfig };
+    let currentSection = 'overview';
+    let visitedSections = new Set(['overview']);
+    let simulatorStep = 0;
+    let quizAnswers = {};
+    let quizSubmitted = false;
+
+    // Assembly steps data
+    const assemblySteps = [
+      { id: 1, name: 'Install CPU', short: 'CPU' },
+      { id: 2, name: 'Install CPU Cooler', short: 'Cooler' },
+      { id: 3, name: 'Install RAM', short: 'RAM' },
+      { id: 4, name: 'Install M.2 SSD', short: 'M.2' },
+      { id: 5, name: 'Install Motherboard', short: 'Mobo' },
+      { id: 6, name: 'Install PSU', short: 'PSU' },
+      { id: 7, name: 'Connect Power Cables', short: 'Power' },
+      { id: 8, name: 'Connect Front Panel', short: 'Front I/O' },
+      { id: 9, name: 'First Boot & POST', short: 'POST' }
+    ];
+
+    // Quiz questions
+    const quizQuestions = [
+      {
+        id: 1,
+        question: "What is the primary purpose of an anti-static wrist strap?",
+        options: [
+          "To keep your hands warm while working",
+          "To prevent ESD (Electrostatic Discharge) damage to components",
+          "To improve grip when handling components",
+          "To measure electrical current"
+        ],
+        correct: 1
+      },
+      {
+        id: 2,
+        question: "Which component is often called the 'brain' of the computer?",
+        options: [
+          "RAM",
+          "Hard Drive",
+          "CPU (Processor)",
+          "Power Supply"
+        ],
+        correct: 2
+      },
+      {
+        id: 3,
+        question: "What does POST stand for?",
+        options: [
+          "Power On System Transfer",
+          "Power On Self-Test",
+          "Primary Operating System Test",
+          "Pre-Operating System Transfer"
+        ],
+        correct: 1
+      },
+      {
+        id: 4,
+        question: "Which network type covers a city-wide area?",
+        options: [
+          "LAN (Local Area Network)",
+          "WAN (Wide Area Network)",
+          "MAN (Metropolitan Area Network)",
+          "PAN (Personal Area Network)"
+        ],
+        correct: 2
+      },
+      {
+        id: 5,
+        question: "In which topology does every device connect to a central hub or switch?",
+        options: [
+          "Bus Topology",
+          "Ring Topology",
+          "Star Topology",
+          "Mesh Topology"
+        ],
+        correct: 2
+      },
+      {
+        id: 6,
+        question: "What is the correct order for the first three steps of PC assembly?",
+        options: [
+          "RAM → CPU → Motherboard",
+          "CPU → RAM → CPU Cooler",
+          "CPU → CPU Cooler → RAM",
+          "Motherboard → CPU → RAM"
+        ],
+        correct: 2
+      },
+      {
+        id: 7,
+        question: "Which transmission mode allows two-way communication simultaneously?",
+        options: [
+          "Simplex",
+          "Half-Duplex",
+          "Full-Duplex",
+          "Multiplex"
+        ],
+        correct: 2
+      },
+      {
+        id: 8,
+        question: "What does a single short beep during POST typically indicate?",
+        options: [
+          "RAM failure",
+          "Normal startup - system OK",
+          "Video card problem",
+          "Hard drive failure"
+        ],
+        correct: 1
+      },
+      {
+        id: 9,
+        question: "Which networking device uses MAC addresses to forward data only to the intended recipient?",
+        options: [
+          "Hub",
+          "Router",
+          "Switch",
+          "Modem"
+        ],
+        correct: 2
+      },
+      {
+        id: 10,
+        question: "What is the fastest transmission media for networking?",
+        options: [
+          "Twisted Pair Cable",
+          "Coaxial Cable",
+          "Fiber Optic",
+          "Wireless"
+        ],
+        correct: 2
+      }
+    ];
+
+    // Initialize the application
+    function init() {
+      initSimulator();
+      initQuiz();
+      updateProgress();
+    }
+
+    // Show section
+    function showSection(sectionId) {
+      document.querySelectorAll('.section-content').forEach(section => {
+        section.classList.add('hidden');
+      });
+      document.getElementById(sectionId).classList.remove('hidden');
+      
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.dataset.section === sectionId) {
+          item.classList.add('active');
+        }
+      });
+      
+      currentSection = sectionId;
+      visitedSections.add(sectionId);
+      updateProgress();
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Update progress
+    function updateProgress() {
+      const totalSections = 6;
+      const progress = Math.round((visitedSections.size / totalSections) * 100);
+      document.getElementById('progress-bar').style.width = progress + '%';
+      document.getElementById('progress-text').textContent = progress + '% Complete';
+    }
+
+    // Lab tabs
+    function showLabTab(tabId) {
+      document.querySelectorAll('.lab-content').forEach(content => {
+        content.classList.add('hidden');
+      });
+      document.getElementById(tabId).classList.remove('hidden');
+      
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.lab === tabId) {
+          btn.classList.add('active');
+        }
+      });
+    }
+
+    // Assembly Simulator
+    function initSimulator() {
+      const container = document.getElementById('simulator-steps');
+      const shuffled = [...assemblySteps].sort(() => Math.random() - 0.5);
+      
+      container.innerHTML = shuffled.map(step => `
+        <button onclick="selectSimStep(${step.id})" 
+                id="sim-step-${step.id}"
+                class="sim-btn bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded-lg p-3 text-center transition-all">
+          <span class="text-2xl block mb-1">${getStepEmoji(step.id)}</span>
+          <span class="text-xs text-gray-400">${step.short}</span>
+        </button>
+      `).join('');
+    }
+
+    function getStepEmoji(id) {
+      const emojis = ['🔧', '❄️', '💾', '💿', '🖥️', '⚡', '🔌', '🎛️', '✅'];
+      return emojis[id - 1];
+    }
+
+    function selectSimStep(stepId) {
+      const expectedStep = simulatorStep + 1;
+      const btn = document.getElementById(`sim-step-${stepId}`);
+      const msgEl = document.getElementById('sim-message');
+      
+      if (stepId === expectedStep) {
+        btn.classList.add('bg-green-600', 'border-green-500');
+        btn.classList.remove('hover:bg-slate-700');
+        btn.disabled = true;
+        simulatorStep++;
+        document.getElementById('sim-progress').textContent = `${simulatorStep}/9`;
+        
+        if (simulatorStep === 9) {
+          msgEl.textContent = '🎉 Excellent! You completed the assembly in correct order!';
+          msgEl.classList.add('text-green-400');
+        } else {
+          msgEl.textContent = `✓ Correct! Now select step ${simulatorStep + 1}...`;
+          msgEl.classList.add('text-green-400');
+          msgEl.classList.remove('text-red-400');
+        }
+      } else {
+        btn.classList.add('animate-shake', 'border-red-500');
+        msgEl.textContent = `✗ Incorrect. Step ${expectedStep} should come next.`;
+        msgEl.classList.add('text-red-400');
+        msgEl.classList.remove('text-green-400');
+        setTimeout(() => {
+          btn.classList.remove('animate-shake', 'border-red-500');
+        }, 500);
+      }
+    }
+
+    function resetSimulator() {
+      simulatorStep = 0;
+      document.getElementById('sim-progress').textContent = '0/9';
+      document.getElementById('sim-message').textContent = 'Click the first step to begin...';
+      document.getElementById('sim-message').classList.remove('text-green-400', 'text-red-400');
+      initSimulator();
+    }
+
+    // Quiz
+    function initQuiz() {
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = quizQuestions.map((q, idx) => `
+        <div class="quiz-question mb-6 bg-slate-800/50 rounded-xl p-5 border border-slate-600/50">
+          <p class="font-medium text-white mb-3">
+            <span class="text-cyan-400">${idx + 1}.</span> ${q.question}
+          </p>
+          <div class="space-y-2">
+            ${q.options.map((opt, optIdx) => `
+              <button onclick="selectAnswer(${q.id}, ${optIdx})"
+                      id="q${q.id}-opt${optIdx}"
+                      class="quiz-option w-full text-left px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-sm text-gray-300 hover:border-blue-500 transition-all">
+                <span class="inline-block w-6 h-6 rounded-full bg-slate-600 text-center mr-2 text-xs leading-6">${String.fromCharCode(65 + optIdx)}</span>
+                ${opt}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+      
+      container.innerHTML += `
+        <button onclick="submitQuiz()" id="submit-quiz-btn" class="w-full py-3 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 rounded-xl text-white font-semibold transition-all">
+          Submit Quiz
+        </button>
+      `;
+    }
+
+    function selectAnswer(questionId, optionIdx) {
+      if (quizSubmitted) return;
+      
+      // Clear previous selection for this question
+      for (let i = 0; i < 4; i++) {
+        const optEl = document.getElementById(`q${questionId}-opt${i}`);
+        if (optEl) {
+          optEl.classList.remove('selected');
+        }
+      }
+      
+      // Select new answer
+      const selectedEl = document.getElementById(`q${questionId}-opt${optionIdx}`);
+      selectedEl.classList.add('selected');
+      quizAnswers[questionId] = optionIdx;
+    }
+
+    function submitQuiz() {
+      if (Object.keys(quizAnswers).length < quizQuestions.length) {
+        const unanswered = quizQuestions.length - Object.keys(quizAnswers).length;
+        document.getElementById('sim-message').textContent = `Please answer all questions. ${unanswered} remaining.`;
+        return;
+      }
+      
+      quizSubmitted = true;
+      let score = 0;
+      
+      quizQuestions.forEach(q => {
+        const userAnswer = quizAnswers[q.id];
+        const correctAnswer = q.correct;
+        
+        for (let i = 0; i < 4; i++) {
+          const optEl = document.getElementById(`q${q.id}-opt${i}`);
+          optEl.classList.remove('selected');
+          
+          if (i === correctAnswer) {
+            optEl.classList.add('correct');
+          } else if (i === userAnswer && userAnswer !== correctAnswer) {
+            optEl.classList.add('incorrect');
+          }
+        }
+        
+        if (userAnswer === correctAnswer) {
+          score++;
+        }
+      });
+      
+      document.getElementById('submit-quiz-btn').classList.add('hidden');
+      document.getElementById('quiz-result').classList.remove('hidden');
+      
+      const percentage = Math.round((score / quizQuestions.length) * 100);
+      document.getElementById('quiz-score').textContent = `You scored ${score} out of ${quizQuestions.length} (${percentage}%)`;
+      
+      let feedback = '';
+      if (percentage >= 90) {
+        feedback = '🌟 Excellent! You have mastered this module!';
+      } else if (percentage >= 70) {
+        feedback = '👍 Good job! Review the topics you missed.';
+      } else if (percentage >= 50) {
+        feedback = '📚 Fair. Please review the lecture materials again.';
+      } else {
+        feedback = '📖 You need more study. Please re-read the lectures carefully.';
+      }
+      document.getElementById('quiz-feedback').textContent = feedback;
+    }
+
+    function resetQuiz() {
+      quizAnswers = {};
+      quizSubmitted = false;
+      document.getElementById('quiz-result').classList.add('hidden');
+      initQuiz();
+    }
+
+    // Element SDK integration
+    async function onConfigChange(newConfig) {
+      config = { ...config, ...newConfig };
+      
+      // Update header
+      const headerTitle = document.getElementById('header-title');
+      if (headerTitle) {
+        headerTitle.textContent = config.course_title || defaultConfig.course_title;
+      }
+      
+      const headerInstructor = document.getElementById('header-instructor');
+      if (headerInstructor) {
+        headerInstructor.innerHTML = `Instructor: <span class="text-cyan-400 font-medium">${config.instructor_name || defaultConfig.instructor_name}</span>`;
+      }
+      
+      const headerInstitution = document.getElementById('header-institution');
+      if (headerInstitution) {
+        headerInstitution.textContent = `${config.institution_name || defaultConfig.institution_name} - College of Information Systems`;
+      }
+    }
+
+    // Initialize Element SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (cfg) => ({
+          recolorables: [
+            {
+              get: () => cfg.background_color || defaultConfig.background_color,
+              set: (value) => { cfg.background_color = value; window.elementSdk.setConfig({ background_color: value }); }
+            },
+            {
+              get: () => cfg.surface_color || defaultConfig.surface_color,
+              set: (value) => { cfg.surface_color = value; window.elementSdk.setConfig({ surface_color: value }); }
+            },
+            {
+              get: () => cfg.text_color || defaultConfig.text_color,
+              set: (value) => { cfg.text_color = value; window.elementSdk.setConfig({ text_color: value }); }
+            },
+            {
+              get: () => cfg.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => { cfg.primary_action_color = value; window.elementSdk.setConfig({ primary_action_color: value }); }
+            },
+            {
+              get: () => cfg.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (value) => { cfg.secondary_action_color = value; window.elementSdk.setConfig({ secondary_action_color: value }); }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (cfg) => new Map([
+          ['course_title', cfg.course_title || defaultConfig.course_title],
+          ['instructor_name', cfg.instructor_name || defaultConfig.instructor_name],
+          ['institution_name', cfg.institution_name || defaultConfig.institution_name]
+        ])
+      });
+    }
+
+    // Initialize on load
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c4e36a7e7b5ab56',t:'MTc2OTU3OTQzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

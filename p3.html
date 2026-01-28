@@ -1,0 +1,1806 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IS103 - Week 3: Physical Network Infrastructure</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    }
+    
+    .card-gradient {
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    .glow {
+      box-shadow: 0 0 30px rgba(59, 130, 246, 0.15);
+    }
+    
+    .nav-item {
+      transition: all 0.3s ease;
+    }
+    
+    .nav-item:hover {
+      transform: translateX(4px);
+    }
+    
+    .nav-item.active {
+      background: linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, transparent 100%);
+      border-left: 3px solid #3b82f6;
+    }
+    
+    .component-card {
+      transition: all 0.3s ease;
+    }
+    
+    .component-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 40px rgba(59, 130, 246, 0.2);
+    }
+    
+    .pulse-dot {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .slide-in {
+      animation: slideIn 0.5s ease forwards;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .progress-bar {
+      transition: width 0.5s ease;
+    }
+    
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #3b82f6;
+      border-radius: 4px;
+    }
+    
+    .tab-btn {
+      transition: all 0.3s ease;
+    }
+    
+    .tab-btn.active {
+      background: #3b82f6;
+      color: white;
+    }
+    
+    .cable-visual {
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    
+    .connector-diagram {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border: 2px solid #3b82f6;
+    }
+    
+    .device-icon {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .interactive-toggle {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .interactive-toggle:hover {
+      transform: scale(1.05);
+    }
+    
+    .lab-card {
+      border-left: 4px solid;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full gradient-bg text-gray-100 overflow-auto">
+  <div id="app" class="h-full w-full"><!-- Header -->
+   <header id="main-header" class="bg-slate-900/80 backdrop-blur-sm border-b border-blue-500/20 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4">
+     <div class="flex items-center justify-between">
+      <div class="flex items-center gap-4">
+       <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-orange-400 flex items-center justify-center">
+        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+       </div>
+       <div>
+        <h1 id="header-title" class="text-xl font-bold text-white">IS103 - IT Infrastructure &amp; Network Technologies</h1>
+        <p class="text-sm text-orange-400">Week 3: Physical Network Infrastructure</p>
+       </div>
+      </div>
+      <div class="text-right hidden md:block">
+       <p id="header-instructor" class="text-sm text-gray-400">Instructor: <span class="text-orange-400 font-medium">MKDB</span></p>
+       <p id="header-institution" class="text-xs text-gray-500">Lyceum de San Pablo - College of Information Systems</p>
+      </div>
+     </div>
+    </div>
+   </header>
+   <div class="flex h-full"><!-- Sidebar Navigation -->
+    <nav class="w-64 bg-slate-900/50 border-r border-blue-500/10 hidden lg:block fixed top-20 left-0 bottom-0 overflow-y-auto">
+     <div class="p-4">
+      <div class="mb-6">
+       <div class="flex items-center gap-2 mb-2"><span class="pulse-dot w-2 h-2 rounded-full bg-green-400"></span> <span class="text-xs text-green-400 uppercase tracking-wider">Module Progress</span>
+       </div>
+       <div class="w-full bg-slate-700 rounded-full h-2">
+        <div id="progress-bar" class="progress-bar bg-gradient-to-r from-orange-500 to-red-400 h-2 rounded-full" style="width: 0%"></div>
+       </div>
+       <p id="progress-text" class="text-xs text-gray-400 mt-1">0% Complete</p>
+      </div>
+      <div class="space-y-1"><button onclick="showSection('overview')" class="nav-item active w-full text-left px-4 py-3 rounded-lg text-sm flex items-center gap-3" data-section="overview"> <span class="text-lg">📋</span> <span>Module Overview</span> </button> <button onclick="showSection('lecture')" class="nav-item w-full text-left px-4 py-3 rounded-lg text-sm flex items-center gap-3" data-section="lecture"> <span class="text-lg">🔌</span> <span>Lecture: Infrastructure</span> </button> <button onclick="showSection('devices')" class="nav-item w-full text-left px-4 py-3 rounded-lg text-sm flex items-center gap-3" data-section="devices"> <span class="text-lg">🖥️</span> <span>Network Devices</span> </button> <button onclick="showSection('cables')" class="nav-item w-full text-left px-4 py-3 rounded-lg text-sm flex items-center gap-3" data-section="cables"> <span class="text-lg">🧵</span> <span>Cables &amp; Connectors</span> </button> <button onclick="showSection('tools')" class="nav-item w-full text-left px-4 py-3 rounded-lg text-sm flex items-center gap-3" data-section="tools"> <span class="text-lg">🔧</span> <span>Cabling Tools</span> </button> <button onclick="showSection('casestudy')" class="nav-item w-full text-left px-4 py-3 rounded-lg text-sm flex items-center gap-3" data-section="casestudy"> <span class="text-lg">📰</span> <span>Real-World Examples</span> </button> <button onclick="showSection('lab')" class="nav-item w-full text-left px-4 py-3 rounded-lg text-sm flex items-center gap-3" data-section="lab"> <span class="text-lg">🧪</span> <span>Lab Activity</span> </button> <button onclick="showSection('quiz')" class="nav-item w-full text-left px-4 py-3 rounded-lg text-sm flex items-center gap-3" data-section="quiz"> <span class="text-lg">✅</span> <span>Knowledge Check</span> </button>
+      </div>
+     </div>
+    </nav><!-- Mobile Navigation -->
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-sm border-t border-blue-500/20 z-50">
+     <div class="flex justify-around py-2 overflow-x-auto"><button onclick="showSection('overview')" class="flex flex-col items-center p-2 text-xs whitespace-nowrap" data-section="overview"> <span class="text-xl">📋</span> <span class="text-gray-400">Overview</span> </button> <button onclick="showSection('devices')" class="flex flex-col items-center p-2 text-xs whitespace-nowrap" data-section="devices"> <span class="text-xl">🖥️</span> <span class="text-gray-400">Devices</span> </button> <button onclick="showSection('cables')" class="flex flex-col items-center p-2 text-xs whitespace-nowrap" data-section="cables"> <span class="text-xl">🧵</span> <span class="text-gray-400">Cables</span> </button> <button onclick="showSection('lab')" class="flex flex-col items-center p-2 text-xs whitespace-nowrap" data-section="lab"> <span class="text-xl">🧪</span> <span class="text-gray-400">Lab</span> </button> <button onclick="showSection('quiz')" class="flex flex-col items-center p-2 text-xs whitespace-nowrap" data-section="quiz"> <span class="text-xl">✅</span> <span class="text-gray-400">Quiz</span> </button>
+     </div>
+    </div><!-- Main Content -->
+    <main class="flex-1 lg:ml-64 pb-20 lg:pb-8"><!-- Overview Section -->
+     <section id="overview" class="section-content p-6 max-w-5xl mx-auto">
+      <div class="slide-in">
+       <div class="card-gradient rounded-2xl p-8 glow mb-8">
+        <div class="flex items-start gap-4 mb-6">
+         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-orange-600 flex items-center justify-center text-3xl">
+          🔌
+         </div>
+         <div>
+          <h2 class="text-2xl font-bold text-white mb-2">Week 3: Module Overview</h2>
+          <p class="text-gray-400">Physical Network Infrastructure Fundamentals</p>
+         </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+         <div class="bg-slate-800/50 rounded-xl p-5 border border-orange-500/10">
+          <h3 class="text-lg font-semibold text-orange-400 mb-3 flex items-center gap-2"><span>🎯</span> Learning Outcomes</h3>
+          <ul class="space-y-2 text-gray-300 text-sm">
+           <li class="flex items-start gap-2"><span class="text-green-400 mt-1">✓</span> <span>Identify physical network components and devices</span></li>
+           <li class="flex items-start gap-2"><span class="text-green-400 mt-1">✓</span> <span>Explain the functions of each network device</span></li>
+           <li class="flex items-start gap-2"><span class="text-green-400 mt-1">✓</span> <span>Understand network cables, connectors, and their specifications</span></li>
+           <li class="flex items-start gap-2"><span class="text-green-400 mt-1">✓</span> <span>Recognize and use cabling tools properly</span></li>
+          </ul>
+         </div>
+         <div class="bg-slate-800/50 rounded-xl p-5 border border-orange-500/10">
+          <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center gap-2"><span>⏰</span> Time Allocation</h3>
+          <div class="space-y-3">
+           <div class="flex items-center justify-between bg-slate-700/50 rounded-lg p-3"><span class="text-gray-300">Lecture Session</span> <span class="text-orange-400 font-mono font-bold">2 Hours</span>
+           </div>
+           <div class="flex items-center justify-between bg-slate-700/50 rounded-lg p-3"><span class="text-gray-300">Laboratory Session</span> <span class="text-red-400 font-mono font-bold">3 Hours</span>
+           </div>
+           <div class="flex items-center justify-between bg-slate-700/50 rounded-lg p-3"><span class="text-gray-300">Total</span> <span class="text-green-400 font-mono font-bold">5 Hours</span>
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="bg-gradient-to-r from-orange-500/10 to-red-500/10 rounded-xl p-5 border border-orange-500/20">
+         <h3 class="text-lg font-semibold text-orange-400 mb-3 flex items-center gap-2"><span>📌</span> Topics Covered</h3>
+         <div class="grid md:grid-cols-2 gap-4">
+          <div>
+           <h4 class="text-sm font-medium text-gray-300 mb-2">Part 1: Network Devices</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• NICs (Network Interface Cards)</li>
+            <li>• Hubs vs Switches</li>
+            <li>• Routers and their functions</li>
+            <li>• Other network devices</li>
+           </ul>
+          </div>
+          <div>
+           <h4 class="text-sm font-medium text-gray-300 mb-2">Part 2: Cabling Infrastructure</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• Cable types and specifications</li>
+            <li>• Connectors and standards</li>
+            <li>• Cable installation procedures</li>
+            <li>• Tools and best practices</li>
+           </ul>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="card-gradient rounded-2xl p-6">
+        <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><span>🚀</span> Module Navigation Guide</h3>
+        <div class="grid md:grid-cols-3 gap-4">
+         <div class="bg-slate-800/50 rounded-xl p-4 text-center">
+          <div class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-3"><span class="text-2xl">📚</span>
+          </div>
+          <h4 class="font-medium text-gray-200 mb-1">Understand Concepts</h4>
+          <p class="text-xs text-gray-400">Read lectures and explore device functions in detail</p>
+         </div>
+         <div class="bg-slate-800/50 rounded-xl p-4 text-center">
+          <div class="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center mx-auto mb-3"><span class="text-2xl">🔍</span>
+          </div>
+          <h4 class="font-medium text-gray-200 mb-1">Study Real Examples</h4>
+          <p class="text-xs text-gray-400">Learn from case studies and current industry trends</p>
+         </div>
+         <div class="bg-slate-800/50 rounded-xl p-4 text-center">
+          <div class="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-3"><span class="text-2xl">🎯</span>
+          </div>
+          <h4 class="font-medium text-gray-200 mb-1">Practice &amp; Verify</h4>
+          <p class="text-xs text-gray-400">Complete labs and take the knowledge check quiz</p>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section><!-- Lecture Section -->
+     <section id="lecture" class="section-content hidden p-6 max-w-5xl mx-auto">
+      <div class="slide-in">
+       <div class="card-gradient rounded-2xl p-8 glow mb-6">
+        <div class="flex items-center gap-4 mb-6">
+         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-2xl">
+          🔌
+         </div>
+         <div>
+          <h2 class="text-2xl font-bold text-white">Physical Network Infrastructure</h2>
+          <p class="text-gray-400">Lecture Duration: 2 Hours</p>
+         </div>
+        </div>
+        <div class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-xl p-5 border border-blue-500/20 mb-6">
+         <h3 class="text-lg font-bold text-blue-400 mb-2">What is Physical Network Infrastructure?</h3>
+         <p class="text-gray-300">Physical network infrastructure refers to all the tangible, hardware-based components that make up a computer network. It includes the devices, cables, connectors, and tools that enable computers to communicate with each other and access network resources.</p>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><span>🏗️</span> The Foundation: What Makes Networks Work?</h3>
+        <div class="bg-slate-800/50 rounded-xl p-5 border border-slate-600/50 mb-6">
+         <p class="text-gray-300 mb-4">Think of a network like a city's infrastructure:</p>
+         <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-blue-500/10 rounded-lg p-4 border border-blue-500/20">
+           <p class="font-medium text-blue-300 mb-2">🏙️ Physical Analogy</p>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• <strong>Roads:</strong> Network cables</li>
+            <li>• <strong>Intersections:</strong> Switches &amp; routers</li>
+            <li>• <strong>Cars:</strong> Data packets</li>
+            <li>• <strong>Traffic lights:</strong> Network protocols</li>
+           </ul>
+          </div>
+          <div class="bg-orange-500/10 rounded-lg p-4 border border-orange-500/20">
+           <p class="font-medium text-orange-300 mb-2">💻 Network Reality</p>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• <strong>Cables:</strong> Ethernet, fiber optic</li>
+            <li>• <strong>Devices:</strong> Switches, routers</li>
+            <li>• <strong>Data:</strong> Digital information</li>
+            <li>• <strong>Rules:</strong> Network standards</li>
+           </ul>
+          </div>
+         </div>
+        </div>
+        <div class="bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl p-5 border border-purple-500/20">
+         <h3 class="text-lg font-bold text-purple-400 mb-3">💡 Why Physical Infrastructure Matters</h3>
+         <div class="grid md:grid-cols-3 gap-4 text-sm">
+          <div class="bg-slate-800/50 rounded-lg p-3">
+           <p class="text-purple-300 font-medium mb-1">🔒 Reliability</p>
+           <p class="text-gray-400">Good cabling ensures consistent, uninterrupted data transmission</p>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-3">
+           <p class="text-purple-300 font-medium mb-1">⚡ Performance</p>
+           <p class="text-gray-400">Quality cables and devices determine network speed and efficiency</p>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-3">
+           <p class="text-purple-300 font-medium mb-1">🛡️ Security</p>
+           <p class="text-gray-400">Proper infrastructure supports secure network management</p>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section><!-- Network Devices Section -->
+     <section id="devices" class="section-content hidden p-6 max-w-5xl mx-auto">
+      <div class="slide-in">
+       <div class="card-gradient rounded-2xl p-8 glow mb-6">
+        <div class="flex items-center gap-4 mb-6">
+         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-2xl">
+          🖥️
+         </div>
+         <div>
+          <h2 class="text-2xl font-bold text-white">Network Devices</h2>
+          <p class="text-gray-400">Understanding Hardware Components</p>
+         </div>
+        </div><!-- NIC -->
+        <div class="component-card bg-gradient-to-br from-blue-900/50 to-blue-800/30 rounded-xl p-6 border border-blue-500/30 mb-6">
+         <div class="flex items-start gap-4 mb-4">
+          <div class="text-5xl">
+           🔌
+          </div>
+          <div class="flex-1">
+           <h3 class="text-2xl font-bold text-blue-300 mb-1">NIC (Network Interface Card)</h3>
+           <p class="text-gray-400 text-sm">Also called Ethernet card or network adapter</p>
+          </div>
+         </div>
+         <div class="grid md:grid-cols-2 gap-6">
+          <div>
+           <h4 class="font-semibold text-blue-200 mb-3">📋 What It Does</h4>
+           <ul class="text-sm text-gray-400 space-y-2">
+            <li>• Connects your computer to the network</li>
+            <li>• Converts digital data to network signals</li>
+            <li>• Has a unique MAC (Media Access Control) address</li>
+            <li>• Can be integrated on motherboard or separate card</li>
+            <li>• Receives and transmits data</li>
+           </ul>
+          </div>
+          <div>
+           <h4 class="font-semibold text-blue-200 mb-3">🔍 Key Specifications</h4>
+           <div class="space-y-2 text-sm">
+            <div class="bg-blue-500/20 rounded-lg p-2">
+             <p class="text-blue-300 font-mono">Speed: 1Gbps, 10Gbps, 25Gbps</p>
+            </div>
+            <div class="bg-blue-500/20 rounded-lg p-2">
+             <p class="text-blue-300 font-mono">MAC Address: 48-bit unique identifier</p>
+            </div>
+            <div class="bg-blue-500/20 rounded-lg p-2">
+             <p class="text-blue-300 font-mono">Types: Wired (Ethernet), Wireless (Wi-Fi)</p>
+            </div>
+            <div class="bg-blue-500/20 rounded-lg p-2">
+             <p class="text-blue-300 font-mono">Standard: IEEE 802.3 (Ethernet)</p>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="mt-4 bg-blue-500/10 rounded-lg p-4 border border-blue-500/20">
+          <p class="text-sm text-blue-200"><strong>💡 Tip:</strong> Every device connected to a network needs a NIC. Your laptop has one (integrated), your printer has one, your smartphone has one (wireless).</p>
+         </div>
+        </div><!-- Hub -->
+        <div class="component-card bg-gradient-to-br from-yellow-900/50 to-yellow-800/30 rounded-xl p-6 border border-yellow-500/30 mb-6">
+         <div class="flex items-start gap-4 mb-4">
+          <div class="text-5xl">
+           🔗
+          </div>
+          <div class="flex-1">
+           <h3 class="text-2xl font-bold text-yellow-300 mb-1">Hub (Network Hub)</h3>
+           <p class="text-gray-400 text-sm">Legacy network device - mostly obsolete</p>
+          </div>
+         </div>
+         <div class="grid md:grid-cols-2 gap-6">
+          <div>
+           <h4 class="font-semibold text-yellow-200 mb-3">📋 What It Does</h4>
+           <ul class="text-sm text-gray-400 space-y-2">
+            <li>• Connects multiple devices together</li>
+            <li>• Receives data from one port</li>
+            <li>• Broadcasts to ALL other ports</li>
+            <li>• No intelligence (dumb device)</li>
+            <li>• Creates collision domain</li>
+           </ul>
+          </div>
+          <div>
+           <h4 class="font-semibold text-yellow-200 mb-3">⚠️ Problems</h4>
+           <div class="space-y-2 text-sm">
+            <div class="bg-red-500/20 rounded-lg p-2 border border-red-500/30">
+             <p class="text-red-300 font-medium">❌ Inefficient</p>
+             <p class="text-xs text-gray-400">Wastes bandwidth by broadcasting all traffic</p>
+            </div>
+            <div class="bg-red-500/20 rounded-lg p-2 border border-red-500/30">
+             <p class="text-red-300 font-medium">❌ Slow</p>
+             <p class="text-xs text-gray-400">All devices share same bandwidth</p>
+            </div>
+            <div class="bg-red-500/20 rounded-lg p-2 border border-red-500/30">
+             <p class="text-red-300 font-medium">❌ Collisions</p>
+             <p class="text-xs text-gray-400">Data packets collide causing retransmission</p>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="mt-4 bg-amber-500/10 rounded-lg p-4 border border-amber-500/20">
+          <p class="text-sm text-amber-200"><strong>📌 History:</strong> Hubs were standard in 1990s. Now replaced by switches. You won't find them in modern networks, but they're important to understand for networking history.</p>
+         </div>
+        </div><!-- Switch -->
+        <div class="component-card bg-gradient-to-br from-green-900/50 to-green-800/30 rounded-xl p-6 border border-green-500/30 mb-6">
+         <div class="flex items-start gap-4 mb-4">
+          <div class="text-5xl">
+           🔄
+          </div>
+          <div class="flex-1">
+           <h3 class="text-2xl font-bold text-green-300 mb-1">Switch (Network Switch)</h3>
+           <p class="text-gray-400 text-sm">Industry standard for LAN connections</p>
+          </div>
+         </div>
+         <div class="grid md:grid-cols-2 gap-6">
+          <div>
+           <h4 class="font-semibold text-green-200 mb-3">📋 What It Does</h4>
+           <ul class="text-sm text-gray-400 space-y-2">
+            <li>• Intelligently forwards data to specific ports</li>
+            <li>• Reads MAC addresses on data frames</li>
+            <li>• Creates separate collision domains per port</li>
+            <li>• Learns network topology dynamically</li>
+            <li>• Provides full bandwidth to each port</li>
+           </ul>
+          </div>
+          <div>
+           <h4 class="font-semibold text-green-200 mb-3">✅ Advantages</h4>
+           <div class="space-y-2 text-sm">
+            <div class="bg-green-500/20 rounded-lg p-2 border border-green-500/30">
+             <p class="text-green-300 font-medium">✓ Efficient</p>
+             <p class="text-xs text-gray-400">Sends data only to intended recipient</p>
+            </div>
+            <div class="bg-green-500/20 rounded-lg p-2 border border-green-500/30">
+             <p class="text-green-300 font-medium">✓ Fast</p>
+             <p class="text-xs text-gray-400">Each port gets dedicated bandwidth</p>
+            </div>
+            <div class="bg-green-500/20 rounded-lg p-2 border border-green-500/30">
+             <p class="text-green-300 font-medium">✓ Smart</p>
+             <p class="text-xs text-gray-400">Manages VLAN, QoS, port mirroring</p>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="mt-4 bg-green-500/10 rounded-lg p-4 border border-green-500/20">
+          <h4 class="font-semibold text-green-300 mb-2">🔍 How Switches Learn</h4>
+          <p class="text-sm text-gray-300">1. Device A connects to Port 1. Switch learns: "MAC address of A is on Port 1"</p>
+          <p class="text-sm text-gray-300">2. Device B wants to send data to A. Switch checks table → finds A on Port 1 → sends data only to Port 1</p>
+          <p class="text-sm text-gray-300">3. Device C connects to Port 2. Switch learns: "MAC address of C is on Port 2"</p>
+         </div>
+         <div class="mt-4 bg-blue-500/10 rounded-lg p-4 border border-blue-500/20">
+          <h4 class="font-semibold text-blue-300 mb-2">📊 Switch Types</h4>
+          <div class="grid md:grid-cols-3 gap-3 text-sm">
+           <div>
+            <p class="text-blue-300 font-mono">Unmanaged</p>
+            <p class="text-gray-400">Plug and play, no configuration needed</p>
+           </div>
+           <div>
+            <p class="text-blue-300 font-mono">Managed</p>
+            <p class="text-gray-400">Can configure VLANs, QoS, etc.</p>
+           </div>
+           <div>
+            <p class="text-blue-300 font-mono">PoE (Power over Ethernet)</p>
+            <p class="text-gray-400">Supplies power + data through cable</p>
+           </div>
+          </div>
+         </div>
+        </div><!-- Router -->
+        <div class="component-card bg-gradient-to-br from-purple-900/50 to-purple-800/30 rounded-xl p-6 border border-purple-500/30 mb-6">
+         <div class="flex items-start gap-4 mb-4">
+          <div class="text-5xl">
+           🧭
+          </div>
+          <div class="flex-1">
+           <h3 class="text-2xl font-bold text-purple-300 mb-1">Router (Network Router)</h3>
+           <p class="text-gray-400 text-sm">Connects different networks together</p>
+          </div>
+         </div>
+         <div class="grid md:grid-cols-2 gap-6">
+          <div>
+           <h4 class="font-semibold text-purple-200 mb-3">📋 What It Does</h4>
+           <ul class="text-sm text-gray-400 space-y-2">
+            <li>• Connects multiple networks together</li>
+            <li>• Routes data between networks using IP addresses</li>
+            <li>• Determines the best path for data</li>
+            <li>• Separates network into subnets</li>
+            <li>• Provides security (firewall functionality)</li>
+            <li>• Translates between public/private IP (NAT)</li>
+           </ul>
+          </div>
+          <div>
+           <h4 class="font-semibold text-purple-200 mb-3">🔀 Key Difference: Switch vs Router</h4>
+           <div class="space-y-2 text-sm">
+            <div class="bg-purple-500/20 rounded-lg p-2">
+             <p class="text-purple-300 font-medium">Switch (Layer 2)</p>
+             <p class="text-xs text-gray-400">Connects devices within SAME network</p>
+             <p class="text-xs text-gray-400">Uses MAC addresses</p>
+            </div>
+            <div class="bg-purple-500/20 rounded-lg p-2">
+             <p class="text-purple-300 font-medium">Router (Layer 3)</p>
+             <p class="text-xs text-gray-400">Connects DIFFERENT networks</p>
+             <p class="text-xs text-gray-400">Uses IP addresses</p>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="mt-4 bg-purple-500/10 rounded-lg p-4 border border-purple-500/20">
+          <h4 class="font-semibold text-purple-300 mb-2">🏠 In Your Home</h4>
+          <p class="text-sm text-gray-300">Your WiFi router at home is actually a combination device:</p>
+          <ul class="text-sm text-gray-400 mt-2 space-y-1">
+           <li>• <strong>Router:</strong> Connects your home network to ISP (internet)</li>
+           <li>• <strong>Switch:</strong> Connects devices within your home network</li>
+           <li>• <strong>Wireless AP:</strong> Provides WiFi connectivity</li>
+           <li>• <strong>Modem:</strong> Converts ISP signal to usable form</li>
+           <li>• <strong>Firewall:</strong> Protects your network from threats</li>
+          </ul>
+         </div>
+        </div><!-- Other Devices -->
+        <div class="grid md:grid-cols-2 gap-6">
+         <div class="component-card bg-gradient-to-br from-indigo-900/50 to-indigo-800/30 rounded-xl p-6 border border-indigo-500/30">
+          <div class="text-4xl mb-3">
+           📡
+          </div>
+          <h4 class="text-xl font-bold text-indigo-300 mb-2">Access Point (AP)</h4>
+          <p class="text-sm text-gray-400 mb-3">Provides wireless connectivity</p>
+          <ul class="text-xs text-gray-400 space-y-1">
+           <li>• Bridges wired and wireless networks</li>
+           <li>• Creates wireless signal from wired connection</li>
+           <li>• Can be standalone or part of router</li>
+           <li>• Operates on WiFi standards (802.11ax, etc.)</li>
+          </ul>
+         </div>
+         <div class="component-card bg-gradient-to-br from-rose-900/50 to-rose-800/30 rounded-xl p-6 border border-rose-500/30">
+          <div class="text-4xl mb-3">
+           🛡️
+          </div>
+          <h4 class="text-xl font-bold text-rose-300 mb-2">Firewall</h4>
+          <p class="text-sm text-gray-400 mb-3">Network security device</p>
+          <ul class="text-xs text-gray-400 space-y-1">
+           <li>• Controls incoming/outgoing traffic</li>
+           <li>• Blocks unauthorized access</li>
+           <li>• Can be hardware or software</li>
+           <li>• Essential for network security</li>
+          </ul>
+         </div>
+         <div class="component-card bg-gradient-to-br from-cyan-900/50 to-cyan-800/30 rounded-xl p-6 border border-cyan-500/30">
+          <div class="text-4xl mb-3">
+           📶
+          </div>
+          <h4 class="text-xl font-bold text-cyan-300 mb-2">Modem</h4>
+          <p class="text-sm text-gray-400 mb-3">Modulator/demodulator</p>
+          <ul class="text-xs text-gray-400 space-y-1">
+           <li>• Converts ISP signal to digital</li>
+           <li>• Connects to internet provider</li>
+           <li>• Types: cable, fiber, DSL</li>
+           <li>• Often combined with router</li>
+          </ul>
+         </div>
+         <div class="component-card bg-gradient-to-br from-teal-900/50 to-teal-800/30 rounded-xl p-6 border border-teal-500/30">
+          <div class="text-4xl mb-3">
+           🖨️
+          </div>
+          <h4 class="text-xl font-bold text-teal-300 mb-2">Managed Devices</h4>
+          <p class="text-sm text-gray-400 mb-3">Network-enabled hardware</p>
+          <ul class="text-xs text-gray-400 space-y-1">
+           <li>• Printers, scanners</li>
+           <li>• IP cameras, VoIP phones</li>
+           <li>• NAS, security systems</li>
+           <li>• All need IP addresses</li>
+          </ul>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section><!-- Cables & Connectors Section -->
+     <section id="cables" class="section-content hidden p-6 max-w-5xl mx-auto">
+      <div class="slide-in">
+       <div class="card-gradient rounded-2xl p-8 glow mb-6">
+        <div class="flex items-center gap-4 mb-6">
+         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-2xl">
+          🧵
+         </div>
+         <div>
+          <h2 class="text-2xl font-bold text-white">Network Cables &amp; Connectors</h2>
+          <p class="text-gray-400">The Backbone of Network Infrastructure</p>
+         </div>
+        </div><!-- Twisted Pair -->
+        <div class="component-card bg-gradient-to-br from-blue-900/50 to-blue-800/30 rounded-xl p-6 border border-blue-500/30 mb-6">
+         <h3 class="text-2xl font-bold text-blue-300 mb-4">🧵 Twisted Pair Cable</h3>
+         <p class="text-gray-400 mb-4">The most common cable type for LANs</p>
+         <div class="grid md:grid-cols-2 gap-6 mb-4">
+          <div>
+           <h4 class="font-semibold text-blue-200 mb-3">📋 Overview</h4>
+           <ul class="text-sm text-gray-400 space-y-2">
+            <li>• 8 wires twisted in pairs</li>
+            <li>• Twisted design reduces interference</li>
+            <li>• Affordable and flexible</li>
+            <li>• Standard for offices, homes</li>
+            <li>• Typical length: up to 100 meters</li>
+           </ul>
+          </div>
+          <div>
+           <h4 class="font-semibold text-blue-200 mb-3">📊 Cable Categories</h4>
+           <div class="space-y-2 text-sm">
+            <div class="bg-blue-500/20 rounded-lg p-2 border border-blue-500/20">
+             <p class="text-blue-300 font-mono">Cat5e</p>
+             <p class="text-xs text-gray-400">1 Gbps (Gigabit) - Still common, aging</p>
+            </div>
+            <div class="bg-green-500/20 rounded-lg p-2 border border-green-500/20">
+             <p class="text-green-300 font-mono">Cat6</p>
+             <p class="text-xs text-gray-400">10 Gbps - Modern standard, recommended</p>
+            </div>
+            <div class="bg-yellow-500/20 rounded-lg p-2 border border-yellow-500/20">
+             <p class="text-yellow-300 font-mono">Cat6a</p>
+             <p class="text-xs text-gray-400">10 Gbps extended distance (100m)</p>
+            </div>
+            <div class="bg-purple-500/20 rounded-lg p-2 border border-purple-500/20">
+             <p class="text-purple-300 font-mono">Cat7 / Cat8</p>
+             <p class="text-xs text-gray-400">40+ Gbps - Enterprise, data centers</p>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="bg-blue-500/10 rounded-lg p-4 border border-blue-500/20">
+          <h4 class="font-semibold text-blue-300 mb-2">🔌 RJ45 Connector (8P8C)</h4>
+          <p class="text-sm text-gray-400 mb-3">Standard connector for twisted pair cables</p>
+          <div class="grid md:grid-cols-2 gap-4">
+           <div>
+            <p class="text-sm text-blue-300 font-medium mb-2">Wiring Standards</p>
+            <div class="bg-slate-800/50 rounded-lg p-3 font-mono text-xs text-gray-400 space-y-1">
+             <p><strong>T568A (Home):</strong> WGr-G-WBl-Bl-WBr-Br-WOr-Or</p>
+             <p><strong>T568B (Business):</strong> WBr-Br-WGr-G-WBl-Bl-WOr-Or</p>
+            </div>
+           </div>
+           <div>
+            <p class="text-sm text-blue-300 font-medium mb-2">Cable Types</p>
+            <ul class="text-xs text-gray-400 space-y-1">
+             <li>• <strong>Straight:</strong> Same wiring both ends (most common)</li>
+             <li>• <strong>Crossover:</strong> Different wiring each end (device-to-device)</li>
+             <li>• <strong>UTP:</strong> Unshielded (faster, no EMI protection)</li>
+             <li>• <strong>STP/FTP:</strong> Shielded (better EMI protection)</li>
+            </ul>
+           </div>
+          </div>
+         </div>
+        </div><!-- Fiber Optic -->
+        <div class="component-card bg-gradient-to-br from-yellow-900/50 to-yellow-800/30 rounded-xl p-6 border border-yellow-500/30 mb-6">
+         <h3 class="text-2xl font-bold text-yellow-300 mb-4">💡 Fiber Optic Cable</h3>
+         <p class="text-gray-400 mb-4">High-speed, long-distance networking</p>
+         <div class="grid md:grid-cols-2 gap-6 mb-4">
+          <div>
+           <h4 class="font-semibold text-yellow-200 mb-3">📋 Overview</h4>
+           <ul class="text-sm text-gray-400 space-y-2">
+            <li>• Uses light pulses instead of electrical signals</li>
+            <li>• Extremely fast speeds (up to 400 Gbps)</li>
+            <li>• Very long distances (kilometers)</li>
+            <li>• Immune to electromagnetic interference</li>
+            <li>• More expensive than twisted pair</li>
+            <li>• Requires specialized connectors</li>
+           </ul>
+          </div>
+          <div>
+           <h4 class="font-semibold text-yellow-200 mb-3">🔍 Types</h4>
+           <div class="space-y-2 text-sm">
+            <div class="bg-yellow-500/20 rounded-lg p-2 border border-yellow-500/20">
+             <p class="text-yellow-300 font-medium">Single-Mode (SMF)</p>
+             <p class="text-xs text-gray-400">Long distance (50+ km), higher speed, expensive</p>
+            </div>
+            <div class="bg-orange-500/20 rounded-lg p-2 border border-orange-500/20">
+             <p class="text-orange-300 font-medium">Multi-Mode (MMF)</p>
+             <p class="text-xs text-gray-400">Shorter distance (2 km), lower cost, data centers</p>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="bg-yellow-500/10 rounded-lg p-4 border border-yellow-500/20">
+          <h4 class="font-semibold text-yellow-300 mb-2">🔌 Common Connectors</h4>
+          <div class="grid md:grid-cols-3 gap-3 text-sm">
+           <div class="bg-slate-800/50 rounded-lg p-2">
+            <p class="text-yellow-300 font-mono">LC (Lucent)</p>
+            <p class="text-xs text-gray-400">Compact, modern standard</p>
+           </div>
+           <div class="bg-slate-800/50 rounded-lg p-2">
+            <p class="text-yellow-300 font-mono">SC (Subscriber)</p>
+            <p class="text-xs text-gray-400">Larger, older standard</p>
+           </div>
+           <div class="bg-slate-800/50 rounded-lg p-2">
+            <p class="text-yellow-300 font-mono">MTP/MPO</p>
+            <p class="text-xs text-gray-400">Multi-fiber for backbone</p>
+           </div>
+          </div>
+         </div>
+        </div><!-- Coaxial Cable -->
+        <div class="component-card bg-gradient-to-br from-red-900/50 to-red-800/30 rounded-xl p-6 border border-red-500/30 mb-6">
+         <h3 class="text-2xl font-bold text-red-300 mb-4">🛑 Coaxial Cable</h3>
+         <p class="text-gray-400 mb-4">Legacy technology, still used in specific applications</p>
+         <div class="grid md:grid-cols-2 gap-6">
+          <div>
+           <h4 class="font-semibold text-red-200 mb-3">📋 Overview</h4>
+           <ul class="text-sm text-gray-400 space-y-2">
+            <li>• Central conductor surrounded by shielding</li>
+            <li>• Better shielding than twisted pair</li>
+            <li>• Used for cable TV and older Ethernet</li>
+            <li>• (10Base2, 10Base5) - obsolete for data</li>
+            <li>• Still used for video (CCTV, HDBaseT)</li>
+           </ul>
+          </div>
+          <div>
+           <h4 class="font-semibold text-red-200 mb-3">🔌 Connectors</h4>
+           <div class="space-y-2 text-sm">
+            <div class="bg-red-500/20 rounded-lg p-2">
+             <p class="text-red-300 font-mono">BNC Connector</p>
+             <p class="text-xs text-gray-400">Quick-disconnect for Ethernet</p>
+            </div>
+            <div class="bg-red-500/20 rounded-lg p-2">
+             <p class="text-red-300 font-mono">F Connector</p>
+             <p class="text-xs text-gray-400">TV/cable internet</p>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div><!-- Cable Comparison -->
+        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-600/50">
+         <h3 class="text-lg font-bold text-white mb-4">📊 Cable Comparison Chart</h3>
+         <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+           <thead class="border-b border-slate-600">
+            <tr>
+             <th class="text-left p-3 text-gray-300">Cable Type</th>
+             <th class="text-center p-3 text-gray-300">Speed</th>
+             <th class="text-center p-3 text-gray-300">Distance</th>
+             <th class="text-center p-3 text-gray-300">Cost</th>
+             <th class="text-left p-3 text-gray-300">Common Use</th>
+            </tr>
+           </thead>
+           <tbody class="text-gray-400">
+            <tr class="border-b border-slate-700">
+             <td class="p-3">Twisted Pair (Cat5e)</td>
+             <td class="text-center">1 Gbps</td>
+             <td class="text-center">100m</td>
+             <td class="text-center">💰 Low</td>
+             <td class="p-3">Homes, old offices</td>
+            </tr>
+            <tr class="border-b border-slate-700">
+             <td class="p-3">Twisted Pair (Cat6)</td>
+             <td class="text-center">10 Gbps</td>
+             <td class="text-center">100m</td>
+             <td class="text-center">💰 Low</td>
+             <td class="p-3">Modern offices, data centers</td>
+            </tr>
+            <tr class="border-b border-slate-700">
+             <td class="p-3">Fiber Optic (Multi-Mode)</td>
+             <td class="text-center">100+ Gbps</td>
+             <td class="text-center">2 km</td>
+             <td class="text-center">💰💰💰 High</td>
+             <td class="p-3">Data center backbones</td>
+            </tr>
+            <tr>
+             <td class="p-3">Fiber Optic (Single-Mode)</td>
+             <td class="text-center">400+ Gbps</td>
+             <td class="text-center">50+ km</td>
+             <td class="text-center">💰💰💰💰 Very High</td>
+             <td class="p-3">ISP backbone, WANs</td>
+            </tr>
+           </tbody>
+          </table>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section><!-- Cabling Tools Section -->
+     <section id="tools" class="section-content hidden p-6 max-w-5xl mx-auto">
+      <div class="slide-in">
+       <div class="card-gradient rounded-2xl p-8 glow mb-6">
+        <div class="flex items-center gap-4 mb-6">
+         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-2xl">
+          🔧
+         </div>
+         <div>
+          <h2 class="text-2xl font-bold text-white">Cabling Tools &amp; Best Practices</h2>
+          <p class="text-gray-400">Essential Equipment for Network Installation</p>
+         </div>
+        </div><!-- Cable Crimper -->
+        <div class="component-card bg-gradient-to-br from-red-900/50 to-red-800/30 rounded-xl p-6 border border-red-500/30 mb-6">
+         <div class="flex items-start gap-4 mb-4">
+          <div class="text-5xl">
+           🔨
+          </div>
+          <div class="flex-1">
+           <h3 class="text-2xl font-bold text-red-300 mb-1">Cable Crimper</h3>
+           <p class="text-gray-400 text-sm">Attaches RJ45 connectors to twisted pair cables</p>
+          </div>
+         </div>
+         <div class="grid md:grid-cols-2 gap-6">
+          <div>
+           <h4 class="font-semibold text-red-200 mb-3">📋 Purpose</h4>
+           <ul class="text-sm text-gray-400 space-y-2">
+            <li>• Compresses RJ45 connector onto cable ends</li>
+            <li>• Pushes 8 pins into the 8 wires</li>
+            <li>• Creates permanent connection</li>
+            <li>• Manual or automatic models available</li>
+           </ul>
+          </div>
+          <div>
+           <h4 class="font-semibold text-red-200 mb-3">✅ Best Practices</h4>
+           <ul class="text-sm text-gray-400 space-y-2">
+            <li>• Strip outer jacket ~12mm (0.5 inch)</li>
+            <li>• Arrange wires in correct order</li>
+            <li>• Insert into RJ45 until they touch</li>
+            <li>• Crimp with firm, even pressure</li>
+            <li>• Test cable after crimping</li>
+           </ul>
+          </div>
+         </div>
+         <div class="mt-4 bg-red-500/10 rounded-lg p-4 border border-red-500/20">
+          <p class="text-sm text-red-200"><strong>⚠️ Warning:</strong> Improper crimping is the most common cause of cable failures. Take time to do it correctly or use pre-made cables.</p>
+         </div>
+        </div><!-- Cable Tester -->
+        <div class="component-card bg-gradient-to-br from-green-900/50 to-green-800/30 rounded-xl p-6 border border-green-500/30 mb-6">
+         <div class="flex items-start gap-4 mb-4">
+          <div class="text-5xl">
+           🧪
+          </div>
+          <div class="flex-1">
+           <h3 class="text-2xl font-bold text-green-300 mb-1">Cable Tester</h3>
+           <p class="text-gray-400 text-sm">Verifies cable connectivity and proper wiring</p>
+          </div>
+         </div>
+         <div class="grid md:grid-cols-2 gap-6">
+          <div>
+           <h4 class="font-semibold text-green-200 mb-3">📋 Types</h4>
+           <ul class="text-sm text-gray-400 space-y-2">
+            <li>• <strong>Basic Cable Tester:</strong> Checks if all 8 wires are connected</li>
+            <li>• <strong>Multi-function Tester:</strong> Tests speed, length, signal quality</li>
+            <li>• <strong>Tone &amp; Probe:</strong> Identifies individual cables in walls</li>
+            <li>• <strong>Fiber Optic Tester:</strong> Measures light signal strength</li>
+           </ul>
+          </div>
+          <div>
+           <h4 class="font-semibold text-green-200 mb-3">✅ What They Check</h4>
+           <ul class="text-sm text-gray-400 space-y-2">
+            <li>✓ Continuity (all wires connected)</li>
+            <li>✓ Proper wiring order (568A/568B)</li>
+            <li>✓ Short circuits (crossed wires)</li>
+            <li>✓ Cable length and attenuation</li>
+            <li>✓ Network speed capability</li>
+           </ul>
+          </div>
+         </div>
+         <div class="mt-4 bg-green-500/10 rounded-lg p-4 border border-green-500/20">
+          <p class="text-sm text-green-200"><strong>💡 Tip:</strong> Always test cables after crimping. A cable tester costs $20-100 but saves hours of troubleshooting problems later.</p>
+         </div>
+        </div><!-- Wire Stripper -->
+        <div class="component-card bg-gradient-to-br from-blue-900/50 to-blue-800/30 rounded-xl p-6 border border-blue-500/30 mb-6">
+         <div class="flex items-start gap-4 mb-4">
+          <div class="text-5xl">
+           ✂️
+          </div>
+          <div class="flex-1">
+           <h3 class="text-2xl font-bold text-blue-300 mb-1">Wire Stripper</h3>
+           <p class="text-gray-400 text-sm">Removes cable jacket to expose individual wires</p>
+          </div>
+         </div>
+         <div class="grid md:grid-cols-2 gap-6">
+          <div>
+           <h4 class="font-semibold text-blue-200 mb-3">📋 Purpose</h4>
+           <ul class="text-sm text-gray-400 space-y-2">
+            <li>• Removes outer insulation from cable</li>
+            <li>• Exposes individual pair wires inside</li>
+            <li>• Must be done carefully to avoid damaging wires</li>
+            <li>• Different models for different cable gauges</li>
+           </ul>
+          </div>
+          <div>
+           <h4 class="font-semibold text-blue-200 mb-3">✅ Tips</h4>
+           <ul class="text-sm text-gray-400 space-y-2">
+            <li>• Strip 1-2 inches (25-50mm) for RJ45</li>
+            <li>• Strip 3-6 inches (75-150mm) for punch-down blocks</li>
+            <li>• Don't strip too much (creates slack)</li>
+            <li>• Don't damage individual wire insulation</li>
+           </ul>
+          </div>
+         </div>
+        </div><!-- Punch-Down Tool -->
+        <div class="component-card bg-gradient-to-br from-purple-900/50 to-purple-800/30 rounded-xl p-6 border border-purple-500/30 mb-6">
+         <div class="flex items-start gap-4 mb-4">
+          <div class="text-5xl">
+           📌
+          </div>
+          <div class="flex-1">
+           <h3 class="text-2xl font-bold text-purple-300 mb-1">Punch-Down Tool (Impact Tool)</h3>
+           <p class="text-gray-400 text-sm">Inserts wires into termination blocks</p>
+          </div>
+         </div>
+         <div class="grid md:grid-cols-2 gap-6">
+          <div>
+           <h4 class="font-semibold text-purple-200 mb-3">📋 Purpose</h4>
+           <ul class="text-sm text-gray-400 space-y-2">
+            <li>• Secures individual wires into punch blocks</li>
+            <li>• Used in wall jacks and patch panels</li>
+            <li>• Interchangeable tips for different block types</li>
+            <li>• Uses spring-loaded mechanism for pressure</li>
+           </ul>
+          </div>
+          <div>
+           <h4 class="font-semibold text-purple-200 mb-3">🔌 Common Blocks</h4>
+           <div class="space-y-2 text-sm">
+            <div class="bg-purple-500/20 rounded-lg p-2">
+             <p class="text-purple-300 font-mono">110 Block</p>
+             <p class="text-xs text-gray-400">Most common, standard telecom</p>
+            </div>
+            <div class="bg-purple-500/20 rounded-lg p-2">
+             <p class="text-purple-300 font-mono">Krone Block</p>
+             <p class="text-xs text-gray-400">European standard</p>
+            </div>
+            <div class="bg-purple-500/20 rounded-lg p-2">
+             <p class="text-purple-300 font-mono">66 Block</p>
+             <p class="text-xs text-gray-400">Legacy, older systems</p>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div><!-- Other Tools -->
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+         <div class="component-card bg-gradient-to-br from-cyan-900/50 to-cyan-800/30 rounded-xl p-6 border border-cyan-500/30">
+          <div class="text-4xl mb-3">
+           📏
+          </div>
+          <h4 class="text-xl font-bold text-cyan-300 mb-2">Cable Comb</h4>
+          <p class="text-sm text-gray-400 mb-3">Organizes twisted pairs for neat appearance</p>
+          <ul class="text-xs text-gray-400 space-y-1">
+           <li>• Separates individual wire pairs</li>
+           <li>• Guides wires into proper position</li>
+           <li>• Improves aesthetics of installation</li>
+          </ul>
+         </div>
+         <div class="component-card bg-gradient-to-br from-yellow-900/50 to-yellow-800/30 rounded-xl p-6 border border-yellow-500/30">
+          <div class="text-4xl mb-3">
+           🏷️
+          </div>
+          <h4 class="text-xl font-bold text-yellow-300 mb-2">Cable Labels</h4>
+          <p class="text-sm text-gray-400 mb-3">Identifies cable purposes and locations</p>
+          <ul class="text-xs text-gray-400 space-y-1">
+           <li>• Clearly mark cable functions</li>
+           <li>• Include port numbers and dates</li>
+           <li>• Essential for troubleshooting</li>
+          </ul>
+         </div>
+         <div class="component-card bg-gradient-to-br from-rose-900/50 to-rose-800/30 rounded-xl p-6 border border-rose-500/30">
+          <div class="text-4xl mb-3">
+           🧲
+          </div>
+          <h4 class="text-xl font-bold text-rose-300 mb-2">Fish Tape</h4>
+          <p class="text-sm text-gray-400 mb-3">Routes cables through walls and conduit</p>
+          <ul class="text-xs text-gray-400 space-y-1">
+           <li>• Flexible steel tape on spool</li>
+           <li>• Guides cable through tight spaces</li>
+           <li>• Helps avoid cable damage</li>
+          </ul>
+         </div>
+         <div class="component-card bg-gradient-to-br from-indigo-900/50 to-indigo-800/30 rounded-xl p-6 border border-indigo-500/30">
+          <div class="text-4xl mb-3">
+           📦
+          </div>
+          <h4 class="text-xl font-bold text-indigo-300 mb-2">Cable Management</h4>
+          <p class="text-sm text-gray-400 mb-3">Organizes and protects cables</p>
+          <ul class="text-xs text-gray-400 space-y-1">
+           <li>• Cable trays, ties, velcro</li>
+           <li>• Prevents damage and tangling</li>
+           <li>• Improves airflow in equipment</li>
+          </ul>
+         </div>
+        </div><!-- Best Practices -->
+        <div class="bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-xl p-6 border border-green-500/20">
+         <h3 class="text-lg font-bold text-green-400 mb-4 flex items-center gap-2"><span>✅</span> Cable Installation Best Practices</h3>
+         <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-300">
+          <div class="space-y-2">
+           <p class="text-green-300 font-medium">📐 Planning</p>
+           <ul class="text-gray-400 space-y-1">
+            <li>• Measure distances accurately</li>
+            <li>• Plan cable routes before installing</li>
+            <li>• Choose appropriate cable category</li>
+            <li>• Keep 20% extra length for future needs</li>
+           </ul>
+          </div>
+          <div class="space-y-2">
+           <p class="text-green-300 font-medium">🔧 Installation</p>
+           <ul class="text-gray-400 space-y-1">
+            <li>• Don't exceed cable bend radius (≥5 x diameter)</li>
+            <li>• Keep cables away from electrical lines</li>
+            <li>• Avoid excessive tension when pulling</li>
+            <li>• Use cable management systems</li>
+           </ul>
+          </div>
+          <div class="space-y-2">
+           <p class="text-green-300 font-medium">🎯 Termination</p>
+           <ul class="text-gray-400 space-y-1">
+            <li>• Follow T568A or T568B consistently</li>
+            <li>• Strip minimum insulation needed</li>
+            <li>• Ensure all wires are fully inserted</li>
+            <li>• Crimp with proper tool and technique</li>
+           </ul>
+          </div>
+          <div class="space-y-2">
+           <p class="text-green-300 font-medium">✔️ Testing</p>
+           <ul class="text-gray-400 space-y-1">
+            <li>• Test before drywall is closed</li>
+            <li>• Test at multiple speeds if possible</li>
+            <li>• Document test results</li>
+            <li>• Retest after any modifications</li>
+           </ul>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section><!-- Real-World Examples Section -->
+     <section id="casestudy" class="section-content hidden p-6 max-w-5xl mx-auto">
+      <div class="slide-in">
+       <div class="card-gradient rounded-2xl p-8 glow mb-6">
+        <div class="flex items-center gap-4 mb-6">
+         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-2xl">
+          🌍
+         </div>
+         <div>
+          <h2 class="text-2xl font-bold text-white">Real-World Applications</h2>
+          <p class="text-gray-400">How Physical Infrastructure Powers Today's Networks</p>
+         </div>
+        </div><!-- Example 1: Data Center -->
+        <div class="bg-gradient-to-r from-blue-900/30 to-cyan-900/30 rounded-xl p-6 border border-blue-500/20 mb-6">
+         <h3 class="text-xl font-bold text-cyan-400 mb-3 flex items-center gap-2"><span>🏢</span> Example 1: Data Center Infrastructure</h3>
+         <div class="grid md:grid-cols-2 gap-6 mb-4">
+          <div class="bg-slate-800/50 rounded-lg p-4">
+           <h4 class="font-semibold text-cyan-300 mb-2">Physical Setup</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• Thousands of servers in racks</li>
+            <li>• Fiber optic backbone (100+ Gbps)</li>
+            <li>• Cat6a/Cat7 for server connections</li>
+            <li>• Redundant switches for failover</li>
+            <li>• Extensive cable management</li>
+           </ul>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-4">
+           <h4 class="font-semibold text-cyan-300 mb-2">Why It Matters</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• Uptime is critical ($ per minute)</li>
+            <li>• Speed impacts user experience globally</li>
+            <li>• Redundancy prevents service loss</li>
+            <li>• Proper cooling requires good airflow</li>
+            <li>• Organization saves troubleshooting time</li>
+           </ul>
+          </div>
+         </div>
+         <div class="bg-blue-500/10 rounded-lg p-4 border border-blue-500/20">
+          <p class="text-sm text-blue-200"><strong>💡 Real Cost:</strong> One cable misconfiguration in a major data center can cost $1 million+ in downtime.</p>
+         </div>
+        </div><!-- Example 2: Hospital Network -->
+        <div class="bg-gradient-to-r from-red-900/30 to-pink-900/30 rounded-xl p-6 border border-red-500/20 mb-6">
+         <h3 class="text-xl font-bold text-red-400 mb-3 flex items-center gap-2"><span>🏥</span> Example 2: Hospital Medical Network</h3>
+         <div class="grid md:grid-cols-2 gap-6 mb-4">
+          <div class="bg-slate-800/50 rounded-lg p-4">
+           <h4 class="font-semibold text-red-300 mb-2">Infrastructure Challenges</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• Medical equipment needs reliable connection</li>
+            <li>• Patient data must be HIPAA compliant</li>
+            <li>• Wireless NICs in mobile carts</li>
+            <li>• Wired connections in operating rooms</li>
+            <li>• Redundant networks for critical systems</li>
+           </ul>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-4">
+           <h4 class="font-semibold text-red-300 mb-2">Solution</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• PoE switches for wireless APs</li>
+            <li>• Shielded (STP) cables to reduce interference</li>
+            <li>• Redundant uplinks to core switches</li>
+            <li>• Managed VLANs for network segmentation</li>
+            <li>• Regular testing and backup systems</li>
+           </ul>
+          </div>
+         </div>
+         <div class="bg-red-500/10 rounded-lg p-4 border border-red-500/20">
+          <p class="text-sm text-red-200"><strong>⚠️ Critical:</strong> Network downtime in a hospital can affect patient care. Physical infrastructure must be rock solid with redundancy.</p>
+         </div>
+        </div><!-- Example 3: School Network -->
+        <div class="bg-gradient-to-r from-green-900/30 to-emerald-900/30 rounded-xl p-6 border border-green-500/20">
+         <h3 class="text-xl font-bold text-green-400 mb-3 flex items-center gap-2"><span>🎓</span> Example 3: Educational Institution (Like Lyceum)</h3>
+         <div class="grid md:grid-cols-2 gap-6 mb-4">
+          <div class="bg-slate-800/50 rounded-lg p-4">
+           <h4 class="font-semibold text-green-300 mb-2">Network Design</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• Multiple buildings connected via fiber</li>
+            <li>• Computer labs with Cat6 wiring</li>
+            <li>• WiFi APs throughout campus</li>
+            <li>• Switches in each building</li>
+            <li>• Central server room (main router)</li>
+           </ul>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-4">
+           <h4 class="font-semibold text-green-300 mb-2">Student Impact</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• Fast, reliable internet for learning</li>
+            <li>• Access to online resources globally</li>
+            <li>• Video conferencing for remote classes</li>
+            <li>• Online assessment and submissions</li>
+            <li>• Research and development resources</li>
+           </ul>
+          </div>
+         </div>
+         <div class="bg-green-500/10 rounded-lg p-4 border border-green-500/20">
+          <p class="text-sm text-green-200"><strong>🎯 Concept:</strong> The physical infrastructure you learn in this module is what makes your classroom WiFi fast, your computer lab connected, and online classes possible.</p>
+         </div>
+        </div><!-- Current Trends -->
+        <div class="bg-gradient-to-r from-orange-500/10 to-yellow-500/10 rounded-xl p-6 border border-orange-500/20">
+         <h3 class="text-lg font-bold text-orange-400 mb-4 flex items-center gap-2"><span>📡</span> 2025 Infrastructure Trends</h3>
+         <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-slate-800/50 rounded-lg p-4">
+           <h4 class="font-semibold text-orange-300 mb-2">🚀 5G &amp; Edge Computing</h4>
+           <p class="text-sm text-gray-400">Networks moving processing closer to users, reducing latency and improving real-time applications</p>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-4">
+           <h4 class="font-semibold text-orange-300 mb-2">🌱 Sustainable Infrastructure</h4>
+           <p class="text-sm text-gray-400">More efficient cooling, renewable power for data centers, reduction in e-waste</p>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-4">
+           <h4 class="font-semibold text-orange-300 mb-2">⚡ Higher Speeds</h4>
+           <p class="text-sm text-gray-400">Shift from 10Gbps to 25Gbps, 40Gbps, 100Gbps connections becoming mainstream</p>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-4">
+           <h4 class="font-semibold text-orange-300 mb-2">🛡️ Security Infrastructure</h4>
+           <p class="text-sm text-gray-400">Zero-trust networks, microsegmentation, and security-by-design in physical topology</p>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section><!-- Lab Activity Section -->
+     <section id="lab" class="section-content hidden p-6 max-w-5xl mx-auto">
+      <div class="slide-in">
+       <div class="card-gradient rounded-2xl p-8 glow mb-6">
+        <div class="flex items-center gap-4 mb-6">
+         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-2xl">
+          🧪
+         </div>
+         <div>
+          <h2 class="text-2xl font-bold text-white">Laboratory Activities</h2>
+          <p class="text-gray-400">Duration: 3 Hours | Individual or Group (2-3 members)</p>
+         </div>
+        </div><!-- Lab Tabs -->
+        <div class="flex flex-wrap gap-2 mb-6"><button onclick="showLabTab('lab-activity1')" class="tab-btn active px-4 py-2 rounded-lg bg-slate-700 text-sm" data-lab="lab-activity1">Activity 1: Cable Analysis</button> <button onclick="showLabTab('lab-activity2')" class="tab-btn px-4 py-2 rounded-lg bg-slate-700 text-sm" data-lab="lab-activity2">Activity 2: Network Design</button> <button onclick="showLabTab('lab-rubric')" class="tab-btn px-4 py-2 rounded-lg bg-slate-700 text-sm" data-lab="lab-rubric">Rubric &amp; Checklist</button>
+        </div><!-- Activity 1 -->
+        <div id="lab-activity1" class="lab-content">
+         <div class="lab-card border-l-4 border-blue-500 bg-blue-500/10 rounded-xl p-6 border border-blue-500/20 mb-6">
+          <h3 class="text-xl font-bold text-blue-400 mb-2">Activity 1: Cable Type Identification &amp; Testing</h3>
+          <p class="text-gray-400 mb-4">Time: 1 Hour | Individual Activity</p>
+          <div class="bg-slate-800/50 rounded-lg p-4 mb-4">
+           <h4 class="font-semibold text-white mb-2">📋 Objectives</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• Identify different types of network cables</li>
+            <li>• Understand cable specifications and standards</li>
+            <li>• Learn proper cable termination techniques</li>
+            <li>• Recognize common mistakes and defects</li>
+           </ul>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-4 mb-4">
+           <h4 class="font-semibold text-white mb-3">🔍 Tasks</h4>
+           <div class="space-y-3 text-sm text-gray-300">
+            <div class="bg-blue-500/10 rounded-lg p-3 border border-blue-500/20">
+             <p class="text-blue-300 font-medium mb-1">Task 1: Cable Collection (15 mins)</p>
+             <p class="text-gray-400">Gather 5 different network cables. For each cable:</p>
+             <ul class="text-gray-400 ml-4 space-y-1 mt-1">
+              <li>• Identify the cable type (Cat5e, Cat6, fiber, coaxial)</li>
+              <li>• Document the color and physical characteristics</li>
+              <li>• Measure the cable length</li>
+              <li>• Examine the connector type (RJ45, SC, LC, BNC)</li>
+              <li>• Check for any damage or defects</li>
+             </ul>
+            </div>
+            <div class="bg-green-500/10 rounded-lg p-3 border border-green-500/20">
+             <p class="text-green-300 font-medium mb-1">Task 2: Wire Pair Analysis (20 mins)</p>
+             <p class="text-gray-400">For twisted pair cables:</p>
+             <ul class="text-gray-400 ml-4 space-y-1 mt-1">
+              <li>• Carefully strip ~3cm of outer jacket</li>
+              <li>• Identify the 4 twisted pairs (8 wires total)</li>
+              <li>• Determine if wired as T568A or T568B</li>
+              <li>• Document the wire order (colors and sequence)</li>
+              <li>• Analyze why twisting reduces interference</li>
+             </ul>
+            </div>
+            <div class="bg-purple-500/10 rounded-lg p-3 border border-purple-500/20">
+             <p class="text-purple-300 font-medium mb-1">Task 3: Connector Inspection (15 mins)</p>
+             <p class="text-gray-400">For each cable connector:</p>
+             <ul class="text-gray-400 ml-4 space-y-1 mt-1">
+              <li>• Count the pins/contacts</li>
+              <li>• Verify all wires are fully inserted</li>
+              <li>• Check for bent or damaged pins</li>
+              <li>• Look for proper crimp marks</li>
+              <li>• Test with a cable tester if available</li>
+             </ul>
+            </div>
+            <div class="bg-yellow-500/10 rounded-lg p-3 border border-yellow-500/20">
+             <p class="text-yellow-300 font-medium mb-1">Task 4: Comparison Chart (10 mins)</p>
+             <p class="text-gray-400">Create a comparison table with:</p>
+             <ul class="text-gray-400 ml-4 space-y-1 mt-1">
+              <li>• Cable type, connector type, wiring standard</li>
+              <li>• Speed capability, maximum distance</li>
+              <li>• Typical applications and environments</li>
+              <li>• Any defects or issues found</li>
+             </ul>
+            </div>
+           </div>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-6 border border-blue-500/30">
+           <h4 class="font-bold text-blue-400 mb-4">📝 Lab Report Template</h4>
+           <div class="space-y-4">
+            <div><label class="block text-sm text-gray-400 mb-2">Cable #1 Type</label> <input type="text" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white text-sm" placeholder="e.g., Cat6 UTP">
+            </div>
+            <div class="grid md:grid-cols-2 gap-4">
+             <div><label class="block text-sm text-gray-400 mb-2">Connector Type</label> <input type="text" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white text-sm" placeholder="e.g., RJ45">
+             </div>
+             <div><label class="block text-sm text-gray-400 mb-2">Wiring Standard</label> <select class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white text-sm"> <option>T568A</option> <option>T568B</option> <option>Unknown</option> </select>
+             </div>
+            </div>
+            <div><label class="block text-sm text-gray-400 mb-2">Observations &amp; Issues Found</label> <textarea class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-3 text-white text-sm" rows="3" placeholder="Document any defects, damage, or interesting findings..."></textarea>
+            </div>
+           </div>
+          </div>
+          <div class="mt-4 bg-blue-500/10 rounded-lg p-4 border border-blue-500/20">
+           <h4 class="font-semibold text-blue-300 mb-2">📄 Deliverables</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>✓ Photographs of 5 different cables with labels</li>
+            <li>✓ Comparison chart with specifications</li>
+            <li>✓ Detailed wire pair analysis for 1 twisted pair cable</li>
+            <li>✓ Lab report with observations</li>
+           </ul>
+          </div>
+         </div>
+        </div><!-- Activity 2 -->
+        <div id="lab-activity2" class="lab-content hidden">
+         <div class="lab-card border-l-4 border-green-500 bg-green-500/10 rounded-xl p-6 border border-green-500/20 mb-6">
+          <h3 class="text-xl font-bold text-green-400 mb-2">Activity 2: Physical Network Infrastructure Design</h3>
+          <p class="text-gray-400 mb-4">Time: 2 Hours | Group Activity (2-3 members)</p>
+          <div class="bg-slate-800/50 rounded-lg p-4 mb-4">
+           <h4 class="font-semibold text-white mb-2">📋 Objectives</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>• Design physical network layout for a building</li>
+            <li>• Select appropriate devices and cables</li>
+            <li>• Understand placement and cable routing</li>
+            <li>• Create a detailed technical specification</li>
+           </ul>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-4 mb-4">
+           <h4 class="font-semibold text-white mb-3">🏢 Scenario</h4>
+           <div class="bg-green-500/10 rounded-lg p-4 border border-green-500/20">
+            <p class="text-gray-300"><strong>Your Task:</strong> Design the physical network infrastructure for a 3-story office building with:</p>
+            <ul class="text-sm text-gray-400 mt-3 space-y-1">
+             <li>• Ground Floor: 40 workstations (4 offices of 10 each)</li>
+             <li>• 2nd Floor: 30 workstations (3 offices of 10 each)</li>
+             <li>• 3rd Floor: 20 workstations (2 offices of 10 each)</li>
+             <li>• Central server room in basement</li>
+             <li>• 4 meeting rooms with WiFi</li>
+             <li>• Security cameras throughout building</li>
+            </ul>
+           </div>
+          </div>
+          <div class="bg-slate-800/50 rounded-lg p-4 mb-4">
+           <h4 class="font-semibold text-white mb-3">📝 Design Tasks</h4>
+           <div class="space-y-3 text-sm">
+            <div class="bg-green-500/20 rounded-lg p-3 border border-green-500/30">
+             <p class="text-green-300 font-medium mb-2">Task 1: Device Selection (25 mins)</p>
+             <ul class="text-gray-400 space-y-1">
+              <li>• Specify number and type of switches per floor</li>
+              <li>• Plan WiFi access point placement</li>
+              <li>• Determine router and firewall specs</li>
+              <li>• Consider PoE for cameras and APs</li>
+              <li>• Plan for future expansion (20%)</li>
+             </ul>
+            </div>
+            <div class="bg-blue-500/20 rounded-lg p-3 border border-blue-500/30">
+             <p class="text-blue-300 font-medium mb-2">Task 2: Cable Planning (30 mins)</p>
+             <ul class="text-gray-400 space-y-1">
+              <li>• Choose cable types (Cat6, Cat6a, fiber for backbone)</li>
+              <li>• Calculate cable quantities needed</li>
+              <li>• Plan cable routes between floors</li>
+              <li>• Consider cable trays and conduit</li>
+              <li>• Account for cable testing and certification</li>
+             </ul>
+            </div>
+            <div class="bg-purple-500/20 rounded-lg p-3 border border-purple-500/30">
+             <p class="text-purple-300 font-medium mb-2">Task 3: Layout Diagram (40 mins)</p>
+             <ul class="text-gray-400 space-y-1">
+              <li>• Draw floor plan with workstation locations</li>
+              <li>• Mark switch and AP placement</li>
+              <li>• Show cable routes between devices</li>
+              <li>• Include server room and backbone connections</li>
+              <li>• Add labels and legend</li>
+             </ul>
+            </div>
+            <div class="bg-yellow-500/20 rounded-lg p-3 border border-yellow-500/30">
+             <p class="text-yellow-300 font-medium mb-2">Task 4: Specifications Document (25 mins)</p>
+             <ul class="text-gray-400 space-y-1">
+              <li>• Bill of materials with costs</li>
+              <li>• Installation procedures and timeline</li>
+              <li>• Cable management strategy</li>
+              <li>• Testing and certification plan</li>
+              <li>• Maintenance and upgrade considerations</li>
+             </ul>
+            </div>
+           </div>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-6 border border-green-500/30">
+           <h4 class="font-bold text-green-400 mb-4">📊 Design Specification Template</h4>
+           <div class="space-y-4">
+            <div><label class="block text-sm text-gray-400 mb-2">Project Name</label> <input type="text" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white text-sm" placeholder="e.g., 3-Story Office Building Network">
+            </div>
+            <div class="grid md:grid-cols-2 gap-4">
+             <div><label class="block text-sm text-gray-400 mb-2">Total Workstations</label> <input type="number" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white text-sm" value="90" readonly>
+             </div>
+             <div><label class="block text-sm text-gray-400 mb-2">Total Cost Estimate</label> <input type="text" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white text-sm" placeholder="₱ ">
+             </div>
+            </div>
+            <div><label class="block text-sm text-gray-400 mb-2">Design Notes &amp; Justifications</label> <textarea class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-3 text-white text-sm" rows="4" placeholder="Explain your design choices, cable selections, device placement..."></textarea>
+            </div>
+           </div>
+          </div>
+          <div class="mt-4 bg-green-500/10 rounded-lg p-4 border border-green-500/20">
+           <h4 class="font-semibold text-green-300 mb-2">📄 Deliverables</h4>
+           <ul class="text-sm text-gray-400 space-y-1">
+            <li>✓ Network topology diagram (hand-drawn or digital)</li>
+            <li>✓ Floor plans with device and cable placement</li>
+            <li>✓ Bill of materials with costs</li>
+            <li>✓ Installation and testing plan</li>
+            <li>✓ Group presentation (5-7 minutes)</li>
+           </ul>
+          </div>
+         </div>
+        </div><!-- Rubric -->
+        <div id="lab-rubric" class="lab-content hidden">
+         <div class="bg-amber-500/10 rounded-xl p-6 border border-amber-500/20">
+          <h3 class="text-xl font-bold text-amber-400 mb-4">📊 Assessment Rubric</h3>
+          <div class="overflow-x-auto mb-6">
+           <table class="w-full text-sm">
+            <thead>
+             <tr class="border-b border-slate-600">
+              <th class="text-left p-3 text-gray-300">Criteria</th>
+              <th class="text-center p-3 text-gray-300">Excellent (5)</th>
+              <th class="text-center p-3 text-gray-300">Good (4)</th>
+              <th class="text-center p-3 text-gray-300">Satisfactory (3)</th>
+              <th class="text-center p-3 text-gray-300">Needs Work (1-2)</th>
+             </tr>
+            </thead>
+            <tbody class="text-gray-400">
+             <tr class="border-b border-slate-700">
+              <td class="p-3 font-medium text-white">Cable Identification</td>
+              <td class="p-3 text-center text-sm">All cables correctly identified with complete specs</td>
+              <td class="p-3 text-center text-sm">Most cables correctly identified</td>
+              <td class="p-3 text-center text-sm">Some cables identified, missing specs</td>
+              <td class="p-3 text-center text-sm">Few identified, many errors</td>
+             </tr>
+             <tr class="border-b border-slate-700">
+              <td class="p-3 font-medium text-white">Wire Pair Analysis</td>
+              <td class="p-3 text-center text-sm">Correct wiring standard, detailed analysis</td>
+              <td class="p-3 text-center text-sm">Correct wiring, basic analysis</td>
+              <td class="p-3 text-center text-sm">Wiring identified, incomplete analysis</td>
+              <td class="p-3 text-center text-sm">Incorrect or missing analysis</td>
+             </tr>
+             <tr class="border-b border-slate-700">
+              <td class="p-3 font-medium text-white">Network Design</td>
+              <td class="p-3 text-center text-sm">Optimal design, excellent justification</td>
+              <td class="p-3 text-center text-sm">Good design, clear reasoning</td>
+              <td class="p-3 text-center text-sm">Acceptable design, basic reasoning</td>
+              <td class="p-3 text-center text-sm">Flawed design or incomplete reasoning</td>
+             </tr>
+             <tr class="border-b border-slate-700">
+              <td class="p-3 font-medium text-white">Device Selection</td>
+              <td class="p-3 text-center text-sm">Appropriate devices for all requirements</td>
+              <td class="p-3 text-center text-sm">Mostly appropriate selections</td>
+              <td class="p-3 text-center text-sm">Some appropriate selections</td>
+              <td class="p-3 text-center text-sm">Inappropriate or missing devices</td>
+             </tr>
+             <tr class="border-b border-slate-700">
+              <td class="p-3 font-medium text-white">Documentation</td>
+              <td class="p-3 text-center text-sm">Complete, clear, well-organized</td>
+              <td class="p-3 text-center text-sm">Mostly complete and clear</td>
+              <td class="p-3 text-center text-sm">Complete but unclear in places</td>
+              <td class="p-3 text-center text-sm">Incomplete or disorganized</td>
+             </tr>
+             <tr>
+              <td class="p-3 font-medium text-white">Teamwork &amp; Presentation</td>
+              <td class="p-3 text-center text-sm">Excellent collaboration, polished presentation</td>
+              <td class="p-3 text-center text-sm">Good collaboration and presentation</td>
+              <td class="p-3 text-center text-sm">Adequate teamwork, basic presentation</td>
+              <td class="p-3 text-center text-sm">Poor coordination or unclear presentation</td>
+             </tr>
+            </tbody>
+           </table>
+          </div>
+          <div class="grid md:grid-cols-3 gap-4">
+           <div class="bg-slate-800/50 rounded-lg p-4">
+            <h4 class="font-semibold text-white mb-2">⏰ Time Breakdown</h4>
+            <div class="space-y-1 text-sm text-gray-400">
+             <p>Activity 1: 60 minutes</p>
+             <p>Activity 2: 120 minutes</p>
+             <p>Presentations: 30 minutes</p>
+             <p><strong>Total: 210 minutes (3.5 hours)</strong></p>
+            </div>
+           </div>
+           <div class="bg-slate-800/50 rounded-lg p-4">
+            <h4 class="font-semibold text-white mb-2">📊 Grading Scale</h4>
+            <div class="space-y-1 text-sm">
+             <p class="text-green-400">27-30 points: Excellent (A)</p>
+             <p class="text-blue-400">24-26 points: Very Good (B)</p>
+             <p class="text-yellow-400">21-23 points: Good (C)</p>
+             <p class="text-orange-400">18-20 points: Satisfactory (D)</p>
+             <p class="text-red-400">Below 18: Needs Improvement (F)</p>
+            </div>
+           </div>
+           <div class="bg-slate-800/50 rounded-lg p-4">
+            <h4 class="font-semibold text-white mb-2">✅ Lab Checklist</h4>
+            <div class="space-y-1 text-sm text-gray-400">
+             <p>☐ All cables identified correctly</p>
+             <p>☐ Wire pairs analyzed accurately</p>
+             <p>☐ Network design is feasible</p>
+             <p>☐ Documentation is complete</p>
+             <p>☐ Presentation is professional</p>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section><!-- Quiz Section -->
+     <section id="quiz" class="section-content hidden p-6 max-w-5xl mx-auto">
+      <div class="slide-in">
+       <div class="card-gradient rounded-2xl p-8 glow">
+        <div class="flex items-center gap-4 mb-6">
+         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center text-2xl">
+          ✅
+         </div>
+         <div>
+          <h2 class="text-2xl font-bold text-white">Knowledge Check Quiz</h2>
+          <p class="text-gray-400">Test your understanding of physical infrastructure concepts</p>
+         </div>
+        </div>
+        <div id="quiz-container"><!-- Quiz will be populated by JavaScript -->
+        </div>
+        <div id="quiz-result" class="hidden mt-6 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-xl p-6 border border-green-500/30">
+         <h3 class="text-xl font-bold text-green-400 mb-2">🎉 Quiz Complete!</h3>
+         <p id="quiz-score" class="text-lg text-white"></p>
+         <p id="quiz-feedback" class="text-gray-400 mt-2"></p><button onclick="resetQuiz()" class="mt-4 px-6 py-2 bg-green-500 hover:bg-green-600 rounded-lg text-white font-medium transition-colors">Retake Quiz</button>
+        </div>
+       </div>
+      </div>
+     </section>
+    </main>
+   </div><!-- Footer -->
+   <footer class="bg-slate-900/80 border-t border-blue-500/20 py-4 lg:ml-64">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+     <p class="text-sm text-gray-500">© 2026 Lyceum de San Pablo - College of Information Systems</p>
+     <p class="text-xs text-gray-600 mt-1">IS103 - IT Infrastructure and Network Technologies | Week 3: Physical Network Infrastructure</p>
+     <p class="text-xs text-gray-600">Instructor: MKDB</p>
+    </div>
+   </footer>
+  </div>
+  <script>
+    // Configuration
+    const defaultConfig = {
+      course_title: 'IS103 - IT Infrastructure & Network Technologies',
+      instructor_name: 'MKDB',
+      institution_name: 'Lyceum de San Pablo'
+    };
+
+    let config = { ...defaultConfig };
+    let currentSection = 'overview';
+    let visitedSections = new Set(['overview']);
+    let quizAnswers = {};
+    let quizSubmitted = false;
+
+    // Quiz Questions
+    const quizQuestions = [
+      {
+        id: 1,
+        question: "Which networking device operates at Layer 2 and forwards data based on MAC addresses?",
+        options: [
+          "Router",
+          "Switch",
+          "Hub",
+          "Modem"
+        ],
+        correct: 1
+      },
+      {
+        id: 2,
+        question: "What is the maximum distance for a standard Cat6 cable?",
+        options: [
+          "50 meters",
+          "75 meters",
+          "100 meters",
+          "150 meters"
+        ],
+        correct: 2
+      },
+      {
+        id: 3,
+        question: "Which type of cable uses light pulses instead of electrical signals?",
+        options: [
+          "Twisted Pair",
+          "Coaxial",
+          "Fiber Optic",
+          "Serial Cable"
+        ],
+        correct: 2
+      },
+      {
+        id: 4,
+        question: "What does a NIC (Network Interface Card) do?",
+        options: [
+          "Routes data between networks",
+          "Connects a computer to the network",
+          "Protects the network from threats",
+          "Amplifies network signals"
+        ],
+        correct: 1
+      },
+      {
+        id: 5,
+        question: "The standard connector for twisted pair cables is:",
+        options: [
+          "BNC",
+          "RJ45",
+          "LC",
+          "SC"
+        ],
+        correct: 1
+      },
+      {
+        id: 6,
+        question: "Which wiring standard is typically used in business environments?",
+        options: [
+          "T568A",
+          "T568B",
+          "Both A and B are used",
+          "Neither, they're obsolete"
+        ],
+        correct: 1
+      },
+      {
+        id: 7,
+        question: "What is the primary function of a router in a network?",
+        options: [
+          "Connects devices within the same network",
+          "Connects different networks together",
+          "Provides wireless connectivity",
+          "Tests cable integrity"
+        ],
+        correct: 1
+      },
+      {
+        id: 8,
+        question: "Which tool is used to attach RJ45 connectors to cable ends?",
+        options: [
+          "Wire Stripper",
+          "Cable Tester",
+          "Cable Crimper",
+          "Punch-Down Tool"
+        ],
+        correct: 2
+      },
+      {
+        id: 9,
+        question: "What does PoE (Power over Ethernet) do?",
+        options: [
+          "Powers routers wirelessly",
+          "Supplies both power and data through a single cable",
+          "Protects cables from electrical damage",
+          "Increases internet speed"
+        ],
+        correct: 1
+      },
+      {
+        id: 10,
+        question: "Which network device is now considered obsolete for data networks?",
+        options: [
+          "Switch",
+          "Router",
+          "Hub",
+          "Access Point"
+        ],
+        correct: 2
+      }
+    ];
+
+    // Initialize
+    function init() {
+      initQuiz();
+      updateProgress();
+    }
+
+    // Show section
+    function showSection(sectionId) {
+      document.querySelectorAll('.section-content').forEach(section => {
+        section.classList.add('hidden');
+      });
+      document.getElementById(sectionId).classList.remove('hidden');
+      
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.dataset.section === sectionId) {
+          item.classList.add('active');
+        }
+      });
+      
+      currentSection = sectionId;
+      visitedSections.add(sectionId);
+      updateProgress();
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Update progress
+    function updateProgress() {
+      const totalSections = 8;
+      const progress = Math.round((visitedSections.size / totalSections) * 100);
+      document.getElementById('progress-bar').style.width = progress + '%';
+      document.getElementById('progress-text').textContent = progress + '% Complete';
+    }
+
+    // Lab tabs
+    function showLabTab(tabId) {
+      document.querySelectorAll('.lab-content').forEach(content => {
+        content.classList.add('hidden');
+      });
+      document.getElementById(tabId).classList.remove('hidden');
+      
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.lab === tabId) {
+          btn.classList.add('active');
+        }
+      });
+    }
+
+    // Quiz
+    function initQuiz() {
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = quizQuestions.map((q, idx) => `
+        <div class="quiz-question mb-6 bg-slate-800/50 rounded-xl p-5 border border-slate-600/50">
+          <p class="font-medium text-white mb-3">
+            <span class="text-orange-400">${idx + 1}.</span> ${q.question}
+          </p>
+          <div class="space-y-2">
+            ${q.options.map((opt, optIdx) => `
+              <button onclick="selectAnswer(${q.id}, ${optIdx})"
+                      id="q${q.id}-opt${optIdx}"
+                      class="quiz-option w-full text-left px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-sm text-gray-300 hover:border-orange-500 transition-all">
+                <span class="inline-block w-6 h-6 rounded-full bg-slate-600 text-center mr-2 text-xs leading-6">${String.fromCharCode(65 + optIdx)}</span>
+                ${opt}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+      
+      container.innerHTML += `
+        <button onclick="submitQuiz()" id="submit-quiz-btn" class="w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 rounded-xl text-white font-semibold transition-all">
+          Submit Quiz
+        </button>
+      `;
+    }
+
+    function selectAnswer(questionId, optionIdx) {
+      if (quizSubmitted) return;
+      
+      for (let i = 0; i < 4; i++) {
+        const optEl = document.getElementById(`q${questionId}-opt${i}`);
+        if (optEl) {
+          optEl.classList.remove('selected');
+          optEl.style.borderColor = '';
+          optEl.style.background = '';
+        }
+      }
+      
+      const selectedEl = document.getElementById(`q${questionId}-opt${optionIdx}`);
+      selectedEl.classList.add('selected');
+      selectedEl.style.borderColor = '#f97316';
+      selectedEl.style.background = 'rgba(249, 115, 22, 0.1)';
+      quizAnswers[questionId] = optionIdx;
+    }
+
+    function submitQuiz() {
+      if (Object.keys(quizAnswers).length < quizQuestions.length) {
+        alert(`Please answer all questions. ${quizQuestions.length - Object.keys(quizAnswers).length} remaining.`);
+        return;
+      }
+      
+      quizSubmitted = true;
+      let score = 0;
+      
+      quizQuestions.forEach(q => {
+        const userAnswer = quizAnswers[q.id];
+        const correctAnswer = q.correct;
+        
+        for (let i = 0; i < 4; i++) {
+          const optEl = document.getElementById(`q${q.id}-opt${i}`);
+          optEl.classList.remove('selected');
+          optEl.style.pointerEvents = 'none';
+          
+          if (i === correctAnswer) {
+            optEl.classList.add('correct');
+            optEl.style.borderColor = '#22c55e';
+            optEl.style.background = 'rgba(34, 197, 94, 0.2)';
+          } else if (i === userAnswer && userAnswer !== correctAnswer) {
+            optEl.classList.add('incorrect');
+            optEl.style.borderColor = '#ef4444';
+            optEl.style.background = 'rgba(239, 68, 68, 0.2)';
+          }
+        }
+        
+        if (userAnswer === correctAnswer) {
+          score++;
+        }
+      });
+      
+      document.getElementById('submit-quiz-btn').classList.add('hidden');
+      document.getElementById('quiz-result').classList.remove('hidden');
+      
+      const percentage = Math.round((score / quizQuestions.length) * 100);
+      document.getElementById('quiz-score').textContent = `You scored ${score} out of ${quizQuestions.length} (${percentage}%)`;
+      
+      let feedback = '';
+      if (percentage >= 90) {
+        feedback = '🌟 Excellent! You have mastered physical network infrastructure!';
+      } else if (percentage >= 70) {
+        feedback = '👍 Good job! Review the topics you missed.';
+      } else if (percentage >= 50) {
+        feedback = '📚 Fair. Please review the lecture materials again.';
+      } else {
+        feedback = '📖 You need more study. Please re-read the lectures carefully.';
+      }
+      document.getElementById('quiz-feedback').textContent = feedback;
+    }
+
+    function resetQuiz() {
+      quizAnswers = {};
+      quizSubmitted = false;
+      document.getElementById('quiz-result').classList.add('hidden');
+      initQuiz();
+    }
+
+    // Element SDK Integration
+    async function onConfigChange(newConfig) {
+      config = { ...config, ...newConfig };
+      
+      const headerTitle = document.getElementById('header-title');
+      if (headerTitle) {
+        headerTitle.textContent = config.course_title || defaultConfig.course_title;
+      }
+      
+      const headerInstructor = document.getElementById('header-instructor');
+      if (headerInstructor) {
+        headerInstructor.innerHTML = `Instructor: <span class="text-orange-400 font-medium">${config.instructor_name || defaultConfig.instructor_name}</span>`;
+      }
+      
+      const headerInstitution = document.getElementById('header-institution');
+      if (headerInstitution) {
+        headerInstitution.textContent = `${config.institution_name || defaultConfig.institution_name} - College of Information Systems`;
+      }
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (cfg) => ({
+          recolorables: [],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (cfg) => new Map([
+          ['course_title', cfg.course_title || defaultConfig.course_title],
+          ['instructor_name', cfg.instructor_name || defaultConfig.instructor_name],
+          ['institution_name', cfg.institution_name || defaultConfig.institution_name]
+        ])
+      });
+    }
+
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c4e3fb5c746fdb2',t:'MTc2OTU3OTgxMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
