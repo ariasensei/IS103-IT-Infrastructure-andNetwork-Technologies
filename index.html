@@ -3,383 +3,337 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IS3036 - IT Infrastructure and Network Technologies</title>
+  <title>IS103 Course Index</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
   <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <style>
     body {
       box-sizing: border-box;
     }
     
-    .font-display {
-      font-family: 'Space Grotesk', sans-serif;
+    .gradient-text {
+      background: linear-gradient(135deg, #00d4aa 0%, #00b4d8 50%, #7c3aed 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     
-    .font-body {
-      font-family: 'Inter', sans-serif;
+    .card-glow {
+      position: relative;
     }
     
-    .gradient-bg {
-      background: linear-gradient(135deg, #1a0f2e 0%, #2d1b3d 50%, #0f0a15 100%);
+    .card-glow::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(0, 212, 170, 0.3), rgba(124, 58, 237, 0.3));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
     }
     
-    .card-gradient {
-      background: linear-gradient(145deg, rgba(45, 27, 61, 0.8) 0%, rgba(15, 10, 21, 0.9) 100%);
-      backdrop-filter: blur(10px);
-    }
-    
-    .glow-border {
-      box-shadow: 0 0 20px rgba(147, 51, 234, 0.2), inset 0 1px 0 rgba(88, 28, 135, 0.1);
-    }
-    
-    .week-card {
+    .week-item {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
-    .week-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(168, 85, 247, 0.2);
+    .week-item:hover {
+      transform: translateX(8px);
     }
     
-    .section-header {
-      position: relative;
+    .pulse-dot {
+      animation: pulse 2s infinite;
     }
     
-    .section-header::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 0;
-      width: 60px;
-      height: 3px;
-      border-radius: 2px;
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
     
-    .prelims-header::after {
-      background: linear-gradient(90deg, #ec4899, #db2777);
+    .network-line {
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 4px,
+        rgba(0, 212, 170, 0.3) 4px,
+        rgba(0, 212, 170, 0.3) 8px
+      );
     }
     
-    .midterms-header::after {
-      background: linear-gradient(90deg, #f59e0b, #d97706);
+    .scroll-container {
+      scrollbar-width: thin;
+      scrollbar-color: #374151 #111827;
     }
     
-    .finals-header::after {
-      background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+    .scroll-container::-webkit-scrollbar {
+      width: 6px;
     }
     
-    .network-pattern {
-      background-image: 
-        radial-gradient(circle at 20% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.03) 0%, transparent 30%);
+    .scroll-container::-webkit-scrollbar-track {
+      background: #111827;
     }
     
-    .outcome-item {
-      position: relative;
-      padding-left: 1.5rem;
+    .scroll-container::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 3px;
     }
-    
-    .outcome-item::before {
-      content: '→';
-      position: absolute;
-      left: 0;
-      color: #a855f7;
-      font-weight: bold;
-    }
-    
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    .animate-fade-in {
-      animation: fadeInUp 0.6s ease-out forwards;
-    }
-    
-    .stagger-1 { animation-delay: 0.1s; }
-    .stagger-2 { animation-delay: 0.2s; }
-    .stagger-3 { animation-delay: 0.3s; }
-    .stagger-4 { animation-delay: 0.4s; }
-    .stagger-5 { animation-delay: 0.5s; }
   </style>
   <style>@view-transition { navigation: auto; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
- <body class="h-full font-body gradient-bg network-pattern text-gray-100">
-  <div class="h-full w-full overflow-auto">
-   <div class="max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8"><!-- Header Section -->
-    <header class="text-center mb-12 animate-fade-in">
-     <h1 id="course-title" class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-amber-400 bg-clip-text text-transparent">IS103 - IT Infrastructure and Network Technologies</h1>
-     <div class="flex flex-wrap justify-center items-center gap-4 text-gray-400 mb-6">
-      <div class="flex items-center gap-2"><span class="text-xl">👨‍🏫</span> <span id="instructor-name" class="text-sm sm:text-base">Instructor: MKDB</span>
+ <body class="h-full bg-gray-950 text-gray-100 overflow-auto scroll-container" style="font-family: 'Space Grotesk', sans-serif;">
+  <div class="min-h-full w-full" style="background: radial-gradient(ellipse at top, #1a1a2e 0%, #0f0f1a 50%, #000000 100%);"><!-- Floating Network Nodes Background -->
+   <div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-20 left-10 w-2 h-2 rounded-full bg-emerald-500/30 pulse-dot"></div>
+    <div class="absolute top-40 right-20 w-1.5 h-1.5 rounded-full bg-violet-500/30 pulse-dot" style="animation-delay: 0.5s;"></div>
+    <div class="absolute bottom-40 left-1/4 w-2 h-2 rounded-full bg-cyan-500/30 pulse-dot" style="animation-delay: 1s;"></div>
+    <div class="absolute top-1/3 right-1/3 w-1 h-1 rounded-full bg-emerald-400/20 pulse-dot" style="animation-delay: 1.5s;"></div>
+   </div>
+   <div class="relative z-10 max-w-5xl mx-auto px-4 py-8 sm:px-6 lg:px-8"><!-- Header Section -->
+    <header class="mb-10">
+     <div class="flex items-center gap-3 mb-4">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+       <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+       </svg>
       </div>
-      <div class="hidden sm:block w-1 h-1 rounded-full bg-gray-600"></div>
-      <div class="flex items-center gap-2"><span class="text-xl">🏛️</span> <span id="institution-name" class="text-sm sm:text-base">Lyceum De San Pablo - College of Information Systems</span>
+      <div><span id="course-code" class="text-emerald-400 font-mono text-sm tracking-wider">IS103</span>
+       <h1 id="course-title" class="text-2xl sm:text-3xl font-bold gradient-text">IT Infrastructure and Network Technologies</h1>
       </div>
      </div>
-    </header><!-- Course Description -->
-    <section class="card-gradient glow-border rounded-2xl p-6 sm:p-8 mb-8 animate-fade-in stagger-1">
-     <h2 class="font-display text-xl sm:text-2xl font-semibold mb-4 text-purple-400 flex items-center gap-3"><span class="text-2xl">📖</span> Course Description</h2>
-     <p class="text-gray-300 leading-relaxed text-sm sm:text-base">This course introduces students to the fundamental concepts of IT infrastructure and computer networking. It covers computer hardware components, system unit assembly, data communication principles, network models, and physical network infrastructure. Students will explore IP addressing, subnetting, VLANs, routing, and essential network services such as DHCP and DNS. The course also includes wireless networking, network monitoring, security principles, documentation, and infrastructure evaluation. Emphasis is placed on hands-on configuration, practical skills, and outcome-based learning to prepare students for real-world networking environments and further studies in information systems.</p>
-    </section><!-- Learning Outcomes -->
-    <section class="card-gradient glow-border rounded-2xl p-6 sm:p-8 mb-10 animate-fade-in stagger-2">
-     <h2 class="font-display text-xl sm:text-2xl font-semibold mb-6 text-pink-400 flex items-center gap-3"><span class="text-2xl">🎯</span> Course Learning Outcomes</h2>
-     <p class="text-gray-400 mb-4 text-sm">By the end of the semester, students are able to:</p>
-     <ul class="space-y-3 text-gray-300 text-sm sm:text-base">
-      <li class="outcome-item">Explain fundamental concepts of computer hardware, data communication, networking models, and network infrastructure.</li>
-      <li class="outcome-item">Analyze network components, OSI layers, IP addressing, and subnetting schemes for different organizational needs.</li>
-      <li class="outcome-item">Configure basic network services including VLANs, routing, DHCP, DNS, and wireless networks.</li>
-      <li class="outcome-item">Apply network security principles, monitoring tools, and evaluate network performance and reliability.</li>
-      <li class="outcome-item">Document, integrate, and defend a basic network infrastructure design following industry standards.</li>
-     </ul>
-    </section><!-- Course Content Index -->
-    <section class="mb-8 animate-fade-in stagger-3">
-     <h2 class="font-display text-2xl sm:text-3xl font-bold mb-8 text-center text-gray-100">📚 Course Content Index</h2><!-- Prelims -->
-     <div class="mb-10">
-      <h3 class="font-display text-xl font-semibold mb-6 section-header prelims-header text-pink-400">🔹 Prelims</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"><a href="p1.html" class="week-card card-gradient glow-border rounded-xl p-5 border border-pink-500/20 hover:border-pink-400/50 block">
-        <div class="text-pink-400 text-xs font-medium uppercase tracking-wider mb-2">
-         Week 1 &amp; 2
-        </div>
-        <div class="font-display font-semibold text-white">
-         Introduction
-        </div>
-        <div class="text-gray-500 text-xs mt-2">
-         p1.html
-        </div></a> <a href="p3.html" class="week-card card-gradient glow-border rounded-xl p-5 border border-pink-500/20 hover:border-pink-400/50 block">
-        <div class="text-pink-400 text-xs font-medium uppercase tracking-wider mb-2">
-         Week 3
-        </div>
-        <div class="font-display font-semibold text-white">
-         Fundamentals
-        </div>
-        <div class="text-gray-500 text-xs mt-2">
-         p3.html
-        </div></a> <a href="p4.html" class="week-card card-gradient glow-border rounded-xl p-5 border border-pink-500/20 hover:border-pink-400/50 block">
-        <div class="text-pink-400 text-xs font-medium uppercase tracking-wider mb-2">
-         Week 4
-        </div>
-        <div class="font-display font-semibold text-white">
-         Hardware
-        </div>
-        <div class="text-gray-500 text-xs mt-2">
-         p4.html
-        </div></a> <a href="p5.html" class="week-card card-gradient glow-border rounded-xl p-5 border border-pink-500/20 hover:border-pink-400/50 block">
-        <div class="text-pink-400 text-xs font-medium uppercase tracking-wider mb-2">
-         Week 5
-        </div>
-        <div class="font-display font-semibold text-white">
-         Data Comm
-        </div>
-        <div class="text-gray-500 text-xs mt-2">
-         p5.html
-        </div></a>
-       <div class="week-card card-gradient rounded-xl p-5 border border-gray-700/50 flex items-center justify-center"><span class="text-gray-500 text-sm">📝 Prelim Exam</span>
+     <div class="flex flex-wrap items-center gap-4 text-sm text-gray-400">
+      <div class="flex items-center gap-2">
+       <svg class="w-4 h-4 text-violet-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+       </svg><span>Instructor: <span id="instructor-name" class="text-gray-200">MKDB</span></span>
+      </div>
+      <div class="flex items-center gap-2">
+       <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+       </svg><span id="institution-name">Lyceum De San Pablo - College of Information Systems</span>
+      </div>
+     </div>
+    </header><!-- Course Description Card -->
+    <section class="mb-10">
+     <div class="card-glow rounded-2xl bg-gray-900/60 backdrop-blur-sm p-6">
+      <div class="flex items-center gap-2 mb-4">
+       <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
        </div>
+       <h2 class="text-lg font-semibold text-gray-100">Course Description</h2>
       </div>
-     </div><!-- Midterms -->
-     <div class="mb-10">
-      <h3 class="font-display text-xl font-semibold mb-6 section-header midterms-header text-amber-400">🔸 Midterms</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"><a href="m1.html" class="week-card card-gradient glow-border rounded-xl p-5 border border-amber-500/20 hover:border-amber-400/50 block">
-        <div class="text-amber-400 text-xs font-medium uppercase tracking-wider mb-2">
-         Week 1
-        </div>
-        <div class="font-display font-semibold text-white">
-         IP Addressing
-        </div>
-        <div class="text-gray-500 text-xs mt-2">
-         m1.html
-        </div></a> <a href="m2.html" class="week-card card-gradient glow-border rounded-xl p-5 border border-amber-500/20 hover:border-amber-400/50 block">
-        <div class="text-amber-400 text-xs font-medium uppercase tracking-wider mb-2">
-         Week 2
-        </div>
-        <div class="font-display font-semibold text-white">
-         Subnetting
-        </div>
-        <div class="text-gray-500 text-xs mt-2">
-         m2.html
-        </div></a> <a href="m3.html" class="week-card card-gradient glow-border rounded-xl p-5 border border-amber-500/20 hover:border-amber-400/50 block">
-        <div class="text-amber-400 text-xs font-medium uppercase tracking-wider mb-2">
-         Week 3
-        </div>
-        <div class="font-display font-semibold text-white">
-         VLANs
-        </div>
-        <div class="text-gray-500 text-xs mt-2">
-         m3.html
-        </div></a> <a href="m4.html" class="week-card card-gradient glow-border rounded-xl p-5 border border-amber-500/20 hover:border-amber-400/50 block">
-        <div class="text-amber-400 text-xs font-medium uppercase tracking-wider mb-2">
-         Week 4
-        </div>
-        <div class="font-display font-semibold text-white">
-         Routing
-        </div>
-        <div class="text-gray-500 text-xs mt-2">
-         m4.html
-        </div></a> <a href="m5.html" class="week-card card-gradient glow-border rounded-xl p-5 border border-amber-500/20 hover:border-amber-400/50 block">
-        <div class="text-amber-400 text-xs font-medium uppercase tracking-wider mb-2">
-         Week 5
-        </div>
-        <div class="font-display font-semibold text-white">
-         DHCP &amp; DNS
-        </div>
-        <div class="text-gray-500 text-xs mt-2">
-         m5.html
-        </div></a>
+      <p class="text-gray-400 leading-relaxed text-sm">This course introduces students to the fundamental concepts of IT infrastructure and computer networking. It covers computer hardware components, system unit assembly, data communication principles, network models, and physical network infrastructure. Students will explore IP addressing, subnetting, VLANs, routing, and essential network services such as DHCP and DNS. The course also includes wireless networking, network monitoring, security principles, documentation, and infrastructure evaluation.</p>
+     </div>
+    </section><!-- Learning Outcomes -->
+    <section class="mb-10">
+     <div class="flex items-center gap-2 mb-5"><span class="text-2xl">🎯</span>
+      <h2 class="text-xl font-bold text-gray-100">Course Learning Outcomes</h2>
+     </div>
+     <div class="grid gap-3">
+      <div class="flex items-start gap-3 p-4 rounded-xl bg-gray-900/40 border border-gray-800/50 hover:border-emerald-500/30 transition-colors"><span class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold">1</span>
+       <p class="text-gray-300 text-sm">Explain fundamental concepts of computer hardware, data communication, networking models, and network infrastructure.</p>
       </div>
-     </div><!-- Finals -->
-     <div class="mb-10">
-      <h3 class="font-display text-xl font-semibold mb-6 section-header finals-header text-violet-400">🔹 Finals</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"><a href="f1.html" class="week-card card-gradient glow-border rounded-xl p-5 border border-violet-500/20 hover:border-violet-400/50 block">
-        <div class="text-violet-400 text-xs font-medium uppercase tracking-wider mb-2">
-         Week 1
+      <div class="flex items-start gap-3 p-4 rounded-xl bg-gray-900/40 border border-gray-800/50 hover:border-cyan-500/30 transition-colors"><span class="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xs font-bold">2</span>
+       <p class="text-gray-300 text-sm">Analyze network components, OSI layers, IP addressing, and subnetting schemes for different organizational needs.</p>
+      </div>
+      <div class="flex items-start gap-3 p-4 rounded-xl bg-gray-900/40 border border-gray-800/50 hover:border-violet-500/30 transition-colors"><span class="flex-shrink-0 w-6 h-6 rounded-full bg-violet-500/20 text-violet-400 flex items-center justify-center text-xs font-bold">3</span>
+       <p class="text-gray-300 text-sm">Configure basic network services including VLANs, routing, DHCP, DNS, and wireless networks.</p>
+      </div>
+      <div class="flex items-start gap-3 p-4 rounded-xl bg-gray-900/40 border border-gray-800/50 hover:border-pink-500/30 transition-colors"><span class="flex-shrink-0 w-6 h-6 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center text-xs font-bold">4</span>
+       <p class="text-gray-300 text-sm">Apply network security principles, monitoring tools, and evaluate network performance and reliability.</p>
+      </div>
+      <div class="flex items-start gap-3 p-4 rounded-xl bg-gray-900/40 border border-gray-800/50 hover:border-amber-500/30 transition-colors"><span class="flex-shrink-0 w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs font-bold">5</span>
+       <p class="text-gray-300 text-sm">Document, integrate, and defend a basic network infrastructure design following industry standards.</p>
+      </div>
+     </div>
+    </section><!-- Course Content Index -->
+    <section class="mb-10">
+     <div class="flex items-center gap-2 mb-6"><span class="text-2xl">📚</span>
+      <h2 class="text-xl font-bold text-gray-100">Course Content Index</h2>
+     </div>
+     <div class="grid lg:grid-cols-3 gap-6"><!-- Prelims -->
+      <div class="card-glow rounded-2xl bg-gray-900/60 backdrop-blur-sm overflow-hidden">
+       <div class="p-4 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border-b border-gray-800/50">
+        <div class="flex items-center gap-2"><span class="text-lg">🔹</span>
+         <h3 class="font-bold text-emerald-400">PRELIMS</h3>
         </div>
-        <div class="font-display font-semibold text-white">
-         Wireless
+       </div>
+       <div class="p-4 space-y-3"><a href="p1.html" class="week-item flex flex-col gap-2 p-3 rounded-lg bg-gray-800/30 hover:bg-emerald-500/10 group">
+         <div class="flex items-center gap-2"><span class="text-xs font-mono text-emerald-400/70 font-semibold">Week 1-2</span> <span class="text-gray-200 group-hover:text-emerald-300 font-semibold text-sm">Introduction</span>
+         </div>
+         <ul class="text-xs text-gray-400 space-y-1 ml-6">
+          <li>• Computer Basics Review</li>
+          <li>• System Unit Assembly &amp; Networking Fundamentals</li>
+         </ul></a> <a href="p3.html" class="week-item flex flex-col gap-2 p-3 rounded-lg bg-gray-800/30 hover:bg-emerald-500/10 group">
+         <div class="flex items-center gap-2"><span class="text-xs font-mono text-emerald-400/70 font-semibold">Week 3</span> <span class="text-gray-200 group-hover:text-emerald-300 font-semibold text-sm">Physical Network Infrastructure</span>
+         </div></a> <a href="p4.html" class="week-item flex flex-col gap-2 p-3 rounded-lg bg-gray-800/30 hover:bg-emerald-500/10 group">
+         <div class="flex items-center gap-2"><span class="text-xs font-mono text-emerald-400/70 font-semibold">Week 4</span> <span class="text-gray-200 group-hover:text-emerald-300 font-semibold text-sm">OSI Model</span>
+         </div></a> <a href="p5.html" class="week-item flex flex-col gap-2 p-3 rounded-lg bg-gray-800/30 hover:bg-emerald-500/10 group">
+         <div class="flex items-center gap-2"><span class="text-xs font-mono text-emerald-400/70 font-semibold">Week 5</span> <span class="text-gray-200 group-hover:text-emerald-300 font-semibold text-sm">IP Addressing &amp; Subnetting Fundamentals</span>
+         </div></a>
+        <div class="mt-4 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-center"><span class="text-emerald-400 font-semibold text-sm">📝 Prelim Exam</span>
         </div>
-        <div class="text-gray-500 text-xs mt-2">
-         f1.html
-        </div></a> <a href="f2.html" class="week-card card-gradient glow-border rounded-xl p-5 border border-violet-500/20 hover:border-violet-400/50 block">
-        <div class="text-violet-400 text-xs font-medium uppercase tracking-wider mb-2">
-         Week 2
+       </div>
+      </div><!-- Midterms -->
+      <div class="card-glow rounded-2xl bg-gray-900/60 backdrop-blur-sm overflow-hidden">
+       <div class="p-4 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border-b border-gray-800/50">
+        <div class="flex items-center gap-2"><span class="text-lg">🔸</span>
+         <h3 class="font-bold text-amber-400">MIDTERMS</h3>
         </div>
-        <div class="font-display font-semibold text-white">
-         Monitoring
+       </div>
+       <div class="p-4 space-y-2"><a href="m1.html" class="week-item flex items-center justify-between p-3 rounded-lg bg-gray-800/30 hover:bg-amber-500/10 group">
+         <div class="flex items-center gap-3"><span class="text-xs font-mono text-gray-500 w-16">Week 1</span> <span class="text-gray-200 group-hover:text-amber-300">Subnetting &amp; VLSM</span>
+         </div>
+         <svg class="w-4 h-4 text-gray-600 group-hover:text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+         </svg></a> <a href="m2.html" class="week-item flex items-center justify-between p-3 rounded-lg bg-gray-800/30 hover:bg-amber-500/10 group">
+         <div class="flex items-center gap-3"><span class="text-xs font-mono text-gray-500 w-16">Week 2</span> <span class="text-gray-200 group-hover:text-amber-300">VLANs &amp; Inter-VLAN Routing</span>
+         </div>
+         <svg class="w-4 h-4 text-gray-600 group-hover:text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+         </svg></a> <a href="m3.html" class="week-item flex items-center justify-between p-3 rounded-lg bg-gray-800/30 hover:bg-amber-500/10 group">
+         <div class="flex items-center gap-3"><span class="text-xs font-mono text-gray-500 w-16">Week 3</span> <span class="text-gray-200 group-hover:text-amber-300">Basic Routing Protocols</span>
+         </div>
+         <svg class="w-4 h-4 text-gray-600 group-hover:text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+         </svg></a> <a href="m4.html" class="week-item flex items-center justify-between p-3 rounded-lg bg-gray-800/30 hover:bg-amber-500/10 group">
+         <div class="flex items-center gap-3"><span class="text-xs font-mono text-gray-500 w-16">Week 4</span> <span class="text-gray-200 group-hover:text-amber-300">DHCP Configuration</span>
+         </div>
+         <svg class="w-4 h-4 text-gray-600 group-hover:text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+         </svg></a> <a href="m5.html" class="week-item flex items-center justify-between p-3 rounded-lg bg-gray-800/30 hover:bg-amber-500/10 group">
+         <div class="flex items-center gap-3"><span class="text-xs font-mono text-gray-500 w-16">Week 5</span> <span class="text-gray-200 group-hover:text-amber-300">DNS &amp; Name Resolution</span>
+         </div>
+         <svg class="w-4 h-4 text-gray-600 group-hover:text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+         </svg></a>
+        <div class="mt-4 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-center"><span class="text-amber-400 font-semibold text-sm">📝 Midterm Exam</span>
         </div>
-        <div class="text-gray-500 text-xs mt-2">
-         f2.html
-        </div></a> <a href="f3.html" class="week-card card-gradient glow-border rounded-xl p-5 border border-violet-500/20 hover:border-violet-400/50 block">
-        <div class="text-violet-400 text-xs font-medium uppercase tracking-wider mb-2">
-         Week 3
+       </div>
+      </div><!-- Finals -->
+      <div class="card-glow rounded-2xl bg-gray-900/60 backdrop-blur-sm overflow-hidden">
+       <div class="p-4 bg-gradient-to-r from-violet-500/10 to-purple-500/10 border-b border-gray-800/50">
+        <div class="flex items-center gap-2"><span class="text-lg">🔹</span>
+         <h3 class="font-bold text-violet-400">FINALS</h3>
         </div>
-        <div class="font-display font-semibold text-white">
-         Security
+       </div>
+       <div class="p-4 space-y-2"><a href="f1.html" class="week-item flex items-center justify-between p-3 rounded-lg bg-gray-800/30 hover:bg-violet-500/10 group">
+         <div class="flex items-center gap-3"><span class="text-xs font-mono text-gray-500 w-16">Week 1</span> <span class="text-gray-200 group-hover:text-violet-300">Wireless Networking</span>
+         </div>
+         <svg class="w-4 h-4 text-gray-600 group-hover:text-violet-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+         </svg></a> <a href="f2.html" class="week-item flex items-center justify-between p-3 rounded-lg bg-gray-800/30 hover:bg-violet-500/10 group">
+         <div class="flex items-center gap-3"><span class="text-xs font-mono text-gray-500 w-16">Week 2</span> <span class="text-gray-200 group-hover:text-violet-300">Network Monitoring &amp; Performance Tools</span>
+         </div>
+         <svg class="w-4 h-4 text-gray-600 group-hover:text-violet-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+         </svg></a> <a href="f3.html" class="week-item flex items-center justify-between p-3 rounded-lg bg-gray-800/30 hover:bg-violet-500/10 group">
+         <div class="flex items-center gap-3"><span class="text-xs font-mono text-gray-500 w-16">Week 3</span> <span class="text-gray-200 group-hover:text-violet-300">Network Security Principles</span>
+         </div>
+         <svg class="w-4 h-4 text-gray-600 group-hover:text-violet-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+         </svg></a> <a href="f4.html" class="week-item flex items-center justify-between p-3 rounded-lg bg-gray-800/30 hover:bg-violet-500/10 group">
+         <div class="flex items-center gap-3"><span class="text-xs font-mono text-gray-500 w-16">Week 4</span> <span class="text-gray-200 group-hover:text-violet-300">Network Reliability &amp; Documentation</span>
+         </div>
+         <svg class="w-4 h-4 text-gray-600 group-hover:text-violet-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+         </svg></a> <a href="f5.html" class="week-item flex items-center justify-between p-3 rounded-lg bg-gray-800/30 hover:bg-violet-500/10 group">
+         <div class="flex items-center gap-3"><span class="text-xs font-mono text-gray-500 w-16">Week 5</span> <span class="text-gray-200 group-hover:text-violet-300">Final Integration, Defense &amp; Evaluation</span>
+         </div>
+         <svg class="w-4 h-4 text-gray-600 group-hover:text-violet-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+         </svg></a>
+        <div class="mt-4 p-3 rounded-lg bg-violet-500/10 border border-violet-500/20 text-center"><span class="text-violet-400 font-semibold text-sm">🎓 Final Presentation</span>
         </div>
-        <div class="text-gray-500 text-xs mt-2">
-         f3.html
-        </div></a> <a href="f4.html" class="week-card card-gradient glow-border rounded-xl p-5 border border-violet-500/20 hover:border-violet-400/50 block">
-        <div class="text-violet-400 text-xs font-medium uppercase tracking-wider mb-2">
-         Week 4
-        </div>
-        <div class="font-display font-semibold text-white">
-         Documentation
-        </div>
-        <div class="text-gray-500 text-xs mt-2">
-         f4.html
-        </div></a> <a href="f5.html" class="week-card card-gradient glow-border rounded-xl p-5 border border-violet-500/20 hover:border-violet-400/50 block">
-        <div class="text-violet-400 text-xs font-medium uppercase tracking-wider mb-2">
-         Week 5
-        </div>
-        <div class="font-display font-semibold text-white">
-         Final Project
-        </div>
-        <div class="text-gray-500 text-xs mt-2">
-         f5.html
-        </div></a>
+       </div>
       </div>
      </div>
     </section><!-- Footer -->
-    <footer class="text-center text-gray-500 text-sm pb-8 animate-fade-in stagger-5">
-     <div class="flex items-center justify-center gap-2 mb-2"><span>🌐</span> <span>Preparing Future Network Professionals</span> <span>🌐</span>
+    <footer class="text-center py-8 border-t border-gray-800/50">
+     <div class="flex items-center justify-center gap-2 mb-3"><span class="text-xl">🌐</span> <span class="text-gray-400 font-medium">Preparing Future Network Professionals</span> <span class="text-xl">🌐</span>
      </div>
-     <p>© 2026 Lyceum De San Pablo - College of Information Systems</p>
+     <p class="text-gray-600 text-sm">© 2026 Lyceum De San Pablo - College of Information Systems</p>
     </footer>
    </div>
   </div>
   <script>
     const defaultConfig = {
-      course_title: 'IS103 - IT Infrastructure and Network Technologies',
-      instructor_name: 'Instructor: MKDB',
+      course_code: 'IS103',
+      course_title: 'IT Infrastructure and Network Technologies',
+      instructor_name: 'MKDB',
       institution_name: 'Lyceum De San Pablo - College of Information Systems',
-      background_color: '#1a0f2e',
-      text_color: '#f1f5f9',
-      primary_accent: '#a855f7',
-      card_color: '#2d1b3d',
-      secondary_accent: '#ec4899'
+      background_color: '#0a0a0f',
+      text_color: '#e5e7eb',
+      accent_color: '#00d4aa',
+      font_family: 'Space Grotesk',
+      font_size: 16
     };
-    
+
     let config = { ...defaultConfig };
-    
-    async function onConfigChange(newConfig) {
-      config = { ...config, ...newConfig };
+
+    async function onConfigChange(cfg) {
+      config = { ...defaultConfig, ...cfg };
       
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseSize = config.font_size || defaultConfig.font_size;
+      const fontStack = `${customFont}, system-ui, sans-serif`;
+      
+      document.body.style.fontFamily = fontStack;
+      
+      document.getElementById('course-code').textContent = config.course_code || defaultConfig.course_code;
       document.getElementById('course-title').textContent = config.course_title || defaultConfig.course_title;
       document.getElementById('instructor-name').textContent = config.instructor_name || defaultConfig.instructor_name;
       document.getElementById('institution-name').textContent = config.institution_name || defaultConfig.institution_name;
+      
+      document.getElementById('course-title').style.fontSize = `${baseSize * 1.75}px`;
     }
-    
-    function mapToCapabilities(config) {
+
+    function mapToCapabilities(cfg) {
       return {
         recolorables: [
           {
-            get: () => config.background_color || defaultConfig.background_color,
+            get: () => cfg.background_color || defaultConfig.background_color,
             set: (value) => {
-              config.background_color = value;
+              cfg.background_color = value;
               window.elementSdk.setConfig({ background_color: value });
             }
           },
           {
-            get: () => config.card_color || defaultConfig.card_color,
+            get: () => cfg.text_color || defaultConfig.text_color,
             set: (value) => {
-              config.card_color = value;
-              window.elementSdk.setConfig({ card_color: value });
-            }
-          },
-          {
-            get: () => config.primary_accent || defaultConfig.primary_accent,
-            set: (value) => {
-              config.primary_accent = value;
-              window.elementSdk.setConfig({ primary_accent: value });
-            }
-          },
-          {
-            get: () => config.secondary_accent || defaultConfig.secondary_accent,
-            set: (value) => {
-              config.secondary_accent = value;
-              window.elementSdk.setConfig({ secondary_accent: value });
-            }
-          },
-          {
-            get: () => config.text_color || defaultConfig.text_color,
-            set: (value) => {
-              config.text_color = value;
+              cfg.text_color = value;
               window.elementSdk.setConfig({ text_color: value });
+            }
+          },
+          {
+            get: () => cfg.accent_color || defaultConfig.accent_color,
+            set: (value) => {
+              cfg.accent_color = value;
+              window.elementSdk.setConfig({ accent_color: value });
             }
           }
         ],
         borderables: [],
         fontEditable: {
-          get: () => config.font_family || 'Space Grotesk',
+          get: () => cfg.font_family || defaultConfig.font_family,
           set: (value) => {
-            config.font_family = value;
+            cfg.font_family = value;
             window.elementSdk.setConfig({ font_family: value });
           }
         },
         fontSizeable: {
-          get: () => config.font_size || 16,
+          get: () => cfg.font_size || defaultConfig.font_size,
           set: (value) => {
-            config.font_size = value;
+            cfg.font_size = value;
             window.elementSdk.setConfig({ font_size: value });
           }
         }
       };
     }
-    
-    function mapToEditPanelValues(config) {
+
+    function mapToEditPanelValues(cfg) {
       return new Map([
-        ['course_title', config.course_title || defaultConfig.course_title],
-        ['instructor_name', config.instructor_name || defaultConfig.instructor_name],
-        ['institution_name', config.institution_name || defaultConfig.institution_name]
+        ['course_code', cfg.course_code || defaultConfig.course_code],
+        ['course_title', cfg.course_title || defaultConfig.course_title],
+        ['instructor_name', cfg.instructor_name || defaultConfig.instructor_name],
+        ['institution_name', cfg.institution_name || defaultConfig.institution_name]
       ]);
     }
-    
+
     if (window.elementSdk) {
       window.elementSdk.init({
         defaultConfig,
@@ -387,7 +341,9 @@
         mapToCapabilities,
         mapToEditPanelValues
       });
+    } else {
+      onConfigChange(defaultConfig);
     }
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c4e1bbd8568c6b8',t:'MTc2OTU3ODMzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c53c1e26188dd45',t:'MTc2OTYzNzU3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
