@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IS103 Midterm Week 1 - Subnetting &amp; VLSM</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      height: 100%;
+    }
+    
+    body {
+      box-sizing: border-box;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 50%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .card-glow {
+      position: relative;
+      border-left: 4px solid #10b981;
+    }
+    
+    .code-block {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      overflow-x: auto;
+      color: #e2e8f0;
+    }
+    
+    .tab-button {
+      transition: all 0.3s ease;
+    }
+    
+    .tab-button.active {
+      border-bottom: 3px solid #10b981;
+      color: #10b981;
+    }
+    
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10b981, #059669);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+      flex-shrink: 0;
+    }
+    
+    .example-box {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1));
+      border-left: 4px solid #10b981;
+      border-radius: 0.5rem;
+    }
+    
+    .quiz-option {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .quiz-option:hover {
+      transform: translateX(4px);
+    }
+    
+    .quiz-option.selected {
+      background: #10b981/20;
+      border-color: #10b981;
+    }
+    
+    .quiz-option.correct {
+      background: #22c55e/20;
+      border-color: #22c55e;
+    }
+    
+    .quiz-option.incorrect {
+      background: #ef4444/20;
+      border-color: #ef4444;
+    }
+    
+    .pulse-dot {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .scroll-smooth {
+      scroll-behavior: smooth;
+    }
+    
+    .scroll-container {
+      scrollbar-width: thin;
+      scrollbar-color: #374151 #1f2937;
+    }
+    
+    .scroll-container::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .scroll-container::-webkit-scrollbar-track {
+      background: #1f2937;
+    }
+    
+    .scroll-container::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 3px;
+    }
+
+    .activity-header {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(139, 92, 246, 0.1));
+      border-left: 4px solid #8b5cf6;
+    }
+  </style>
+  <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-gray-100 overflow-auto scroll-container" style="font-family: 'Space Grotesk', sans-serif;">
+  <div class="min-h-full w-full"><!-- Navigation Bar -->
+   <nav class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-700">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-blue-600 flex items-center justify-center">
+       <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+       </svg>
+      </div>
+      <div><span id="course-code" class="text-emerald-400 font-mono text-xs tracking-wider block">IS103</span> <span class="text-gray-300 text-sm font-semibold">Subnetting &amp; VLSM</span>
+      </div>
+     </div>
+     <div class="flex items-center gap-2 text-sm text-gray-400">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      </svg><span id="instructor-name">Instructor: MKDB</span>
+     </div>
+    </div>
+   </nav><!-- Main Content -->
+   <main class="max-w-6xl mx-auto px-4 py-8 space-y-8"><!-- Header Section -->
+    <header class="space-y-4">
+     <div class="space-y-2">
+      <h1 class="text-4xl font-bold gradient-text">Subnetting &amp; VLSM</h1>
+      <p class="text-lg text-gray-400">Advanced Subnetting &amp; VLSM Addressing Schemes</p>
+     </div>
+     <div class="flex flex-wrap gap-4">
+      <div class="px-4 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30">
+       <p class="text-sm"><span class="text-emerald-400 font-semibold">ILO:</span> Design efficient IP addressing schemes</p>
+      </div>
+      <div class="px-4 py-2 rounded-lg bg-blue-500/10 border border-blue-500/30">
+       <p class="text-sm"><span class="text-blue-400 font-semibold">Week:</span> Midterm - Week 1</p>
+      </div>
+     </div>
+    </header><!-- Tabs Navigation -->
+    <div class="flex gap-4 border-b border-slate-700 overflow-x-auto pb-4"><button class="tab-button active px-4 py-2 text-sm font-semibold transition-all" data-tab="overview"> 📚 Overview </button> <button class="tab-button px-4 py-2 text-sm font-semibold transition-all" data-tab="subnetting"> 🔧 Subnetting Guide </button> <button class="tab-button px-4 py-2 text-sm font-semibold transition-all" data-tab="vlsm"> 🌐 VLSM Addressing </button> <button class="tab-button px-4 py-2 text-sm font-semibold transition-all" data-tab="activities"> ✏️ Activities </button> <button class="tab-button px-4 py-2 text-sm font-semibold transition-all" data-tab="quiz"> 📝 Review Quiz </button>
+    </div><!-- Content Sections --> <!-- 1. OVERVIEW TAB -->
+    <section id="overview" class="tab-content space-y-6">
+     <div class="card-glow bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
+      <h2 class="text-2xl font-bold mb-4 text-emerald-400">Why is Subnetting Important?</h2>
+      <div class="space-y-3 text-gray-300">
+       <div class="flex gap-4">
+        <div class="text-emerald-400 font-bold flex-shrink-0">
+         ✓
+        </div>
+        <div>
+         <p class="font-semibold">Efficient IP Address Utilization</p>
+         <p class="text-sm text-gray-400">Avoid wasting IP addresses by dividing large networks into smaller, manageable subnets</p>
+        </div>
+       </div>
+       <div class="flex gap-4">
+        <div class="text-emerald-400 font-bold flex-shrink-0">
+         ✓
+        </div>
+        <div>
+         <p class="font-semibold">Improved Network Security</p>
+         <p class="text-sm text-gray-400">Isolate network segments, limit broadcast domains, and control traffic between departments</p>
+        </div>
+       </div>
+       <div class="flex gap-4">
+        <div class="text-emerald-400 font-bold flex-shrink-0">
+         ✓
+        </div>
+        <div>
+         <p class="font-semibold">Better Network Performance</p>
+         <p class="text-sm text-gray-400">Reduce broadcast traffic and congestion by limiting the size of broadcast domains</p>
+        </div>
+       </div>
+       <div class="flex gap-4">
+        <div class="text-emerald-400 font-bold flex-shrink-0">
+         ✓
+        </div>
+        <div>
+         <p class="font-semibold">Flexible IP Address Management</p>
+         <p class="text-sm text-gray-400">Use VLSM to allocate variable-sized subnets based on actual requirements of each department</p>
+        </div>
+       </div>
+       <div class="flex gap-4">
+        <div class="text-emerald-400 font-bold flex-shrink-0">
+         ✓
+        </div>
+        <div>
+         <p class="font-semibold">Simplified Network Expansion</p>
+         <p class="text-sm text-gray-400">Easy to add new subnets and departments without redesigning the entire network</p>
+        </div>
+       </div>
+       <div class="flex gap-4">
+        <div class="text-emerald-400 font-bold flex-shrink-0">
+         ✓
+        </div>
+        <div>
+         <p class="font-semibold">Hierarchical Routing</p>
+         <p class="text-sm text-gray-400">Route summarization reduces routing table size and improves routing efficiency</p>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="card-glow bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
+      <h2 class="text-2xl font-bold mb-4 text-blue-400">Key Concepts to Master</h2>
+      <div class="grid md:grid-cols-2 gap-4">
+       <div class="bg-blue-500/10 p-4 rounded-lg border border-blue-500/30">
+        <p class="font-semibold text-blue-300 mb-2">Subnet Mask</p>
+        <p class="text-sm text-gray-300">Determines which portion of an IP address is the network and which is the host</p>
+       </div>
+       <div class="bg-purple-500/10 p-4 rounded-lg border border-purple-500/30">
+        <p class="font-semibold text-purple-300 mb-2">Network Address</p>
+        <p class="text-sm text-gray-300">First address in a subnet; all host bits are set to 0</p>
+       </div>
+       <div class="bg-pink-500/10 p-4 rounded-lg border border-pink-500/30">
+        <p class="font-semibold text-pink-300 mb-2">Broadcast Address</p>
+        <p class="text-sm text-gray-300">Last address in a subnet; all host bits are set to 1</p>
+       </div>
+       <div class="bg-amber-500/10 p-4 rounded-lg border border-amber-500/30">
+        <p class="font-semibold text-amber-300 mb-2">CIDR Notation</p>
+        <p class="text-sm text-gray-300">Compact representation like /24 showing the number of network bits</p>
+       </div>
+      </div>
+     </div>
+    </section><!-- 2. SUBNETTING GUIDE TAB -->
+    <section id="subnetting" class="tab-content space-y-6 hidden">
+     <div class="card-glow bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
+      <h2 class="text-2xl font-bold mb-6 text-emerald-400">Step-by-Step Subnetting Guide</h2>
+      <div class="space-y-6"><!-- Step 1 -->
+       <div class="flex gap-4">
+        <div class="step-number">
+         1
+        </div>
+        <div class="flex-1">
+         <h3 class="font-bold text-lg mb-2">Understand Your Network Requirements</h3>
+         <p class="text-gray-300 mb-3">Before subnetting, determine:</p>
+         <ul class="text-sm text-gray-400 space-y-1 ml-4">
+          <li>• How many subnets do you need?</li>
+          <li>• How many hosts per subnet?</li>
+          <li>• What is your starting IP address and class?</li>
+         </ul>
+        </div>
+       </div><!-- Step 2 -->
+       <div class="flex gap-4">
+        <div class="step-number">
+         2
+        </div>
+        <div class="flex-1">
+         <h3 class="font-bold text-lg mb-2">Convert to Binary</h3>
+         <p class="text-gray-300 mb-3">Convert the host octet to binary to visualize which bits to borrow:</p>
+         <div class="code-block">
+          Example: 192.168.1.0/24 Subnet Mask: 255.255.255.0 In Binary: 11111111.11111111.11111111.00000000
+         </div>
+        </div>
+       </div><!-- Step 3 -->
+       <div class="flex gap-4">
+        <div class="step-number">
+         3
+        </div>
+        <div class="flex-1">
+         <h3 class="font-bold text-lg mb-2">Calculate Bits to Borrow</h3>
+         <p class="text-gray-300 mb-3">Use the formula: 2^n = number of subnets</p>
+         <div class="code-block">
+          Example: Need 4 subnets 2^2 = 4 subnets Therefore, borrow 2 bits from the host portion New mask: /26 (24 + 2)
+         </div>
+        </div>
+       </div><!-- Step 4 -->
+       <div class="flex gap-4">
+        <div class="step-number">
+         4
+        </div>
+        <div class="flex-1">
+         <h3 class="font-bold text-lg mb-2">Calculate Subnet Increment</h3>
+         <p class="text-gray-300 mb-3">The increment between subnets = 2^(8-borrowed bits)</p>
+         <div class="code-block">
+          Example: Borrowed 2 bits from last octet Increment = 2^(8-2) = 2^6 = 64 Subnets will be: 0, 64, 128, 192
+         </div>
+        </div>
+       </div><!-- Step 5 -->
+       <div class="flex gap-4">
+        <div class="step-number">
+         5
+        </div>
+        <div class="flex-1">
+         <h3 class="font-bold text-lg mb-2">List All Subnet Addresses</h3>
+         <p class="text-gray-300 mb-3">Generate complete subnets with network, usable hosts, and broadcast addresses:</p>
+         <div class="code-block">
+          Subnet 1: 192.168.1.0/26 Network: 192.168.1.0 First Host: 192.168.1.1 Last Host: 192.168.1.62 Broadcast: 192.168.1.63 Subnet 2: 192.168.1.64/26 Network: 192.168.1.64 First Host: 192.168.1.65 Last Host: 192.168.1.126 Broadcast: 192.168.1.127
+         </div>
+        </div>
+       </div>
+      </div>
+     </div><!-- Complete Example -->
+     <div class="example-box bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
+      <h3 class="text-xl font-bold mb-4 text-emerald-400">✨ Complete Subnetting Example</h3>
+      <p class="text-gray-300 mb-4"><strong>Scenario:</strong> You have 172.16.0.0/22 and need to create 8 subnets</p>
+      <div class="space-y-4">
+       <div class="bg-slate-700/50 p-4 rounded border border-slate-600">
+        <p class="text-sm font-semibold text-gray-300">Step 1: Calculate bits needed</p>
+        <p class="text-gray-400 mt-2">2^3 = 8 subnets → Need to borrow 3 bits</p>
+       </div>
+       <div class="bg-slate-700/50 p-4 rounded border border-slate-600">
+        <p class="text-sm font-semibold text-gray-300">Step 2: New subnet mask</p>
+        <p class="text-gray-400 mt-2">/22 + 3 bits = /25</p>
+        <p class="text-emerald-300 font-mono mt-2">255.255.254.0 → 255.255.255.128</p>
+       </div>
+       <div class="bg-slate-700/50 p-4 rounded border border-slate-600">
+        <p class="text-sm font-semibold text-gray-300">Step 3: Calculate increment</p>
+        <p class="text-gray-400 mt-2">We borrowed 3 bits from the last octet</p>
+        <p class="text-gray-400 mt-2">Increment = 256 ÷ 8 = 32</p>
+       </div>
+       <div class="bg-slate-700/50 p-4 rounded border border-slate-600">
+        <p class="text-sm font-semibold text-gray-300">Step 4: List all 8 subnets</p>
+        <div class="font-mono text-xs text-gray-300 mt-3 space-y-2">
+         <p>Subnet 0: 172.16.0.0/25 (Hosts: .1 - .126)</p>
+         <p>Subnet 1: 172.16.0.128/25 (Hosts: .129 - .254)</p>
+         <p>Subnet 2: 172.16.1.0/25 (Hosts: .1 - .126)</p>
+         <p>Subnet 3: 172.16.1.128/25 (Hosts: .129 - .254)</p>
+         <p>Subnet 4: 172.16.2.0/25 (Hosts: .1 - .126)</p>
+         <p>Subnet 5: 172.16.2.128/25 (Hosts: .129 - .254)</p>
+         <p>Subnet 6: 172.16.3.0/25 (Hosts: .1 - .126)</p>
+         <p>Subnet 7: 172.16.3.128/25 (Hosts: .129 - .254)</p>
+        </div>
+       </div>
+      </div>
+     </div><!-- Quick Reference -->
+     <div class="card-glow bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
+      <h3 class="text-xl font-bold mb-4 text-blue-400">📊 Quick Reference: Powers of 2</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+       <div class="bg-slate-700/50 p-3 rounded text-center">
+        <p class="text-xs text-gray-400">2^1</p>
+        <p class="text-lg font-bold text-emerald-400">2</p>
+       </div>
+       <div class="bg-slate-700/50 p-3 rounded text-center">
+        <p class="text-xs text-gray-400">2^2</p>
+        <p class="text-lg font-bold text-emerald-400">4</p>
+       </div>
+       <div class="bg-slate-700/50 p-3 rounded text-center">
+        <p class="text-xs text-gray-400">2^3</p>
+        <p class="text-lg font-bold text-emerald-400">8</p>
+       </div>
+       <div class="bg-slate-700/50 p-3 rounded text-center">
+        <p class="text-xs text-gray-400">2^4</p>
+        <p class="text-lg font-bold text-emerald-400">16</p>
+       </div>
+       <div class="bg-slate-700/50 p-3 rounded text-center">
+        <p class="text-xs text-gray-400">2^5</p>
+        <p class="text-lg font-bold text-emerald-400">32</p>
+       </div>
+       <div class="bg-slate-700/50 p-3 rounded text-center">
+        <p class="text-xs text-gray-400">2^6</p>
+        <p class="text-lg font-bold text-emerald-400">64</p>
+       </div>
+       <div class="bg-slate-700/50 p-3 rounded text-center">
+        <p class="text-xs text-gray-400">2^7</p>
+        <p class="text-lg font-bold text-emerald-400">128</p>
+       </div>
+       <div class="bg-slate-700/50 p-3 rounded text-center">
+        <p class="text-xs text-gray-400">2^8</p>
+        <p class="text-lg font-bold text-emerald-400">256</p>
+       </div>
+      </div>
+     </div>
+    </section><!-- 3. VLSM TAB -->
+    <section id="vlsm" class="tab-content space-y-6 hidden">
+     <div class="card-glow bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
+      <h2 class="text-2xl font-bold mb-4 text-purple-400">VLSM (Variable Length Subnet Masking)</h2>
+      <div class="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4 mb-6">
+       <p class="text-gray-300"><strong>What is VLSM?</strong> A technique that allows different subnets to have different subnet masks, so you can allocate IP addresses more efficiently based on the actual needs of each network segment.</p>
+      </div>
+      <h3 class="text-lg font-bold text-purple-300 mb-4">Why VLSM is Better Than Fixed Subnetting</h3>
+      <div class="grid md:grid-cols-2 gap-4 mb-6">
+       <div class="bg-slate-700/50 p-4 rounded border border-slate-600">
+        <p class="font-semibold text-red-300 mb-2">❌ Fixed Subnetting Waste</p>
+        <p class="text-sm text-gray-400">All subnets same size = wasted addresses in small subnets</p>
+        <p class="text-xs text-gray-500 mt-2">Example: Give 64 IPs to a 2-person office</p>
+       </div>
+       <div class="bg-slate-700/50 p-4 rounded border border-slate-600">
+        <p class="font-semibold text-emerald-300 mb-2">✅ VLSM Efficiency</p>
+        <p class="text-sm text-gray-400">Custom subnet sizes = perfect fit for each department</p>
+        <p class="text-xs text-gray-500 mt-2">Example: Give /30 (4 IPs) to 2-person office</p>
+       </div>
+      </div>
+     </div><!-- VLSM Example -->
+     <div class="example-box bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
+      <h3 class="text-xl font-bold mb-6 text-purple-400">📋 VLSM Real-World Scenario</h3>
+      <div class="mb-6">
+       <p class="text-gray-300 mb-4"><strong>Your company has 192.168.0.0/22 (1024 hosts) and needs to subnet it for:</strong></p>
+       <ul class="space-y-2 text-gray-400">
+        <li class="flex gap-2"><span class="text-emerald-400">•</span> <span><strong>HR Department:</strong> 250 hosts</span></li>
+        <li class="flex gap-2"><span class="text-emerald-400">•</span> <span><strong>IT Department:</strong> 120 hosts</span></li>
+        <li class="flex gap-2"><span class="text-emerald-400">•</span> <span><strong>Sales Department:</strong> 100 hosts</span></li>
+        <li class="flex gap-2"><span class="text-emerald-400">•</span> <span><strong>Router Link 1:</strong> 2 hosts</span></li>
+        <li class="flex gap-2"><span class="text-emerald-400">•</span> <span><strong>Router Link 2:</strong> 2 hosts</span></li>
+       </ul>
+      </div>
+      <h4 class="font-bold text-purple-300 mb-4">Solution: Create Custom Subnets</h4>
+      <div class="space-y-3">
+       <div class="bg-slate-700/50 p-4 rounded border-l-4 border-emerald-500">
+        <p class="text-sm font-mono text-emerald-300">192.168.0.0/23 (510 hosts)</p>
+        <p class="text-xs text-gray-400 mt-1">HR Department (250 hosts needed)</p>
+        <p class="text-xs text-gray-500 mt-1">Network: 192.168.0.0 | Broadcast: 192.168.1.255</p>
+       </div>
+       <div class="bg-slate-700/50 p-4 rounded border-l-4 border-blue-500">
+        <p class="text-sm font-mono text-blue-300">192.168.2.0/24 (254 hosts)</p>
+        <p class="text-xs text-gray-400 mt-1">IT Department (120 hosts needed)</p>
+        <p class="text-xs text-gray-500 mt-1">Network: 192.168.2.0 | Broadcast: 192.168.2.255</p>
+       </div>
+       <div class="bg-slate-700/50 p-4 rounded border-l-4 border-purple-500">
+        <p class="text-sm font-mono text-purple-300">192.168.3.0/25 (126 hosts)</p>
+        <p class="text-xs text-gray-400 mt-1">Sales Department (100 hosts needed)</p>
+        <p class="text-xs text-gray-500 mt-1">Network: 192.168.3.0 | Broadcast: 192.168.3.127</p>
+       </div>
+       <div class="bg-slate-700/50 p-4 rounded border-l-4 border-pink-500">
+        <p class="text-sm font-mono text-pink-300">192.168.3.128/30 (2 hosts)</p>
+        <p class="text-xs text-gray-400 mt-1">Router Link 1</p>
+        <p class="text-xs text-gray-500 mt-1">Network: 192.168.3.128 | Broadcast: 192.168.3.131</p>
+       </div>
+       <div class="bg-slate-700/50 p-4 rounded border-l-4 border-amber-500">
+        <p class="text-sm font-mono text-amber-300">192.168.3.132/30 (2 hosts)</p>
+        <p class="text-xs text-gray-400 mt-1">Router Link 2</p>
+        <p class="text-xs text-gray-500 mt-1">Network: 192.168.3.132 | Broadcast: 192.168.3.135</p>
+       </div>
+      </div>
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4 mt-6">
+       <p class="text-sm text-emerald-300 font-semibold">✓ Result:</p>
+       <p class="text-gray-300 text-sm mt-2">Total IPs allocated: 510 + 254 + 126 + 2 + 2 = 894 (Out of 1024 available)</p>
+       <p class="text-gray-400 text-sm mt-2">Wasted IPs: Only 130 (12.7%) vs 50%+ with fixed subnetting!</p>
+      </div>
+     </div><!-- VLSM Steps -->
+     <div class="card-glow bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
+      <h3 class="text-xl font-bold mb-6 text-purple-400">How to Design VLSM</h3>
+      <div class="space-y-4">
+       <div class="flex gap-4">
+        <div class="step-number bg-purple-600">
+         1
+        </div>
+        <div>
+         <p class="font-semibold text-gray-100">Sort Requirements from Largest to Smallest</p>
+         <p class="text-sm text-gray-400">This prevents IP waste and ensures you have enough space</p>
+        </div>
+       </div>
+       <div class="flex gap-4">
+        <div class="step-number bg-purple-600">
+         2
+        </div>
+        <div>
+         <p class="font-semibold text-gray-100">Allocate Subnets Largest First</p>
+         <p class="text-sm text-gray-400">Calculate prefix length for each requirement: log₂(hosts+2) = bits needed</p>
+        </div>
+       </div>
+       <div class="flex gap-4">
+        <div class="step-number bg-purple-600">
+         3
+        </div>
+        <div>
+         <p class="font-semibold text-gray-100">Document Address Space</p>
+         <p class="text-sm text-gray-400">Track which addresses are allocated and which are available</p>
+        </div>
+       </div>
+       <div class="flex gap-4">
+        <div class="step-number bg-purple-600">
+         4
+        </div>
+        <div>
+         <p class="font-semibold text-gray-100">Verify No Overlaps</p>
+         <p class="text-sm text-gray-400">Ensure subnets don't overlap and stay within the parent network</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- 4. ACTIVITIES TAB -->
+    <section id="activities" class="tab-content space-y-6 hidden"><!-- Individual Activity -->
+     <div class="activity-header bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
+      <h2 class="text-2xl font-bold mb-6 text-purple-400">👤 Individual Activity: Basic Subnetting Challenge</h2>
+      <div class="bg-slate-700/50 p-4 rounded-lg mb-6 border-l-4 border-purple-500">
+       <p class="font-semibold text-gray-200 mb-3">Scenario:</p>
+       <p class="text-gray-300">Your company has been assigned the network <strong class="text-emerald-400">10.0.0.0/24</strong>. You need to create <strong class="text-emerald-400">4 equal subnets</strong> for four different departments.</p>
+      </div>
+      <h3 class="font-bold text-purple-300 mb-4">Your Task:</h3>
+      <div class="space-y-4">
+       <div class="bg-slate-700/30 p-4 rounded border border-slate-600">
+        <p class="font-semibold text-gray-200">1️⃣ Calculate the new prefix length (/##)</p>
+        <p class="text-xs text-gray-400 mt-2">Hint: You need 4 subnets, so 2^n = 4, therefore n = ?</p><input type="text" placeholder="Enter your answer (e.g., /26)" class="individual-input mt-2 w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-sm text-gray-100 focus:outline-none focus:border-purple-500">
+       </div>
+       <div class="bg-slate-700/30 p-4 rounded border border-slate-600">
+        <p class="font-semibold text-gray-200">2️⃣ Calculate subnet increment</p>
+        <p class="text-xs text-gray-400 mt-2">Increment = 256 ÷ (number of subnets)</p><input type="text" placeholder="Enter increment" class="individual-input mt-2 w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-sm text-gray-100 focus:outline-none focus:border-purple-500">
+       </div>
+       <div class="bg-slate-700/30 p-4 rounded border border-slate-600">
+        <p class="font-semibold text-gray-200">3️⃣ List all 4 subnets (Network Address)</p>
+        <p class="text-xs text-gray-400 mt-2">Example: 10.0.0.0, 10.0.0.64, ...</p><textarea placeholder="Enter all 4 subnet addresses (comma separated)" class="individual-input mt-2 w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-sm text-gray-100 focus:outline-none focus:border-purple-500" rows="2"></textarea>
+       </div>
+       <div class="bg-slate-700/30 p-4 rounded border border-slate-600">
+        <p class="font-semibold text-gray-200">4️⃣ For Subnet 1, list the usable host range</p>
+        <p class="text-xs text-gray-400 mt-2">Example: 10.0.0.1 - 10.0.0.62</p><input type="text" placeholder="First host - Last host" class="individual-input mt-2 w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-sm text-gray-100 focus:outline-none focus:border-purple-500">
+       </div><button onclick="showIndividualSolution()" class="w-full mt-4 px-4 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 rounded-lg font-semibold transition-all"> 📋 Show Solution </button>
+       <div id="individual-solution" class="hidden bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4 mt-4 space-y-2">
+        <p class="font-semibold text-emerald-300">✓ Correct Answers:</p>
+        <p class="text-sm text-gray-300"><strong>1. New Prefix:</strong> /26 (24 + 2 = 26)</p>
+        <p class="text-sm text-gray-300"><strong>2. Increment:</strong> 64 (256 ÷ 4 = 64)</p>
+        <p class="text-sm text-gray-300"><strong>3. Four Subnets:</strong> 10.0.0.0, 10.0.0.64, 10.0.0.128, 10.0.0.192</p>
+        <p class="text-sm text-gray-300"><strong>4. Subnet 1 Hosts:</strong> 10.0.0.1 - 10.0.0.62</p>
+       </div>
+      </div>
+     </div><!-- Group Activity -->
+     <div class="activity-header bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
+      <h2 class="text-2xl font-bold mb-6 text-blue-400">👥 Group Activity: VLSM Network Design</h2>
+      <div class="bg-slate-700/50 p-4 rounded-lg mb-6 border-l-4 border-blue-500">
+       <p class="font-semibold text-gray-200 mb-3">Scenario:</p>
+       <p class="text-gray-300">Your group is the network administrator for a growing tech company. You have been assigned <strong class="text-emerald-400">172.16.0.0/21</strong> and must design VLSM for:</p>
+       <ul class="mt-3 space-y-2 text-gray-300 ml-4">
+        <li>• <strong>Main Office:</strong> 400 hosts</li>
+        <li>• <strong>Branch Office 1:</strong> 200 hosts</li>
+        <li>• <strong>Branch Office 2:</strong> 100 hosts</li>
+        <li>• <strong>Data Center:</strong> 50 hosts</li>
+        <li>• <strong>WAN Links:</strong> 4 connections (2 hosts each)</li>
+       </ul>
+      </div>
+      <h3 class="font-bold text-blue-300 mb-4">Your Group's Task:</h3>
+      <div class="space-y-4">
+       <div class="bg-slate-700/30 p-4 rounded border border-slate-600">
+        <p class="font-semibold text-gray-200">Step 1: Sort requirements by size (largest to smallest)</p>
+        <p class="text-xs text-gray-400 mt-2">Why is this important? To prevent IP address waste</p><textarea placeholder="List requirements from largest to smallest" class="group-input mt-2 w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-sm text-gray-100 focus:outline-none focus:border-blue-500" rows="3"></textarea>
+       </div>
+       <div class="bg-slate-700/30 p-4 rounded border border-slate-600">
+        <p class="font-semibold text-gray-200">Step 2: Calculate prefix length for each subnet</p>
+        <p class="text-xs text-gray-400 mt-2">Use: Prefix = 32 - log₂(hosts + 2)</p><textarea placeholder="Main Office: /##, Branch 1: /##, ..." class="group-input mt-2 w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-sm text-gray-100 focus:outline-none focus:border-blue-500" rows="2"></textarea>
+       </div>
+       <div class="bg-slate-700/30 p-4 rounded border border-slate-600">
+        <p class="font-semibold text-gray-200">Step 3: Design complete VLSM allocation</p>
+        <p class="text-xs text-gray-400 mt-2">Network address and prefix for each subnet</p><textarea placeholder="Main Office: 172.16.0.0/23, ..." class="group-input mt-2 w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-sm text-gray-100 focus:outline-none focus:border-blue-500" rows="4"></textarea>
+       </div><button onclick="showGroupSolution()" class="w-full mt-4 px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 rounded-lg font-semibold transition-all"> 📋 Show Solution </button>
+       <div id="group-solution" class="hidden bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4 mt-4 space-y-3">
+        <p class="font-semibold text-emerald-300">✓ Sample VLSM Design:</p>
+        <div class="text-xs text-gray-300 font-mono space-y-1">
+         <p>Main Office: 172.16.0.0/22 (1022 hosts) ← Largest first</p>
+         <p>Branch Office 1: 172.16.4.0/23 (510 hosts)</p>
+         <p>Branch Office 2: 172.16.6.0/24 (254 hosts)</p>
+         <p>Data Center: 172.16.7.0/26 (62 hosts)</p>
+         <p>WAN Link 1: 172.16.7.64/30 (2 hosts)</p>
+         <p>WAN Link 2: 172.16.7.68/30 (2 hosts)</p>
+        </div>
+        <p class="text-sm text-gray-400 mt-3">Total used: 1022 + 510 + 254 + 62 + 2 + 2 = 1852 of 2048 hosts available</p>
+       </div>
+      </div>
+     </div>
+    </section><!-- 5. QUIZ TAB -->
+    <section id="quiz" class="tab-content space-y-6 hidden">
+     <div class="card-glow bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
+      <h2 class="text-2xl font-bold mb-2 text-emerald-400">📝 Review Quiz: Test Your Knowledge</h2>
+      <p class="text-gray-400 mb-6">10 questions to assess your understanding of Subnetting &amp; VLSM</p>
+      <div class="space-y-8"><!-- Question 1 -->
+       <div class="quiz-question bg-slate-700/30 p-5 rounded-lg border border-slate-600">
+        <p class="font-semibold text-gray-200 mb-4">1. What is the primary purpose of subnetting?</p>
+        <div class="space-y-3"><label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q1" value="a" class="w-4 h-4"> <span class="text-gray-300">A) To increase the number of available IP addresses</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q1" value="b" class="w-4 h-4"> <span class="text-gray-300">B) To divide large networks into smaller, manageable segments</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q1" value="c" class="w-4 h-4"> <span class="text-gray-300">C) To replace IPv4 with IPv6</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q1" value="d" class="w-4 h-4"> <span class="text-gray-300">D) To speed up internet connection</span> </label>
+        </div>
+       </div><!-- Question 2 -->
+       <div class="quiz-question bg-slate-700/30 p-5 rounded-lg border border-slate-600">
+        <p class="font-semibold text-gray-200 mb-4">2. You need 6 subnets. How many bits must you borrow from the host portion?</p>
+        <div class="space-y-3"><label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q2" value="a" class="w-4 h-4"> <span class="text-gray-300">A) 2 bits</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q2" value="b" class="w-4 h-4"> <span class="text-gray-300">B) 3 bits</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q2" value="c" class="w-4 h-4"> <span class="text-gray-300">C) 4 bits</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q2" value="d" class="w-4 h-4"> <span class="text-gray-300">D) 6 bits</span> </label>
+        </div>
+       </div><!-- Question 3 -->
+       <div class="quiz-question bg-slate-700/30 p-5 rounded-lg border border-slate-600">
+        <p class="font-semibold text-gray-200 mb-4">3. What is the subnet mask for /28?</p>
+        <div class="space-y-3"><label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q3" value="a" class="w-4 h-4"> <span class="text-gray-300">A) 255.255.255.0</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q3" value="b" class="w-4 h-4"> <span class="text-gray-300">B) 255.255.255.224</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q3" value="c" class="w-4 h-4"> <span class="text-gray-300">C) 255.255.255.240</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q3" value="d" class="w-4 h-4"> <span class="text-gray-300">D) 255.255.255.248</span> </label>
+        </div>
+       </div><!-- Question 4 -->
+       <div class="quiz-question bg-slate-700/30 p-5 rounded-lg border border-slate-600">
+        <p class="font-semibold text-gray-200 mb-4">4. How many usable host addresses are available in a /26 subnet?</p>
+        <div class="space-y-3"><label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q4" value="a" class="w-4 h-4"> <span class="text-gray-300">A) 62 hosts</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q4" value="b" class="w-4 h-4"> <span class="text-gray-300">B) 64 hosts</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q4" value="c" class="w-4 h-4"> <span class="text-gray-300">C) 126 hosts</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q4" value="d" class="w-4 h-4"> <span class="text-gray-300">D) 256 hosts</span> </label>
+        </div>
+       </div><!-- Question 5 -->
+       <div class="quiz-question bg-slate-700/30 p-5 rounded-lg border border-slate-600">
+        <p class="font-semibold text-gray-200 mb-4">5. If the network address is 192.168.1.0 and the subnet mask is 255.255.255.128, what is the broadcast address?</p>
+        <div class="space-y-3"><label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q5" value="a" class="w-4 h-4"> <span class="text-gray-300">A) 192.168.1.127</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q5" value="b" class="w-4 h-4"> <span class="text-gray-300">B) 192.168.1.128</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q5" value="c" class="w-4 h-4"> <span class="text-gray-300">C) 192.168.1.255</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q5" value="d" class="w-4 h-4"> <span class="text-gray-300">D) 192.168.2.0</span> </label>
+        </div>
+       </div><!-- Question 6 -->
+       <div class="quiz-question bg-slate-700/30 p-5 rounded-lg border border-slate-600">
+        <p class="font-semibold text-gray-200 mb-4">6. What does VLSM stand for?</p>
+        <div class="space-y-3"><label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q6" value="a" class="w-4 h-4"> <span class="text-gray-300">A) Virtual Local Subnet Management</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q6" value="b" class="w-4 h-4"> <span class="text-gray-300">B) Variable Length Subnet Masking</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q6" value="c" class="w-4 h-4"> <span class="text-gray-300">C) Very Large Scale Modular</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q6" value="d" class="w-4 h-4"> <span class="text-gray-300">D) Virtual Layer Subnet Management</span> </label>
+        </div>
+       </div><!-- Question 7 -->
+       <div class="quiz-question bg-slate-700/30 p-5 rounded-lg border border-slate-600">
+        <p class="font-semibold text-gray-200 mb-4">7. Which CIDR notation represents 255.255.0.0?</p>
+        <div class="space-y-3"><label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q7" value="a" class="w-4 h-4"> <span class="text-gray-300">A) /8</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q7" value="b" class="w-4 h-4"> <span class="text-gray-300">B) /16</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q7" value="c" class="w-4 h-4"> <span class="text-gray-300">C) /24</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q7" value="d" class="w-4 h-4"> <span class="text-gray-300">D) /30</span> </label>
+        </div>
+       </div><!-- Question 8 -->
+       <div class="quiz-question bg-slate-700/30 p-5 rounded-lg border border-slate-600">
+        <p class="font-semibold text-gray-200 mb-4">8. What advantage does VLSM have over traditional subnetting?</p>
+        <div class="space-y-3"><label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q8" value="a" class="w-4 h-4"> <span class="text-gray-300">A) Faster network speeds</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q8" value="b" class="w-4 h-4"> <span class="text-gray-300">B) More efficient IP address utilization</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q8" value="c" class="w-4 h-4"> <span class="text-gray-300">C) Eliminates the need for routing</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q8" value="d" class="w-4 h-4"> <span class="text-gray-300">D) Increases security automatically</span> </label>
+        </div>
+       </div><!-- Question 9 -->
+       <div class="quiz-question bg-slate-700/30 p-5 rounded-lg border border-slate-600">
+        <p class="font-semibold text-gray-200 mb-4">9. In a /30 subnet, how many usable host addresses are there?</p>
+        <div class="space-y-3"><label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q9" value="a" class="w-4 h-4"> <span class="text-gray-300">A) 2 hosts</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q9" value="b" class="w-4 h-4"> <span class="text-gray-300">B) 4 hosts</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q9" value="c" class="w-4 h-4"> <span class="text-gray-300">C) 6 hosts</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q9" value="d" class="w-4 h-4"> <span class="text-gray-300">D) 30 hosts</span> </label>
+        </div>
+       </div><!-- Question 10 -->
+       <div class="quiz-question bg-slate-700/30 p-5 rounded-lg border border-slate-600">
+        <p class="font-semibold text-gray-200 mb-4">10. When subnetting 192.168.0.0/22 into 4 equal subnets, what is the new prefix length?</p>
+        <div class="space-y-3"><label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q10" value="a" class="w-4 h-4"> <span class="text-gray-300">A) /23</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q10" value="b" class="w-4 h-4"> <span class="text-gray-300">B) /24</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q10" value="c" class="w-4 h-4"> <span class="text-gray-300">C) /25</span> </label> <label class="quiz-option flex items-center gap-3 p-3 rounded border border-slate-600 hover:border-emerald-500"> <input type="radio" name="q10" value="d" class="w-4 h-4"> <span class="text-gray-300">D) /26</span> </label>
+        </div>
+       </div>
+      </div><button onclick="submitQuiz()" class="w-full mt-8 px-6 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 rounded-lg font-bold text-lg transition-all"> ✓ Submit Quiz </button>
+      <div id="quiz-results" class="hidden mt-8 p-6 rounded-lg bg-slate-700/50 border border-slate-600">
+       <h3 class="text-xl font-bold text-emerald-400 mb-4">Your Results</h3>
+       <div id="results-content"></div>
+      </div>
+     </div>
+    </section>
+   </main><!-- Footer -->
+   <footer class="bg-slate-900/80 backdrop-blur-md border-t border-slate-700 mt-16">
+    <div class="max-w-6xl mx-auto px-4 py-8 text-center text-gray-400 text-sm">
+     <p>IS103 - IT Infrastructure and Network Technologies | Lyceum De San Pablo</p>
+     <p class="mt-2">© 2026 College of Information Systems</p>
+    </div>
+   </footer>
+  </div>
+  <script>
+    const defaultConfig = {
+      course_code: 'IS103',
+      instructor_name: 'Instructor: MKDB'
+    };
+
+    let config = { ...defaultConfig };
+
+    async function onConfigChange(cfg) {
+      config = { ...defaultConfig, ...cfg };
+      document.getElementById('course-code').textContent = config.course_code || defaultConfig.course_code;
+      document.getElementById('instructor-name').textContent = config.instructor_name || defaultConfig.instructor_name;
+    }
+
+    function mapToCapabilities(cfg) {
+      return {
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(cfg) {
+      return new Map([
+        ['course_code', cfg.course_code || defaultConfig.course_code],
+        ['instructor_name', cfg.instructor_name || defaultConfig.instructor_name]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    } else {
+      onConfigChange(defaultConfig);
+    }
+
+    // Tab Navigation
+    document.querySelectorAll('.tab-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const tabName = this.dataset.tab;
+        
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+        document.getElementById(tabName).classList.remove('hidden');
+        
+        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Individual Activity Solution
+    function showIndividualSolution() {
+      const el = document.getElementById('individual-solution');
+      el.classList.toggle('hidden');
+    }
+
+    // Group Activity Solution
+    function showGroupSolution() {
+      const el = document.getElementById('group-solution');
+      el.classList.toggle('hidden');
+    }
+
+    // Quiz Submission
+    function submitQuiz() {
+      const answers = {
+        q1: 'b',
+        q2: 'b',
+        q3: 'c',
+        q4: 'a',
+        q5: 'a',
+        q6: 'b',
+        q7: 'b',
+        q8: 'b',
+        q9: 'a',
+        q10: 'b'
+      };
+
+      let score = 0;
+      let html = '';
+
+      for (let i = 1; i <= 10; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const isCorrect = selected && selected.value === answers[`q${i}`];
+        
+        if (isCorrect) score++;
+
+        const status = isCorrect ? '✓ Correct' : '✗ Incorrect';
+        const color = isCorrect ? 'text-emerald-400' : 'text-red-400';
+        html += `<p class="text-sm ${color}">Question ${i}: ${status}</p>`;
+      }
+
+      const percentage = (score / 10) * 100;
+      const resultColor = percentage >= 80 ? 'text-emerald-400' : percentage >= 60 ? 'text-amber-400' : 'text-red-400';
+
+      document.getElementById('results-content').innerHTML = `
+        <p class="text-lg font-bold ${resultColor} mb-4">Score: ${score}/10 (${percentage.toFixed(0)}%)</p>
+        <div class="space-y-2">${html}</div>
+        <p class="text-sm text-gray-400 mt-4">${percentage >= 80 ? '🎉 Excellent work! You have mastered the concepts!' : percentage >= 60 ? '👍 Good effort! Review the weak areas.' : '📚 Keep studying! Review all concepts.'}</p>
+      `;
+
+      document.getElementById('quiz-results').classList.remove('hidden');
+      document.getElementById('quiz-results').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d1edbb7941785a0',t:'MTc3MTc2NzIzOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

@@ -1,0 +1,804 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IS103 Midterm Week 5 - DNS &amp; Name Resolution</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #00d4aa 0%, #00b4d8 50%, #7c3aed 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .tab-btn {
+      transition: all 0.3s ease;
+    }
+    
+    .tab-btn.active {
+      border-bottom: 3px solid #00d4aa;
+      color: #00d4aa;
+    }
+    
+    .code-block {
+      background: #1a1a2e;
+      border-left: 4px solid #00d4aa;
+      font-family: 'JetBrains Mono', monospace;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    
+    .content-section {
+      display: none;
+    }
+    
+    .content-section.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .quiz-option {
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    
+    .quiz-option:hover {
+      transform: translateX(4px);
+    }
+    
+    .quiz-option.selected {
+      background-color: rgba(0, 212, 170, 0.2);
+    }
+    
+    .quiz-option.correct {
+      background-color: rgba(34, 197, 94, 0.2);
+      border-left-color: #22c55e;
+    }
+    
+    .quiz-option.incorrect {
+      background-color: rgba(239, 68, 68, 0.2);
+      border-left-color: #ef4444;
+    }
+    
+    .dns-diagram {
+      background: linear-gradient(135deg, rgba(0, 212, 170, 0.1) 0%, rgba(0, 180, 216, 0.1) 100%);
+    }
+    
+    .scroll-container {
+      scrollbar-width: thin;
+      scrollbar-color: #374151 #111827;
+    }
+    
+    .scroll-container::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .scroll-container::-webkit-scrollbar-track {
+      background: #111827;
+    }
+    
+    .scroll-container::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 3px;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-gray-950 text-gray-100 overflow-auto scroll-container" style="font-family: 'Space Grotesk', sans-serif;">
+  <div class="h-full w-full" style="background: radial-gradient(ellipse at top, #1a1a2e 0%, #0f0f1a 50%, #000000 100%);">
+   <div class="relative z-10 max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8 h-full"><!-- Header -->
+    <header class="mb-8">
+     <div class="flex items-center gap-4 mb-4">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+       <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+       </svg>
+      </div>
+      <div>
+       <p id="course-code" class="text-cyan-400 font-mono text-sm tracking-wider">IS103 • MIDTERM WEEK 5</p>
+       <h1 id="course-title" class="text-3xl font-bold gradient-text">DNS &amp; Name Resolution</h1>
+      </div>
+     </div>
+     <p class="text-gray-400 flex items-center gap-2"><span>👨‍🏫</span> Instructor: <span id="instructor-name">MKDB</span></p>
+    </header><!-- Learning Objective -->
+    <section class="mb-8 p-6 rounded-xl bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/30">
+     <div class="flex items-start gap-3"><span class="text-2xl">🎯</span>
+      <div>
+       <h2 class="text-lg font-bold text-cyan-400 mb-2">Learning Objective (ILO)</h2>
+       <p class="text-gray-300">Implement basic DNS services and understand the complete name resolution process to enable users to access network resources using human-readable domain names instead of IP addresses.</p>
+      </div>
+     </div>
+    </section><!-- Tab Navigation -->
+    <div class="flex flex-wrap gap-2 mb-8 border-b border-gray-800 pb-4"><button class="tab-btn active px-4 py-2 text-sm font-semibold rounded-t-lg" onclick="switchTab(event, 'overview')">📖 Overview</button> <button class="tab-btn px-4 py-2 text-sm font-semibold rounded-t-lg" onclick="switchTab(event, 'concepts')">🔍 DNS Concepts</button> <button class="tab-btn px-4 py-2 text-sm font-semibold rounded-t-lg" onclick="switchTab(event, 'process')">⚙️ Resolution Process</button> <button class="tab-btn px-4 py-2 text-sm font-semibold rounded-t-lg" onclick="switchTab(event, 'handson')">🛠️ Hands-On Guide</button> <button class="tab-btn px-4 py-2 text-sm font-semibold rounded-t-lg" onclick="switchTab(event, 'activities')">✏️ Activities</button> <button class="tab-btn px-4 py-2 text-sm font-semibold rounded-t-lg" onclick="switchTab(event, 'quiz')">📝 Quiz</button>
+    </div><!-- OVERVIEW TAB -->
+    <section id="overview" class="content-section active space-y-6 pb-8">
+     <div class="space-y-6">
+      <div class="p-6 rounded-xl bg-gray-900/60 border border-gray-800">
+       <h3 class="text-xl font-bold text-cyan-400 mb-4">What is DNS?</h3>
+       <p class="text-gray-300 leading-relaxed mb-4">The Domain Name System (DNS) is a hierarchical distributed naming system that translates human-readable domain names (like <span class="font-mono text-emerald-400">www.example.com</span>) into IP addresses (like <span class="font-mono text-emerald-400">192.0.2.1</span>). Without DNS, users would need to memorize IP addresses for every website they want to visit!</p>
+       <div class="mt-4 p-4 bg-blue-500/10 rounded-lg border-l-4 border-blue-500">
+        <p class="text-sm text-blue-200"><strong>Key Point:</strong> DNS is essential infrastructure that makes the internet user-friendly by allowing access via memorable names instead of numeric IP addresses.</p>
+       </div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4">
+       <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800">
+        <h4 class="font-bold text-emerald-400 mb-3">Why DNS Matters</h4>
+        <ul class="space-y-2 text-sm text-gray-300">
+         <li>✅ Human-readable naming</li>
+         <li>✅ Load balancing across servers</li>
+         <li>✅ Redundancy and failover</li>
+         <li>✅ Email routing (MX records)</li>
+         <li>✅ Service discovery</li>
+        </ul>
+       </div>
+       <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800">
+        <h4 class="font-bold text-amber-400 mb-3">DNS Hierarchy</h4>
+        <div class="text-sm text-gray-300 font-mono space-y-1">
+         <div>
+          Root (.) → TLD (.com)
+         </div>
+         <div>
+          ↓
+         </div>
+         <div>
+          Domain (example.com)
+         </div>
+         <div>
+          ↓
+         </div>
+         <div>
+          Subdomain (www.example.com)
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- CONCEPTS TAB -->
+    <section id="concepts" class="content-section space-y-6 pb-8">
+     <div class="space-y-6">
+      <div class="p-6 rounded-xl bg-gray-900/60 border border-gray-800">
+       <h3 class="text-xl font-bold text-cyan-400 mb-4">DNS Components &amp; Records</h3>
+       <div class="space-y-4">
+        <div class="p-4 bg-gray-800/50 rounded-lg border-l-4 border-cyan-500">
+         <h4 class="font-bold text-cyan-300 mb-2">DNS Server Types</h4>
+         <div class="text-sm text-gray-300 space-y-2">
+          <p><strong class="text-emerald-400">Authoritative:</strong> Maintains actual DNS records for a domain</p>
+          <p><strong class="text-emerald-400">Recursive:</strong> Queries other servers on behalf of clients</p>
+          <p><strong class="text-emerald-400">Caching:</strong> Stores frequently accessed DNS records</p>
+         </div>
+        </div>
+        <div class="p-4 bg-gray-800/50 rounded-lg border-l-4 border-emerald-500">
+         <h4 class="font-bold text-emerald-300 mb-3">Common DNS Record Types</h4>
+         <div class="grid gap-3">
+          <div class="flex gap-3"><span class="font-mono text-amber-400 min-w-16">A</span> <span class="text-gray-300">Maps domain name to IPv4 address</span>
+          </div>
+          <div class="flex gap-3"><span class="font-mono text-amber-400 min-w-16">AAAA</span> <span class="text-gray-300">Maps domain name to IPv6 address</span>
+          </div>
+          <div class="flex gap-3"><span class="font-mono text-amber-400 min-w-16">CNAME</span> <span class="text-gray-300">Canonical name - alias for another record</span>
+          </div>
+          <div class="flex gap-3"><span class="font-mono text-amber-400 min-w-16">MX</span> <span class="text-gray-300">Mail exchange - routes emails</span>
+          </div>
+          <div class="flex gap-3"><span class="font-mono text-amber-400 min-w-16">NS</span> <span class="text-gray-300">Name server - delegates domain authority</span>
+          </div>
+          <div class="flex gap-3"><span class="font-mono text-amber-400 min-w-16">SOA</span> <span class="text-gray-300">Start of authority - zone information</span>
+          </div>
+          <div class="flex gap-3"><span class="font-mono text-amber-400 min-w-16">PTR</span> <span class="text-gray-300">Pointer - reverse DNS lookups</span>
+          </div>
+          <div class="flex gap-3"><span class="font-mono text-amber-400 min-w-16">TXT</span> <span class="text-gray-300">Text records - SPF, DKIM, verification</span>
+          </div>
+         </div>
+        </div>
+        <div class="p-4 bg-gray-800/50 rounded-lg border-l-4 border-violet-500">
+         <h4 class="font-bold text-violet-300 mb-2">DNS Caching &amp; TTL</h4>
+         <p class="text-sm text-gray-300"><strong>TTL (Time To Live):</strong> Specifies how long DNS records are cached (in seconds). Higher TTL = faster lookups but slower updates. Lower TTL = slower lookups but faster changes.</p>
+         <div class="mt-3 text-xs text-gray-400">
+          Example: TTL 3600 = records cached for 1 hour
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- RESOLUTION PROCESS TAB -->
+    <section id="process" class="content-section space-y-6 pb-8">
+     <div class="space-y-6">
+      <div class="p-6 rounded-xl bg-gray-900/60 border border-gray-800">
+       <h3 class="text-xl font-bold text-cyan-400 mb-4">DNS Name Resolution Process</h3>
+       <p class="text-gray-300 mb-6">When a user types a URL, here's what happens behind the scenes:</p>
+       <div class="space-y-4">
+        <div class="p-4 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-lg border-l-4 border-blue-500">
+         <div class="flex items-center gap-3 mb-2"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/30 text-blue-300 font-bold text-sm">1</span>
+          <h4 class="font-bold text-blue-300">User Query</h4>
+         </div>
+         <p class="text-sm text-gray-300 ml-11">User types URL (e.g., www.example.com) in browser</p>
+         <div class="mt-2 ml-11 text-xs font-mono text-emerald-400 bg-gray-800/50 p-2 rounded">
+          User → Browser: Resolve www.example.com
+         </div>
+        </div>
+        <div class="p-4 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-lg border-l-4 border-cyan-500">
+         <div class="flex items-center gap-3 mb-2"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-cyan-500/30 text-cyan-300 font-bold text-sm">2</span>
+          <h4 class="font-bold text-cyan-300">Recursive Resolver Query</h4>
+         </div>
+         <p class="text-sm text-gray-300 ml-11">Browser queries recursive resolver (usually ISP's DNS or 8.8.8.8)</p>
+         <div class="mt-2 ml-11 text-xs font-mono text-emerald-400 bg-gray-800/50 p-2 rounded">
+          Browser → Resolver: What's the IP for www.example.com?
+         </div>
+        </div>
+        <div class="p-4 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 rounded-lg border-l-4 border-emerald-500">
+         <div class="flex items-center gap-3 mb-2"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/30 text-emerald-300 font-bold text-sm">3</span>
+          <h4 class="font-bold text-emerald-300">Root Nameserver Query</h4>
+         </div>
+         <p class="text-sm text-gray-300 ml-11">Resolver queries root nameserver for domain information</p>
+         <div class="mt-2 ml-11 text-xs font-mono text-emerald-400 bg-gray-800/50 p-2 rounded">
+          Resolver → Root: Where is .com authority?
+         </div>
+        </div>
+        <div class="p-4 bg-gradient-to-r from-amber-500/10 to-emerald-500/10 rounded-lg border-l-4 border-amber-500">
+         <div class="flex items-center gap-3 mb-2"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/30 text-amber-300 font-bold text-sm">4</span>
+          <h4 class="font-bold text-amber-300">TLD Nameserver Query</h4>
+         </div>
+         <p class="text-sm text-gray-300 ml-11">Resolver queries TLD nameserver for authoritative nameserver</p>
+         <div class="mt-2 ml-11 text-xs font-mono text-emerald-400 bg-gray-800/50 p-2 rounded">
+          Resolver → TLD: Where is example.com authority?
+         </div>
+        </div>
+        <div class="p-4 bg-gradient-to-r from-violet-500/10 to-amber-500/10 rounded-lg border-l-4 border-violet-500">
+         <div class="flex items-center gap-3 mb-2"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-violet-500/30 text-violet-300 font-bold text-sm">5</span>
+          <h4 class="font-bold text-violet-300">Authoritative Nameserver Query</h4>
+         </div>
+         <p class="text-sm text-gray-300 ml-11">Resolver queries authoritative nameserver for actual record</p>
+         <div class="mt-2 ml-11 text-xs font-mono text-emerald-400 bg-gray-800/50 p-2 rounded">
+          Resolver → Auth NS: What's the A record for www.example.com?
+         </div>
+        </div>
+        <div class="p-4 bg-gradient-to-r from-green-500/10 to-violet-500/10 rounded-lg border-l-4 border-green-500">
+         <div class="flex items-center gap-3 mb-2"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-green-500/30 text-green-300 font-bold text-sm">6</span>
+          <h4 class="font-bold text-green-300">Response Back to User</h4>
+         </div>
+         <p class="text-sm text-gray-300 ml-11">IP address returned through chain back to browser</p>
+         <div class="mt-2 ml-11 text-xs font-mono text-emerald-400 bg-gray-800/50 p-2 rounded">
+          Resolver → Browser → User: 192.0.2.1 ✓
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800">
+       <h4 class="font-bold text-cyan-400 mb-3">Quick DNS Resolution Summary</h4>
+       <div class="font-mono text-xs text-gray-300 bg-gray-800/50 p-4 rounded overflow-x-auto">
+        <div>
+         User Query: www.example.com
+        </div>
+        <div class="mt-2">
+         ↓ Recursive Resolver (ISP DNS)
+        </div>
+        <div class="mt-2">
+         ↓ Root Nameserver (".") - Refers to .com TLD
+        </div>
+        <div class="mt-2">
+         ↓ TLD Nameserver (".com") - Refers to example.com NS
+        </div>
+        <div class="mt-2">
+         ↓ Authoritative Nameserver - Returns: 192.0.2.1
+        </div>
+        <div class="mt-2">
+         ↓ Response cached &amp; returned to user
+        </div>
+        <div class="mt-2 text-emerald-400">
+         ✓ Browser can now connect to 192.0.2.1
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- HANDS-ON GUIDE TAB -->
+    <section id="handson" class="content-section space-y-6 pb-8">
+     <div class="space-y-6">
+      <div class="p-6 rounded-xl bg-gray-900/60 border border-gray-800">
+       <h3 class="text-xl font-bold text-cyan-400 mb-4">🔧 Complete DNS Configuration Example</h3>
+       <p class="text-gray-300 mb-6">Let's configure a DNS server for a company network with multiple subdomains.</p>
+       <div class="space-y-6"><!-- Step 1 -->
+        <div class="p-4 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-lg">
+         <div class="flex items-center gap-2 mb-3"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-cyan-500/30 text-cyan-300 font-bold">1</span>
+          <h4 class="font-bold text-cyan-300">Plan Your DNS Infrastructure</h4>
+         </div>
+         <div class="ml-10 space-y-2 text-sm text-gray-300">
+          <p><strong>Domain:</strong> company.local (internal network)</p>
+          <p><strong>DNS Server IP:</strong> 192.168.1.10</p>
+          <p><strong>Subdomains to configure:</strong></p>
+          <ul class="ml-4 space-y-1 text-gray-400">
+           <li>• www.company.local → 192.168.1.50 (Web Server)</li>
+           <li>• mail.company.local → 192.168.1.60 (Mail Server)</li>
+           <li>• admin.company.local → 192.168.1.70 (Admin Server)</li>
+           <li>• ftp.company.local → 192.168.1.80 (FTP Server)</li>
+          </ul>
+         </div>
+        </div><!-- Step 2 -->
+        <div class="p-4 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 rounded-lg">
+         <div class="flex items-center gap-2 mb-3"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/30 text-emerald-300 font-bold">2</span>
+          <h4 class="font-bold text-emerald-300">Configure DNS Zone File</h4>
+         </div>
+         <div class="ml-10 text-sm">
+          <p class="text-gray-300 mb-2">Create zone file for company.local domain:</p>
+          <div class="code-block p-4 rounded">
+           $TTL 86400 @ IN SOA ns1.company.local. admin.company.local. ( 2024010101 ; Serial 3600 ; Refresh 1800 ; Retry 604800 ; Expire 86400 ; Minimum TTL ) @ IN NS ns1.company.local. ns1 IN A 192.168.1.10 company IN A 192.168.1.10 ; A Records www IN A 192.168.1.50 mail IN A 192.168.1.60 admin IN A 192.168.1.70 ftp IN A 192.168.1.80 ; CNAME Records (Aliases) webserver IN CNAME www.company.local. mail-srv IN CNAME mail.company.local. ; MX Record (Mail Server) @ IN MX 10 mail.company.local. ; TXT Record (Verification) @ IN TXT "v=spf1 mx ~all"
+          </div>
+         </div>
+        </div><!-- Step 3 -->
+        <div class="p-4 bg-gradient-to-r from-amber-500/10 to-emerald-500/10 rounded-lg">
+         <div class="flex items-center gap-2 mb-3"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/30 text-amber-300 font-bold">3</span>
+          <h4 class="font-bold text-amber-300">Configure DNS Server (BIND/named)</h4>
+         </div>
+         <div class="ml-10 text-sm">
+          <p class="text-gray-300 mb-2">Edit /etc/bind/named.conf to add zone:</p>
+          <div class="code-block p-4 rounded">
+           zone "company.local" { type master; file "/etc/bind/zones/db.company.local"; allow-transfer { 192.168.1.11; }; }; zone "1.168.192.in-addr.arpa" { type master; file "/etc/bind/zones/db.1.168.192"; }; // Allow recursive queries from internal network acl "internal" { 192.168.1.0/24; 127.0.0.1; }; options { directory "/var/cache/bind"; recursion yes; allow-recursion { internal; }; dnssec-validation auto; listen-on { 192.168.1.10; 127.0.0.1; }; };
+          </div>
+         </div>
+        </div><!-- Step 4 -->
+        <div class="p-4 bg-gradient-to-r from-violet-500/10 to-amber-500/10 rounded-lg">
+         <div class="flex items-center gap-2 mb-3"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-violet-500/30 text-violet-300 font-bold">4</span>
+          <h4 class="font-bold text-violet-300">Configure Router to Use DNS</h4>
+         </div>
+         <div class="ml-10 text-sm">
+          <p class="text-gray-300 mb-2">Cisco Router configuration (DHCP + DNS):</p>
+          <div class="code-block p-4 rounded">
+           ! Enable DNS services ip dns server ip dns name-list 1 permit company.local ip dns primary-server 192.168.1.10 ! Configure DHCP pool with DNS ip dhcp pool CORP_NETWORK network 192.168.1.0 255.255.255.0 default-router 192.168.1.1 dns-server 192.168.1.10 domain-name company.local lease 7 ! Configure DHCP relay if needed interface Fa0/1 ip helper-address 192.168.1.10 ! Verify DNS configuration show ip dns show ip dns view
+          </div>
+         </div>
+        </div><!-- Step 5 -->
+        <div class="p-4 bg-gradient-to-r from-green-500/10 to-violet-500/10 rounded-lg">
+         <div class="flex items-center gap-2 mb-3"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-green-500/30 text-green-300 font-bold">5</span>
+          <h4 class="font-bold text-green-300">Test DNS Resolution</h4>
+         </div>
+         <div class="ml-10 text-sm">
+          <p class="text-gray-300 mb-2">Verify DNS is working from client:</p>
+          <div class="code-block p-4 rounded">
+           ! Test DNS resolution on client C:\&gt; nslookup www.company.local Server: 192.168.1.10 Address: 192.168.1.10#53 Name: www.company.local Address: 192.168.1.50 ! Test reverse DNS lookup C:\&gt; nslookup 192.168.1.50 Server: 192.168.1.10 Address: 192.168.1.10#53 50.1.168.192.in-addr.arpa name = www.company.local ! Dig command (Linux/Mac) $ dig www.company.local @192.168.1.10 $ dig mail.company.local @192.168.1.10 $ dig +short company.local MX $ dig -x 192.168.1.50 @192.168.1.10 ! Ping using DNS name C:\&gt; ping www.company.local Pinging www.company.local [192.168.1.50] with 32 bytes... Reply from 192.168.1.50: bytes=32 time=1ms TTL=128 ! Verify DHCP provides DNS ipconfig /all (Should show DNS Servers: 192.168.1.10)
+          </div>
+         </div>
+        </div><!-- Step 6 -->
+        <div class="p-4 bg-gradient-to-r from-pink-500/10 to-green-500/10 rounded-lg">
+         <div class="flex items-center gap-2 mb-3"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-pink-500/30 text-pink-300 font-bold">6</span>
+          <h4 class="font-bold text-pink-300">Configure DNS Caching &amp; Forwarding</h4>
+         </div>
+         <div class="ml-10 text-sm">
+          <p class="text-gray-300 mb-2">Optimize DNS performance:</p>
+          <div class="code-block p-4 rounded">
+           ! Configure forwarders for external domains ip dns server ip dns forwarding ip name-server 8.8.8.8 ip name-server 8.8.4.4 ! Set DNS cache timeout ip dns cache timeout 300 ! Monitor DNS cache show ip dns cache show ip dns view ! Configure DNS security no ip domain-lookup ; Don't lookup unknown names ip domain-name company.local ip host www 192.168.1.50 ip host mail 192.168.1.60
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- ACTIVITIES TAB -->
+    <section id="activities" class="content-section space-y-6 pb-8">
+     <div class="space-y-6"><!-- Individual Activity -->
+      <div class="p-6 rounded-xl bg-gray-900/60 border border-gray-800">
+       <h3 class="text-xl font-bold text-emerald-400 mb-4">👤 Individual Activity: Configure Multi-Subnet DNS</h3>
+       <div class="space-y-4">
+        <div class="p-4 bg-gray-800/50 rounded-lg">
+         <h4 class="font-bold text-emerald-300 mb-3">Scenario</h4>
+         <p class="text-sm text-gray-300">Your company has 3 subnets and needs a DNS infrastructure:</p>
+         <ul class="text-sm text-gray-300 mt-2 ml-4 space-y-1">
+          <li>• <strong>HR Subnet (192.168.1.0/24)</strong> - DNS Server: 192.168.1.10</li>
+          <li>• <strong>IT Subnet (192.168.2.0/24)</strong> - DNS Server: 192.168.2.10</li>
+          <li>• <strong>Finance Subnet (192.168.3.0/24)</strong> - Uses 192.168.1.10</li>
+         </ul>
+        </div>
+        <div class="p-4 bg-gray-800/50 rounded-lg">
+         <h4 class="font-bold text-emerald-300 mb-3">Tasks</h4>
+         <ol class="text-sm text-gray-300 space-y-2 ml-4">
+          <li>1. Design zone files for all subnets with these records:</li>
+          <ul class="ml-4 text-xs text-gray-400 space-y-1">
+           <li>• HR: hr-server, hr-printer, hr-workstation</li>
+           <li>• IT: it-support, it-server, it-workstation</li>
+           <li>• Finance: finance-server, finance-workstation</li>
+          </ul>
+          <li class="mt-2">2. Configure DNS servers for primary and secondary</li>
+          <li>3. Create forward and reverse DNS zones</li>
+          <li>4. Test DNS resolution from each subnet</li>
+          <li>5. Document DNS record mapping</li>
+         </ol>
+        </div><button class="w-full mt-4 px-4 py-2 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/50 rounded-lg text-emerald-400 font-semibold transition" onclick="toggleSolution('individual-solution')">Show Solution</button>
+        <div id="individual-solution" class="hidden mt-4 p-4 bg-emerald-500/10 rounded-lg border border-emerald-500/30">
+         <h4 class="font-bold text-emerald-300 mb-3">Solution: Multi-Subnet DNS Configuration</h4>
+         <div class="space-y-4 text-sm text-gray-300">
+          <div class="code-block p-4 rounded">
+           ; === HR SUBNET - Primary Zone === ; File: /etc/bind/zones/db.hr.local $TTL 86400 @ IN SOA ns1.hr.local. admin.hr.local. ( 2024010101 ; Serial 3600 1800 604800 86400) @ IN NS ns1.hr.local. ns1 IN A 192.168.1.10 hr-server IN A 192.168.1.50 hr-printer IN A 192.168.1.60 hr-workstation IN A 192.168.1.100 ; === IT SUBNET - Primary Zone === ; File: /etc/bind/zones/db.it.local $TTL 86400 @ IN SOA ns1.it.local. admin.it.local. ( 2024010102 ; Serial 3600 1800 604800 86400) @ IN NS ns1.it.local. ns1 IN A 192.168.2.10 it-support IN A 192.168.2.20 it-server IN A 192.168.2.50 it-workstation IN A 192.168.2.100 ; === FINANCE SUBNET - Zone === ; File: /etc/bind/zones/db.finance.local $TTL 86400 @ IN SOA ns1.hr.local. admin.finance.local. ( 2024010103 ; Serial 3600 1800 604800 86400) @ IN NS ns1.hr.local. finance-server IN A 192.168.3.50 finance-workstation IN A 192.168.3.100 ; === NAMED.CONF CONFIGURATION === zone "hr.local" { type master; file "/etc/bind/zones/db.hr.local"; allow-transfer { 192.168.2.10; 192.168.3.10; }; }; zone "it.local" { type master; file "/etc/bind/zones/db.it.local"; allow-transfer { 192.168.1.10; 192.168.3.10; }; }; zone "finance.local" { type master; file "/etc/bind/zones/db.finance.local"; allow-transfer { 192.168.1.10; 192.168.2.10; }; }; ; === VERIFICATION COMMANDS === # From HR Subnet (192.168.1.x): nslookup hr-server.hr.local 192.168.1.10 nslookup it-support.it.local 192.168.1.10 nslookup finance-server.finance.local 192.168.1.10 # From IT Subnet (192.168.2.x): nslookup it-workstation.it.local 192.168.2.10 nslookup hr-printer.hr.local 192.168.2.10 # From Finance Subnet (192.168.3.x): nslookup finance-workstation.finance.local 192.168.1.10
+          </div>
+          <div class="mt-4 p-3 bg-emerald-500/20 rounded-lg border-l-4 border-emerald-500">
+           <p class="text-xs text-emerald-200"><strong>Key Points:</strong> Each subnet has primary DNS server with zone authority. Secondary servers in other subnets replicate data. Finance uses HR's DNS for cost efficiency. All zones configured for cross-subnet resolution.</p>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Group Activity -->
+      <div class="p-6 rounded-xl bg-gray-900/60 border border-gray-800">
+       <h3 class="text-xl font-bold text-amber-400 mb-4">👥 Group Activity: Enterprise DNS Migration</h3>
+       <div class="space-y-4">
+        <div class="p-4 bg-gray-800/50 rounded-lg">
+         <h4 class="font-bold text-amber-300 mb-3">Scenario</h4>
+         <p class="text-sm text-gray-300 mb-3">Your enterprise is migrating from on-premise DNS (old.internal) to cloud-based DNS (cloud.example.com). You must ensure zero downtime for the 5000+ employees.</p>
+        </div>
+        <div class="p-4 bg-gray-800/50 rounded-lg">
+         <h4 class="font-bold text-amber-300 mb-3">Deliverables (5-6 people per group)</h4>
+         <ol class="text-sm text-gray-300 space-y-3 ml-4">
+          <li><strong>1. DNS Migration Plan (2 people)</strong>
+           <ul class="ml-4 text-xs text-gray-400 mt-1">
+            <li>• Timeline: Stage 1 (pilot), Stage 2 (gradual), Stage 3 (full migration)</li>
+            <li>• Risk assessment and rollback procedures</li>
+            <li>• TTL reduction strategy for smooth migration</li>
+           </ul></li>
+          <li><strong>2. DNS Record Inventory &amp; Mapping (2 people)</strong>
+           <ul class="ml-4 text-xs text-gray-400 mt-1">
+            <li>• Export all current DNS records from old server</li>
+            <li>• Map to new cloud DNS format</li>
+            <li>• Validate 100% record accuracy</li>
+           </ul></li>
+          <li><strong>3. DHCP-DNS Integration (1 person)</strong>
+           <ul class="ml-4 text-xs text-gray-400 mt-1">
+            <li>• Configure DHCP servers to point to new DNS</li>
+            <li>• Set up dynamic DNS (DDNS) updates</li>
+           </ul></li>
+          <li><strong>4. Testing &amp; Validation (1-2 people)</strong>
+           <ul class="ml-4 text-xs text-gray-400 mt-1">
+            <li>• Create test scenarios for each record type</li>
+            <li>• Test failover scenarios</li>
+            <li>• Performance benchmarking (query response time)</li>
+           </ul></li>
+          <li><strong>5. Documentation &amp; Runbook (1 person)</strong>
+           <ul class="ml-4 text-xs text-gray-400 mt-1">
+            <li>• Step-by-step migration runbook</li>
+            <li>• Troubleshooting guide</li>
+            <li>• Post-migration validation checklist</li>
+           </ul></li>
+         </ol>
+        </div><button class="w-full mt-4 px-4 py-2 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 rounded-lg text-amber-400 font-semibold transition" onclick="toggleSolution('group-solution')">Show Solution Framework</button>
+        <div id="group-solution" class="hidden mt-4 p-4 bg-amber-500/10 rounded-lg border border-amber-500/30">
+         <h4 class="font-bold text-amber-300 mb-3">Group Activity Solution Framework</h4>
+         <div class="space-y-4 text-sm text-gray-300">
+          <div class="code-block p-4 rounded">
+           === PHASE 1: PRE-MIGRATION (Week 1) === 1. Reduce TTL on all records from 3600 to 300 seconds 2. Set up cloud DNS with test zone 3. Run parallel DNS servers for 1 week === PHASE 2: PILOT MIGRATION (Week 2) === 1. Select 100 test users (1 dept) 2. Configure their DHCP to use new DNS: 52.x.x.x 3. Run network tests from pilot group 4. Monitor: response time, failures, resolution errors 5. Collect feedback from pilot users === PHASE 3: GRADUAL MIGRATION (Week 3-4) === Monday: 25% of users (1250) → cloud DNS Wednesday: 50% of users (2500) → cloud DNS Friday: 75% of users (3750) → cloud DNS If issues: Reduce TTL, revert DHCP settings === PHASE 4: FULL MIGRATION (Week 5) === Final 25% (1250) + admin/critical systems Decommission old DNS server after 2 weeks verification === DNS RECORD VALIDATION SCRIPT === #!/bin/bash echo "Testing DNS Migration..." # List of critical records to test RECORDS=( "mail.example.com" "intranet.example.com" "vpn.example.com" "file-server.example.com" "printer.example.com" ) for record in "${RECORDS[@]}"; do echo "Testing: $record" OLD_DNS=$(nslookup $record 192.168.1.10 | grep Address) NEW_DNS=$(nslookup $record 52.x.x.x | grep Address) if [ "$OLD_DNS" = "$NEW_DNS" ]; then echo "✓ PASS - Both IPs match" else echo "✗ FAIL - IP mismatch!" echo "Old DNS: $OLD_DNS" echo "New DNS: $NEW_DNS" fi done === ROLLBACK PROCEDURE === If issues occur during migration: 1. Immediately notify all team leads 2. DHCP servers revert to old DNS: 192.168.1.10 3. Wait 10 minutes for DNS caching to clear 4. Verify users can resolve names with old DNS 5. Root cause analysis before resuming
+          </div>
+          <div class="mt-4 p-3 bg-amber-500/20 rounded-lg border-l-4 border-amber-500">
+           <p class="text-xs text-amber-200"><strong>Success Criteria:</strong> Zero outages, 100% record migration, &lt;50ms query response time, all user testing passing, complete documentation, and approved rollback plan.</p>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- QUIZ TAB -->
+    <section id="quiz" class="content-section space-y-6 pb-8">
+     <div class="p-6 rounded-xl bg-gray-900/60 border border-gray-800">
+      <h3 class="text-xl font-bold text-pink-400 mb-2">📝 DNS &amp; Name Resolution Review Quiz</h3>
+      <p class="text-gray-400 mb-6">Test your understanding with these 10 questions</p>
+      <div id="quiz-container" class="space-y-6"></div>
+      <div class="mt-8 p-4 rounded-lg bg-gray-800/50 border border-gray-700"><button class="w-full px-4 py-3 bg-pink-500/20 hover:bg-pink-500/30 border border-pink-500/50 rounded-lg text-pink-400 font-bold transition" onclick="submitQuiz()">Submit Quiz</button>
+      </div>
+      <div id="quiz-results" class="hidden mt-8 p-6 rounded-xl bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30">
+       <h4 class="text-lg font-bold text-green-400 mb-4">Quiz Results</h4>
+       <div id="results-content"></div>
+      </div>
+     </div>
+    </section>
+   </div>
+  </div>
+  <script>
+    // Quiz Data
+    const quizQuestions = [
+      {
+        id: 1,
+        question: "What is the primary function of DNS?",
+        options: [
+          "Translates domain names to IP addresses",
+          "Encrypts network traffic",
+          "Manages IP address allocation",
+          "Routes network packets"
+        ],
+        correct: 0,
+        explanation: "DNS (Domain Name System) translates human-readable domain names (like example.com) into IP addresses (like 192.0.2.1) that computers can use."
+      },
+      {
+        id: 2,
+        question: "Which DNS record type is used to map a domain name to an IPv4 address?",
+        options: [
+          "AAAA record",
+          "A record",
+          "CNAME record",
+          "MX record"
+        ],
+        correct: 1,
+        explanation: "An A record maps a domain name to an IPv4 address. AAAA records are for IPv6, CNAME for aliases, and MX for mail servers."
+      },
+      {
+        id: 3,
+        question: "What does TTL stand for in DNS?",
+        options: [
+          "Time To Live",
+          "Transparent Transport Layer",
+          "Total Traffic Load",
+          "Transfer Time Link"
+        ],
+        correct: 0,
+        explanation: "TTL (Time To Live) specifies how long a DNS record can be cached before it must be re-queried from the authoritative server."
+      },
+      {
+        id: 4,
+        question: "In the DNS resolution process, which server responds directly with the IP address for a domain?",
+        options: [
+          "Root nameserver",
+          "TLD nameserver",
+          "Authoritative nameserver",
+          "Recursive resolver"
+        ],
+        correct: 2,
+        explanation: "The Authoritative nameserver for a domain holds the actual DNS records and provides the definitive answer to DNS queries."
+      },
+      {
+        id: 5,
+        question: "What is a CNAME record used for?",
+        options: [
+          "Mapping domain to IPv6 address",
+          "Creating an alias for another domain/subdomain",
+          "Specifying mail server location",
+          "Enabling reverse DNS lookups"
+        ],
+        correct: 1,
+        explanation: "A CNAME (Canonical Name) record creates an alias that points to another domain name, useful for subdomains like www or ftp."
+      },
+      {
+        id: 6,
+        question: "Which type of DNS server typically stores frequently accessed DNS records?",
+        options: [
+          "Authoritative nameserver",
+          "Caching nameserver",
+          "Primary nameserver",
+          "Secondary nameserver"
+        ],
+        correct: 1,
+        explanation: "A Caching nameserver stores DNS query results to improve performance for frequently requested domain names."
+      },
+      {
+        id: 7,
+        question: "What happens when a user enters a URL in their browser?",
+        options: [
+          "Browser directly queries the authoritative nameserver",
+          "Browser queries a recursive resolver (usually ISP's DNS)",
+          "Router automatically resolves the domain",
+          "Operating system generates the IP address"
+        ],
+        correct: 1,
+        explanation: "The browser queries a recursive resolver (often the ISP's DNS server or public DNS like 8.8.8.8), which then performs the full DNS resolution process."
+      },
+      {
+        id: 8,
+        question: "Which DNS record type is used for email routing?",
+        options: [
+          "A record",
+          "TXT record",
+          "MX record",
+          "NS record"
+        ],
+        correct: 2,
+        explanation: "MX (Mail Exchange) records specify which servers handle email for a domain, with priority numbers indicating preference order."
+      },
+      {
+        id: 9,
+        question: "What is reverse DNS lookup used for?",
+        options: [
+          "Looking up a domain name from an IP address",
+          "Preventing DNS spoofing attacks",
+          "Caching DNS records",
+          "Routing between DNS servers"
+        ],
+        correct: 0,
+        explanation: "Reverse DNS lookup uses PTR records to map IP addresses back to domain names, useful for email server verification and logging."
+      },
+      {
+        id: 10,
+        question: "In a DNS migration scenario, why is it recommended to reduce TTL values before the migration?",
+        options: [
+          "To speed up the migration process",
+          "To prevent caching of old DNS records, allowing faster propagation of new records",
+          "To reduce load on DNS servers",
+          "To improve security during migration"
+        ],
+        correct: 1,
+        explanation: "Reducing TTL from e.g., 3600 seconds to 300 seconds means clients will re-query DNS more frequently, ensuring they get updated information faster after the migration."
+      }
+    ];
+
+    let userAnswers = {};
+
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = '';
+
+      quizQuestions.forEach(q => {
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'p-6 rounded-xl bg-gray-800/30 border border-gray-800';
+        questionDiv.innerHTML = `
+          <h4 class="font-bold text-cyan-400 mb-4">Q${q.id}: ${q.question}</h4>
+          <div class="space-y-2">
+            ${q.options.map((opt, idx) => `
+              <button 
+                class="quiz-option w-full text-left p-4 rounded-lg border-l-4 border-gray-700 bg-gray-900/60 hover:bg-gray-800/60 text-gray-300 transition"
+                onclick="selectAnswer(${q.id}, ${idx})"
+                id="q${q.id}-opt${idx}"
+              >
+                ${String.fromCharCode(65 + idx)}) ${opt}
+              </button>
+            `).join('')}
+          </div>
+        `;
+        container.appendChild(questionDiv);
+      });
+    }
+
+    function selectAnswer(questionId, optionIndex) {
+      userAnswers[questionId] = optionIndex;
+      
+      // Update UI
+      document.querySelectorAll(`[id^="q${questionId}-"]`).forEach(el => {
+        el.classList.remove('selected');
+      });
+      document.getElementById(`q${questionId}-opt${optionIndex}`).classList.add('selected');
+    }
+
+    function submitQuiz() {
+      if (Object.keys(userAnswers).length < quizQuestions.length) {
+        alert('Please answer all questions before submitting.');
+        return;
+      }
+
+      let correctCount = 0;
+      const resultsContainer = document.getElementById('results-content');
+      resultsContainer.innerHTML = '';
+
+      quizQuestions.forEach(q => {
+        const isCorrect = userAnswers[q.id] === q.correct;
+        if (isCorrect) correctCount++;
+
+        const resultDiv = document.createElement('div');
+        resultDiv.className = `p-4 rounded-lg mb-4 ${isCorrect ? 'bg-green-500/10 border-l-4 border-green-500' : 'bg-red-500/10 border-l-4 border-red-500'}`;
+        resultDiv.innerHTML = `
+          <div class="flex items-start gap-2 mb-2">
+            <span class="text-lg">${isCorrect ? '✓' : '✗'}</span>
+            <div>
+              <p class="font-bold ${isCorrect ? 'text-green-400' : 'text-red-400'}">Q${q.id}: ${q.question}</p>
+              <p class="text-sm text-gray-300 mt-1"><strong>Your answer:</strong> ${q.options[userAnswers[q.id]]}</p>
+              ${!isCorrect ? `<p class="text-sm text-gray-300"><strong>Correct answer:</strong> ${q.options[q.correct]}</p>` : ''}
+              <p class="text-sm text-gray-400 mt-2 italic">${q.explanation}</p>
+            </div>
+          </div>
+        `;
+        resultsContainer.appendChild(resultDiv);
+      });
+
+      const percentage = Math.round((correctCount / quizQuestions.length) * 100);
+      const scoreDiv = document.createElement('div');
+      scoreDiv.className = 'mt-6 p-4 rounded-lg bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/50';
+      scoreDiv.innerHTML = `
+        <p class="text-2xl font-bold text-cyan-400">Score: ${correctCount}/${quizQuestions.length} (${percentage}%)</p>
+        <p class="text-gray-300 mt-2">
+          ${percentage === 100 ? '🌟 Perfect! You have mastered DNS concepts!' : 
+            percentage >= 80 ? '👍 Great job! You have strong DNS knowledge.' : 
+            percentage >= 60 ? '📚 Good effort! Review the concepts for the questions you missed.' : 
+            '📖 Keep studying! Focus on the core DNS concepts.'}
+        </p>
+      `;
+      resultsContainer.appendChild(scoreDiv);
+
+      document.getElementById('quiz-results').classList.remove('hidden');
+      document.getElementById('quiz-container').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function switchTab(event, tabName) {
+      event.preventDefault();
+      
+      // Hide all sections
+      document.querySelectorAll('.content-section').forEach(el => {
+        el.classList.remove('active');
+      });
+      
+      // Remove active class from all buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Show selected section
+      document.getElementById(tabName).classList.add('active');
+      
+      // Add active class to clicked button
+      event.target.classList.add('active');
+    }
+
+    function toggleSolution(elementId) {
+      const element = document.getElementById(elementId);
+      element.classList.toggle('hidden');
+    }
+
+    // Initialize
+    renderQuiz();
+
+    const defaultConfig = {
+      course_code: 'IS103',
+      instructor_name: 'MKDB',
+      font_family: 'Space Grotesk',
+      font_size: 16
+    };
+
+    let config = { ...defaultConfig };
+
+    async function onConfigChange(cfg) {
+      config = { ...defaultConfig, ...cfg };
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseSize = config.font_size || defaultConfig.font_size;
+      const fontStack = `${customFont}, system-ui, sans-serif`;
+      document.body.style.fontFamily = fontStack;
+      
+      document.getElementById('course-code').textContent = `${config.course_code} • MIDTERM WEEK 5`;
+      document.getElementById('instructor-name').textContent = config.instructor_name || defaultConfig.instructor_name;
+      document.getElementById('course-title').style.fontSize = `${baseSize * 1.875}px`;
+    }
+
+    function mapToCapabilities(cfg) {
+      return {
+        recolorables: [],
+        borderables: [],
+        fontEditable: {
+          get: () => cfg.font_family || defaultConfig.font_family,
+          set: (value) => {
+            cfg.font_family = value;
+            window.elementSdk.setConfig({ font_family: value });
+          }
+        },
+        fontSizeable: {
+          get: () => cfg.font_size || defaultConfig.font_size,
+          set: (value) => {
+            cfg.font_size = value;
+            window.elementSdk.setConfig({ font_size: value });
+          }
+        }
+      };
+    }
+
+    function mapToEditPanelValues(cfg) {
+      return new Map([
+        ['course_code', cfg.course_code || defaultConfig.course_code],
+        ['instructor_name', cfg.instructor_name || defaultConfig.instructor_name]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    } else {
+      onConfigChange(defaultConfig);
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d1ef81c535afee1',t:'MTc3MTc2ODQwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IS103 Midterm Week 4 - DHCP Configuration</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #0891b2 0%, #06b6d4 50%, #0ea5e9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .code-block {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+    
+    .code-keyword { color: #c4b5fd; }
+    .code-string { color: #86efac; }
+    .code-number { color: #fbbf24; }
+    .code-comment { color: #64748b; }
+    
+    .tab-button {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .tab-button.active {
+      background-color: #0ea5e9;
+      color: #0f172a;
+    }
+    
+    .tab-content {
+      animation: fadeIn 0.3s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .quiz-option {
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .quiz-option:hover {
+      transform: translateX(4px);
+    }
+    
+    .quiz-option.selected {
+      background-color: #0ea5e9;
+      color: #0f172a;
+    }
+    
+    .quiz-option.correct {
+      background-color: #10b981;
+      color: white;
+    }
+    
+    .quiz-option.incorrect {
+      background-color: #ef4444;
+      color: white;
+    }
+    
+    .activity-box {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 16px;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-slate-950 text-slate-50 overflow-auto" style="font-family: 'Space Grotesk', sans-serif;">
+  <div class="min-h-full w-full bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+   <div class="max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8"><!-- Header -->
+    <header class="mb-8">
+     <div class="flex items-center gap-3 mb-4">
+      <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
+       <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+       </svg>
+      </div>
+      <div><span id="course-code" class="text-cyan-400 font-mono text-sm tracking-wider">IS103</span>
+       <h1 id="course-title" class="text-3xl font-bold gradient-text">DHCP Configuration</h1>
+      </div>
+     </div>
+     <p class="text-slate-400 text-sm flex items-center gap-4"><span class="flex items-center gap-2">
+       <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+       </svg> Instructor: <span id="instructor-name" class="text-slate-200">MKDB</span> </span> <span class="flex items-center gap-2">
+       <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+       </svg> Midterm Week 4 </span></p>
+    </header><!-- ILO Card -->
+    <div class="mb-8 p-6 rounded-lg bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/30">
+     <div class="flex items-start gap-3"><span class="text-2xl">🎯</span>
+      <div>
+       <h2 class="text-lg font-semibold text-cyan-300 mb-2">Intended Learning Outcome (ILO)</h2>
+       <p class="text-slate-300">By the end of this lesson, you will be able to <span class="font-semibold text-cyan-300">configure DHCP services</span> on network devices, including setting up DHCP pools, configuring lease times, and verifying DHCP functionality in a live network environment.</p>
+      </div>
+     </div>
+    </div><!-- Tab Navigation -->
+    <div class="flex flex-wrap gap-2 mb-8 bg-slate-900/50 p-2 rounded-lg border border-slate-800"><button class="tab-button active px-4 py-2 rounded font-semibold text-sm transition-all" data-tab="overview"> 📖 Overview </button> <button class="tab-button px-4 py-2 rounded font-semibold text-sm transition-all" data-tab="concepts"> 🔍 DHCP Concepts </button> <button class="tab-button px-4 py-2 rounded font-semibold text-sm transition-all" data-tab="hands-on"> 🛠️ Hands-On Guide </button> <button class="tab-button px-4 py-2 rounded font-semibold text-sm transition-all" data-tab="configuration"> ⚙️ Configuration </button> <button class="tab-button px-4 py-2 rounded font-semibold text-sm transition-all" data-tab="activities"> ✏️ Activities </button> <button class="tab-button px-4 py-2 rounded font-semibold text-sm transition-all" data-tab="quiz"> 📝 Review Quiz </button>
+    </div><!-- Tab Contents --> <!-- OVERVIEW TAB -->
+    <div id="overview" class="tab-content space-y-6">
+     <div class="rounded-lg bg-slate-900/50 border border-slate-800 p-6">
+      <h2 class="text-2xl font-bold text-cyan-300 mb-4 flex items-center gap-2"><span>📡</span> What is DHCP?</h2>
+      <p class="text-slate-300 leading-relaxed mb-4">DHCP (Dynamic Host Configuration Protocol) is a network protocol that automatically assigns IP addresses and other network configuration parameters to devices connecting to a network. Instead of manually configuring each device, DHCP servers distribute IP addresses from a pool, making network management efficient and scalable.</p>
+      <h3 class="text-lg font-semibold text-cyan-400 mt-6 mb-3">Why DHCP Matters</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+       <div class="p-4 rounded-lg bg-slate-800/50 border border-slate-700">
+        <h4 class="text-cyan-300 font-semibold mb-2">🚀 Automation</h4>
+        <p class="text-slate-400 text-sm">Automatically assigns IP addresses without manual intervention, reducing configuration errors and administrative overhead.</p>
+       </div>
+       <div class="p-4 rounded-lg bg-slate-800/50 border border-slate-700">
+        <h4 class="text-cyan-300 font-semibold mb-2">📊 Scalability</h4>
+        <p class="text-slate-400 text-sm">Easily supports networks with hundreds or thousands of devices, from small offices to large enterprises.</p>
+       </div>
+       <div class="p-4 rounded-lg bg-slate-800/50 border border-slate-700">
+        <h4 class="text-cyan-300 font-semibold mb-2">♻️ IP Reuse</h4>
+        <p class="text-slate-400 text-sm">Leases IP addresses for a specific time period, allowing reuse when devices disconnect from the network.</p>
+       </div>
+       <div class="p-4 rounded-lg bg-slate-800/50 border border-slate-700">
+        <h4 class="text-cyan-300 font-semibold mb-2">🔧 Configuration</h4>
+        <p class="text-slate-400 text-sm">Provides additional configuration parameters: DNS servers, default gateway, subnet mask, and more.</p>
+       </div>
+      </div>
+     </div>
+     <div class="rounded-lg bg-slate-900/50 border border-slate-800 p-6">
+      <h2 class="text-2xl font-bold text-cyan-300 mb-4">DHCP Process Flow</h2>
+      <div class="space-y-3">
+       <div class="flex gap-4 p-4 rounded-lg bg-slate-800/30 border-l-4 border-cyan-500"><span class="text-2xl font-bold text-cyan-400 w-8">1</span>
+        <div>
+         <h4 class="font-semibold text-slate-200">DHCPDISCOVER</h4>
+         <p class="text-slate-400 text-sm">Client broadcasts a request to find DHCP servers on the network.</p>
+        </div>
+       </div>
+       <div class="flex gap-4 p-4 rounded-lg bg-slate-800/30 border-l-4 border-blue-500"><span class="text-2xl font-bold text-blue-400 w-8">2</span>
+        <div>
+         <h4 class="font-semibold text-slate-200">DHCPOFFER</h4>
+         <p class="text-slate-400 text-sm">DHCP server responds with an IP address and lease offer.</p>
+        </div>
+       </div>
+       <div class="flex gap-4 p-4 rounded-lg bg-slate-800/30 border-l-4 border-green-500"><span class="text-2xl font-bold text-green-400 w-8">3</span>
+        <div>
+         <h4 class="font-semibold text-slate-200">DHCPREQUEST</h4>
+         <p class="text-slate-400 text-sm">Client confirms acceptance of the IP address and lease terms.</p>
+        </div>
+       </div>
+       <div class="flex gap-4 p-4 rounded-lg bg-slate-800/30 border-l-4 border-purple-500"><span class="text-2xl font-bold text-purple-400 w-8">4</span>
+        <div>
+         <h4 class="font-semibold text-slate-200">DHCPACK</h4>
+         <p class="text-slate-400 text-sm">Server confirms the lease assignment; client configures its network settings.</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div><!-- CONCEPTS TAB -->
+    <div id="concepts" class="tab-content space-y-6" style="display: none;">
+     <div class="rounded-lg bg-slate-900/50 border border-slate-800 p-6">
+      <h2 class="text-2xl font-bold text-cyan-300 mb-4">🔍 Key DHCP Concepts</h2>
+      <div class="space-y-6">
+       <div class="border-b border-slate-700 pb-6">
+        <h3 class="text-lg font-semibold text-cyan-400 mb-3">DHCP Pool</h3>
+        <p class="text-slate-300 mb-3">A range of IP addresses configured on the DHCP server that can be assigned to clients. For example:</p>
+        <div class="code-block"><span class="code-comment">! Define a DHCP pool named "OFFICE-POOL"</span><br><span class="code-keyword">ip dhcp pool</span> OFFICE-POOL<br><span class="code-keyword">network</span> <span class="code-string">192.168.1.0</span> <span class="code-string">255.255.255.0</span><br><span class="code-keyword">default-router</span> <span class="code-string">192.168.1.1</span><br><span class="code-keyword">dns-server</span> <span class="code-string">8.8.8.8 8.8.4.4</span>
+        </div>
+       </div>
+       <div class="border-b border-slate-700 pb-6">
+        <h3 class="text-lg font-semibold text-cyan-400 mb-3">Lease Time</h3>
+        <p class="text-slate-300 mb-3">The duration for which an IP address is assigned to a client before renewal is required. Default is usually 1 day (86400 seconds).</p>
+        <div class="code-block"><span class="code-keyword">ip dhcp pool</span> OFFICE-POOL<br><span class="code-keyword">lease</span> <span class="code-number">3</span> <span class="code-number">0</span> <span class="code-number">0</span> <span class="code-comment">! 3 days</span><br><span class="code-keyword">lease</span> <span class="code-number">0</span> <span class="code-number">12</span> <span class="code-number">0</span> <span class="code-comment">! 12 hours</span>
+        </div>
+       </div>
+       <div class="border-b border-slate-700 pb-6">
+        <h3 class="text-lg font-semibold text-cyan-400 mb-3">Excluded Addresses</h3>
+        <p class="text-slate-300 mb-3">IP addresses that are excluded from DHCP assignment, typically used for servers, routers, or static devices.</p>
+        <div class="code-block"><span class="code-keyword">ip dhcp excluded-address</span> <span class="code-string">192.168.1.1</span> <span class="code-string">192.168.1.50</span><br><span class="code-keyword">ip dhcp excluded-address</span> <span class="code-string">192.168.1.250</span> <span class="code-string">192.168.1.254</span>
+        </div>
+       </div>
+       <div class="border-b border-slate-700 pb-6">
+        <h3 class="text-lg font-semibold text-cyan-400 mb-3">DHCP Relay</h3>
+        <p class="text-slate-300 mb-3">Enables DHCP client requests to be forwarded to a DHCP server on a different network segment.</p>
+        <div class="code-block"><span class="code-keyword">interface</span> FastEthernet <span class="code-number">0</span>/<span class="code-number">1</span><br><span class="code-keyword">ip helper-address</span> <span class="code-string">192.168.2.10</span> <span class="code-comment">! DHCP server IP</span>
+        </div>
+       </div>
+       <div>
+        <h3 class="text-lg font-semibold text-cyan-400 mb-3">Verification Commands</h3>
+        <div class="code-block space-y-2">
+         <div>
+          <span class="code-keyword">show ip dhcp pool</span> <span class="code-comment">! Display DHCP pool details</span>
+         </div>
+         <div>
+          <span class="code-keyword">show ip dhcp binding</span> <span class="code-comment">! Show assigned leases</span>
+         </div>
+         <div>
+          <span class="code-keyword">show ip dhcp server statistics</span> <span class="code-comment">! View DHCP statistics</span>
+         </div>
+         <div>
+          <span class="code-keyword">show ip dhcp conflict</span> <span class="code-comment">! Display IP conflicts</span>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div><!-- HANDS-ON GUIDE TAB -->
+    <div id="hands-on" class="tab-content space-y-6" style="display: none;">
+     <div class="rounded-lg bg-slate-900/50 border border-slate-800 p-6">
+      <h2 class="text-2xl font-bold text-cyan-300 mb-4">🛠️ Step-by-Step DHCP Configuration</h2>
+      <p class="text-slate-300 mb-6">Let's configure DHCP on a Cisco IOS router for a corporate network with two departments.</p>
+      <div class="space-y-6"><!-- Step 1 -->
+       <div class="border-l-4 border-cyan-500 bg-slate-800/30 p-6 rounded-lg">
+        <h3 class="text-lg font-semibold text-cyan-300 mb-3">Step 1: Plan Your Network</h3>
+        <p class="text-slate-300 mb-4">Network Layout:</p>
+        <div class="bg-slate-900 p-4 rounded border border-slate-700 mb-4">
+         <p class="text-slate-300 font-mono text-sm"><strong>Router:</strong> 192.168.1.1</p>
+         <p class="text-slate-300 font-mono text-sm"><strong>DHCP Pool (Office):</strong> 192.168.1.100 - 192.168.1.150</p>
+         <p class="text-slate-300 font-mono text-sm"><strong>DHCP Pool (Guest):</strong> 192.168.2.100 - 192.168.2.150</p>
+         <p class="text-slate-300 font-mono text-sm"><strong>DNS Servers:</strong> 8.8.8.8, 8.8.4.4</p>
+        </div>
+       </div><!-- Step 2 -->
+       <div class="border-l-4 border-blue-500 bg-slate-800/30 p-6 rounded-lg">
+        <h3 class="text-lg font-semibold text-cyan-300 mb-3">Step 2: Exclude Static IP Addresses</h3>
+        <p class="text-slate-300 mb-4">Prevent DHCP from assigning these addresses:</p>
+        <div class="code-block">
+         Router(config)# <span class="code-keyword">ip dhcp excluded-address</span> <span class="code-string">192.168.1.1</span> <span class="code-string">192.168.1.99</span><br>
+          Router(config)# <span class="code-keyword">ip dhcp excluded-address</span> <span class="code-string">192.168.1.200</span> <span class="code-string">192.168.1.254</span><br>
+          Router(config)# <span class="code-keyword">ip dhcp excluded-address</span> <span class="code-string">192.168.2.1</span> <span class="code-string">192.168.2.99</span>
+        </div>
+       </div><!-- Step 3 -->
+       <div class="border-l-4 border-green-500 bg-slate-800/30 p-6 rounded-lg">
+        <h3 class="text-lg font-semibold text-cyan-300 mb-3">Step 3: Create DHCP Pool for Office Network</h3>
+        <div class="code-block">
+         Router(config)# <span class="code-keyword">ip dhcp pool</span> OFFICE-POOL<br>
+          Router(dhcp-config)# <span class="code-keyword">network</span> <span class="code-string">192.168.1.0</span> <span class="code-string">255.255.255.0</span><br>
+          Router(dhcp-config)# <span class="code-keyword">default-router</span> <span class="code-string">192.168.1.1</span><br>
+          Router(dhcp-config)# <span class="code-keyword">dns-server</span> <span class="code-string">8.8.8.8 8.8.4.4</span><br>
+          Router(dhcp-config)# <span class="code-keyword">lease</span> <span class="code-number">1</span> <span class="code-number">0</span> <span class="code-number">0</span> <span class="code-comment">! 1 day lease</span><br>
+          Router(dhcp-config)# <span class="code-keyword">exit</span>
+        </div>
+       </div><!-- Step 4 -->
+       <div class="border-l-4 border-purple-500 bg-slate-800/30 p-6 rounded-lg">
+        <h3 class="text-lg font-semibold text-cyan-300 mb-3">Step 4: Create DHCP Pool for Guest Network</h3>
+        <div class="code-block">
+         Router(config)# <span class="code-keyword">ip dhcp pool</span> GUEST-POOL<br>
+          Router(dhcp-config)# <span class="code-keyword">network</span> <span class="code-string">192.168.2.0</span> <span class="code-string">255.255.255.0</span><br>
+          Router(dhcp-config)# <span class="code-keyword">default-router</span> <span class="code-string">192.168.2.1</span><br>
+          Router(dhcp-config)# <span class="code-keyword">dns-server</span> <span class="code-string">8.8.8.8 8.8.4.4</span><br>
+          Router(dhcp-config)# <span class="code-keyword">lease</span> <span class="code-number">0</span> <span class="code-number">4</span> <span class="code-number">0</span> <span class="code-comment">! 4 hour lease (shorter for guest)</span><br>
+          Router(dhcp-config)# <span class="code-keyword">exit</span>
+        </div>
+       </div><!-- Step 5 -->
+       <div class="border-l-4 border-orange-500 bg-slate-800/30 p-6 rounded-lg">
+        <h3 class="text-lg font-semibold text-cyan-300 mb-3">Step 5: Verify Configuration</h3>
+        <div class="code-block">
+         Router# <span class="code-keyword">show ip dhcp pool</span><br><br>
+          Pool OFFICE-POOL :<br>
+          Utilization mark (high/low) : 100 / 0<br>
+          Subnet size (first/next) : 0 / 0 <br>
+          Total addresses : 51<br>
+          Leased addresses : 3<br>
+          Available addresses : 48<br>
+          Network: 192.168.1.0 255.255.255.0<br>
+          Default Router: 192.168.1.1<br>
+          DNS server: 8.8.8.8<br>
+          Lease: 1 days 0 hours 0 minutes<br><br>
+          Router# <span class="code-keyword">show ip dhcp binding</span><br><br>
+          Bindings from all pools not associated with VRF Default:<br><br>
+          IP address Hardware address Lease expiration Type<br>
+          192.168.1.100 0050.0f3a.2145 Mar 15 2024 02:30 PM Automatic<br>
+          192.168.1.101 0050.0f3a.2146 Mar 15 2024 02:30 PM Automatic
+        </div>
+       </div><!-- Step 6 -->
+       <div class="border-l-4 border-red-500 bg-slate-800/30 p-6 rounded-lg">
+        <h3 class="text-lg font-semibold text-cyan-300 mb-3">Step 6: Disable DHCP on Router Interface (Optional)</h3>
+        <p class="text-slate-300 mb-4">To prevent the router interface itself from requesting an IP:</p>
+        <div class="code-block">
+         Router(config)# <span class="code-keyword">interface</span> FastEthernet <span class="code-number">0</span>/<span class="code-number">0</span><br>
+          Router(config-if)# <span class="code-keyword">ip dhcp server</span> <span class="code-comment">! Ensure server is enabled</span><br>
+          Router(config-if)# <span class="code-keyword">no</span> <span class="code-keyword">ip dhcp client</span><br>
+          Router(config-if)# <span class="code-keyword">exit</span>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div><!-- CONFIGURATION TAB -->
+    <div id="configuration" class="tab-content space-y-6" style="display: none;">
+     <div class="rounded-lg bg-slate-900/50 border border-slate-800 p-6">
+      <h2 class="text-2xl font-bold text-cyan-300 mb-4">⚙️ Advanced Configuration Topics</h2>
+      <div class="space-y-6"><!-- Option 1 -->
+       <div class="rounded-lg bg-slate-800/30 border border-slate-700 p-6">
+        <h3 class="text-lg font-semibold text-cyan-400 mb-3">DHCP Relay Agent (DHCP Forwarder)</h3>
+        <p class="text-slate-300 mb-4">Use when DHCP server is on a different subnet. The relay agent forwards DHCP requests:</p>
+        <div class="code-block"><span class="code-comment">! On the router interface where clients are connected</span><br>
+          Router(config)# <span class="code-keyword">interface</span> FastEthernet <span class="code-number">0</span>/<span class="code-number">1</span><br>
+          Router(config-if)# <span class="code-keyword">ip helper-address</span> <span class="code-string">10.0.1.10</span> <span class="code-comment">! DHCP server IP</span><br>
+          Router(config-if)# <span class="code-keyword">exit</span>
+        </div>
+       </div><!-- Option 2 -->
+       <div class="rounded-lg bg-slate-800/30 border border-slate-700 p-6">
+        <h3 class="text-lg font-semibold text-cyan-400 mb-3">DHCP Conflict Detection</h3>
+        <p class="text-slate-300 mb-4">View and resolve IP address conflicts:</p>
+        <div class="code-block"><span class="code-keyword">show ip dhcp conflict</span><br><br>
+          IP address Detection method Detection time<br>
+          192.168.1.150 Ping Mar 14 2024 03:22 PM<br><br><span class="code-comment">! Clear conflicts</span><br><span class="code-keyword">clear ip dhcp conflict</span> <span class="code-string">192.168.1.150</span>
+        </div>
+       </div><!-- Option 3 -->
+       <div class="rounded-lg bg-slate-800/30 border border-slate-700 p-6">
+        <h3 class="text-lg font-semibold text-cyan-400 mb-3">DHCP Option 82 (Circuit ID)</h3>
+        <p class="text-slate-300 mb-4">Enable detailed DHCP tracking and identification:</p>
+        <div class="code-block">
+         Router(config)# <span class="code-keyword">ip dhcp server option 82 information check</span><br>
+          Router(config)# <span class="code-keyword">ip dhcp relay information check</span>
+        </div>
+       </div><!-- Option 4 -->
+       <div class="rounded-lg bg-slate-800/30 border border-slate-700 p-6">
+        <h3 class="text-lg font-semibold text-cyan-400 mb-3">DHCP Statistics &amp; Monitoring</h3>
+        <div class="code-block"><span class="code-comment">! View comprehensive DHCP server statistics</span><br>
+          Router# <span class="code-keyword">show ip dhcp server statistics</span><br><br>
+          Memory usage : 3045 bytes<br>
+          Address pools : 2<br>
+          Database agents : 1<br>
+          Automatic bindings : 5<br>
+          Manual bindings : 0<br>
+          Expired bindings : 0<br>
+          Malformed messages : 0<br><br>
+          Message Received<br>
+          BOOTREQUEST 5<br>
+          DHCPDISCOVER 5<br>
+          DHCPREQUEST 2<br>
+          DHCPRELEASE 0<br>
+          DHCPDECLINE 0<br>
+          DHCPINFORM 0
+        </div>
+       </div><!-- Complete Working Config -->
+       <div class="rounded-lg bg-slate-800/30 border border-slate-700 p-6">
+        <h3 class="text-lg font-semibold text-cyan-400 mb-3">Complete Working Configuration Example</h3>
+        <div class="code-block"><span class="code-keyword">!--- Global DHCP Configuration ---</span><br><span class="code-keyword">no ip dhcp conflict logging</span><br><br><span class="code-keyword">!--- Excluded IP Addresses ---</span><br><span class="code-keyword">ip dhcp excluded-address</span> <span class="code-string">192.168.1.1</span> <span class="code-string">192.168.1.49</span><br><span class="code-keyword">ip dhcp excluded-address</span> <span class="code-string">192.168.2.1</span> <span class="code-string">192.168.2.49</span><br><br><span class="code-keyword">!--- OFFICE DHCP POOL ---</span><br><span class="code-keyword">ip dhcp pool</span> OFFICE<br><span class="code-keyword">network</span> <span class="code-string">192.168.1.0</span> <span class="code-string">255.255.255.0</span><br><span class="code-keyword">default-router</span> <span class="code-string">192.168.1.1</span><br><span class="code-keyword">dns-server</span> <span class="code-string">8.8.8.8 8.8.4.4</span><br><span class="code-keyword">domain-name</span> <span class="code-string">company.local</span><br><span class="code-keyword">lease</span> <span class="code-number">1</span> <span class="code-number">0</span> <span class="code-number">0</span><br><br><span class="code-keyword">!--- GUEST DHCP POOL ---</span><br><span class="code-keyword">ip dhcp pool</span> GUEST<br><span class="code-keyword">network</span> <span class="code-string">192.168.2.0</span> <span class="code-string">255.255.255.0</span><br><span class="code-keyword">default-router</span> <span class="code-string">192.168.2.1</span><br><span class="code-keyword">dns-server</span> <span class="code-string">8.8.8.8 8.8.4.4</span><br><span class="code-keyword">lease</span> <span class="code-number">0</span> <span class="code-number">4</span> <span class="code-number">0</span>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div><!-- ACTIVITIES TAB -->
+    <div id="activities" class="tab-content space-y-6" style="display: none;">
+     <div class="rounded-lg bg-slate-900/50 border border-slate-800 p-6">
+      <h2 class="text-2xl font-bold text-cyan-300 mb-6">✏️ Learning Activities</h2><!-- Individual Activity -->
+      <div class="mb-8">
+       <h3 class="text-xl font-bold text-emerald-400 mb-4 flex items-center gap-2"><span>👤</span> Individual Activity: DHCP Configuration Challenge</h3>
+       <div class="activity-box mb-4">
+        <h4 class="font-semibold text-slate-200 mb-3">Scenario</h4>
+        <p class="text-slate-300 mb-3">You are a network administrator for a small company with 3 VLANs. Configure a DHCP server on the main router to serve all three networks:</p>
+        <ul class="text-slate-300 text-sm space-y-2 ml-4">
+         <li><strong>VLAN 10 (HR):</strong> Network 192.168.10.0/24, Lease 1 day</li>
+         <li><strong>VLAN 20 (Finance):</strong> Network 192.168.20.0/24, Lease 3 days</li>
+         <li><strong>VLAN 30 (IT):</strong> Network 192.168.30.0/24, Lease 2 hours</li>
+        </ul>
+        <p class="text-slate-300 text-sm mt-3">DNS servers for all: 1.1.1.1 and 1.0.0.1</p>
+       </div>
+       <div class="activity-box mb-4">
+        <h4 class="font-semibold text-slate-200 mb-3">Task Requirements</h4>
+        <ol class="text-slate-300 text-sm space-y-2 ml-4 list-decimal">
+         <li>Exclude the first 50 IPs in each network (for static devices)</li>
+         <li>Create three DHCP pools with appropriate lease times</li>
+         <li>Configure DNS servers for each pool</li>
+         <li>Set default routers (.1 for each network)</li>
+         <li>Write verification commands to check all three pools</li>
+        </ol>
+       </div><button class="px-4 py-2 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition-colors" onclick="toggleIndividualSolution()"> Show Solution </button>
+       <div id="individual-solution" class="mt-4 hidden">
+        <div class="code-block"><span class="code-comment">!--- Exclude Static Addresses ---</span><br><span class="code-keyword">ip dhcp excluded-address</span> <span class="code-string">192.168.10.1</span> <span class="code-string">192.168.10.50</span><br><span class="code-keyword">ip dhcp excluded-address</span> <span class="code-string">192.168.20.1</span> <span class="code-string">192.168.20.50</span><br><span class="code-keyword">ip dhcp excluded-address</span> <span class="code-string">192.168.30.1</span> <span class="code-string">192.168.30.50</span><br><br><span class="code-comment">!--- HR VLAN DHCP Pool ---</span><br><span class="code-keyword">ip dhcp pool</span> HR-POOL<br><span class="code-keyword">network</span> <span class="code-string">192.168.10.0</span> <span class="code-string">255.255.255.0</span><br><span class="code-keyword">default-router</span> <span class="code-string">192.168.10.1</span><br><span class="code-keyword">dns-server</span> <span class="code-string">1.1.1.1 1.0.0.1</span><br><span class="code-keyword">lease</span> <span class="code-number">1</span> <span class="code-number">0</span> <span class="code-number">0</span><br><br><span class="code-comment">!--- Finance VLAN DHCP Pool ---</span><br><span class="code-keyword">ip dhcp pool</span> FINANCE-POOL<br><span class="code-keyword">network</span> <span class="code-string">192.168.20.0</span> <span class="code-string">255.255.255.0</span><br><span class="code-keyword">default-router</span> <span class="code-string">192.168.20.1</span><br><span class="code-keyword">dns-server</span> <span class="code-string">1.1.1.1 1.0.0.1</span><br><span class="code-keyword">lease</span> <span class="code-number">3</span> <span class="code-number">0</span> <span class="code-number">0</span><br><br><span class="code-comment">!--- IT VLAN DHCP Pool ---</span><br><span class="code-keyword">ip dhcp pool</span> IT-POOL<br><span class="code-keyword">network</span> <span class="code-string">192.168.30.0</span> <span class="code-string">255.255.255.0</span><br><span class="code-keyword">default-router</span> <span class="code-string">192.168.30.1</span><br><span class="code-keyword">dns-server</span> <span class="code-string">1.1.1.1 1.0.0.1</span><br><span class="code-keyword">lease</span> <span class="code-number">0</span> <span class="code-number">2</span> <span class="code-number">0</span><br><br><span class="code-comment">!--- Verification Commands ---</span><br><span class="code-keyword">show ip dhcp pool</span><br><span class="code-keyword">show ip dhcp binding</span><br><span class="code-keyword">show ip dhcp server statistics</span>
+        </div>
+       </div>
+      </div><!-- Group Activity -->
+      <div class="mb-8">
+       <h3 class="text-xl font-bold text-blue-400 mb-4 flex items-center gap-2"><span>👥</span> Group Activity: Multi-Location DHCP Deployment</h3>
+       <div class="activity-box mb-4">
+        <h4 class="font-semibold text-slate-200 mb-3">Scenario</h4>
+        <p class="text-slate-300 mb-3">Your organization has 2 office locations. Configure DHCP to handle the following:</p>
+        <div class="bg-slate-900 p-4 rounded border border-slate-700 text-sm text-slate-300 space-y-2">
+         <p><strong>HQ Location (Router1):</strong></p>
+         <p class="ml-4">• VLAN 100 (Production): 10.1.1.0/24, Max 100 devices</p>
+         <p class="ml-4">• VLAN 200 (Development): 10.1.2.0/24, Max 50 devices</p>
+         <p class="ml-4">• VLAN 300 (Guests): 10.1.3.0/24, Max 30 devices (2hr lease)</p><br>
+         <p><strong>Branch Location (Router2):</strong></p>
+         <p class="ml-4">• Single network: 10.2.1.0/24, Max 75 devices</p>
+         <p class="ml-4">• Uses DHCP relay to HQ server (10.1.1.1)</p>
+        </div>
+       </div>
+       <div class="activity-box mb-4">
+        <h4 class="font-semibold text-slate-200 mb-3">Deliverables (Group Tasks)</h4>
+        <ol class="text-slate-300 text-sm space-y-2 ml-4 list-decimal">
+         <li><strong>HQ Configuration:</strong> Configure all 3 DHCP pools with appropriate sizes and lease times</li>
+         <li><strong>Branch Configuration:</strong> Set up DHCP relay agent to forward requests to HQ</li>
+         <li><strong>Verification Plan:</strong> Write commands to verify all pools and bindings</li>
+         <li><strong>Troubleshooting Guide:</strong> Document 3 common DHCP issues and how to resolve them</li>
+         <li><strong>Presentation:</strong> Explain the architecture to the class (5 minutes)</li>
+        </ol>
+       </div><button class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors" onclick="toggleGroupSolution()"> Show Suggested Solution </button>
+       <div id="group-solution" class="mt-4 hidden">
+        <div class="code-block"><span class="code-comment">!=== HQ ROUTER CONFIGURATION ===!</span><br><span class="code-keyword">ip dhcp excluded-address</span> <span class="code-string">10.1.1.1</span> <span class="code-string">10.1.1.50</span><br><span class="code-keyword">ip dhcp excluded-address</span> <span class="code-string">10.1.2.1</span> <span class="code-string">10.1.2.50</span><br><span class="code-keyword">ip dhcp excluded-address</span> <span class="code-string">10.1.3.1</span> <span class="code-string">10.1.3.30</span><br><br><span class="code-keyword">ip dhcp pool</span> PROD<br><span class="code-keyword">network</span> <span class="code-string">10.1.1.0</span> <span class="code-string">255.255.255.0</span><br><span class="code-keyword">default-router</span> <span class="code-string">10.1.1.1</span><br><span class="code-keyword">dns-server</span> <span class="code-string">8.8.8.8</span><br><span class="code-keyword">lease</span> <span class="code-number">1</span> <span class="code-number">0</span> <span class="code-number">0</span><br><br><span class="code-keyword">ip dhcp pool</span> DEV<br><span class="code-keyword">network</span> <span class="code-string">10.1.2.0</span> <span class="code-string">255.255.255.0</span><br><span class="code-keyword">default-router</span> <span class="code-string">10.1.2.1</span><br><span class="code-keyword">dns-server</span> <span class="code-string">8.8.8.8</span><br><span class="code-keyword">lease</span> <span class="code-number">3</span> <span class="code-number">0</span> <span class="code-number">0</span><br><br><span class="code-keyword">ip dhcp pool</span> GUEST<br><span class="code-keyword">network</span> <span class="code-string">10.1.3.0</span> <span class="code-string">255.255.255.0</span><br><span class="code-keyword">default-router</span> <span class="code-string">10.1.3.1</span><br><span class="code-keyword">dns-server</span> <span class="code-string">8.8.8.8</span><br><span class="code-keyword">lease</span> <span class="code-number">0</span> <span class="code-number">2</span> <span class="code-number">0</span><br><br><span class="code-comment">!=== BRANCH ROUTER (DHCP RELAY) ===!</span><br><span class="code-keyword">interface</span> FastEthernet <span class="code-number">0</span>/<span class="code-number">0</span><br><span class="code-keyword">ip helper-address</span> <span class="code-string">10.1.1.1</span> <span class="code-comment">! HQ DHCP Server</span>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div><!-- QUIZ TAB -->
+    <div id="quiz" class="tab-content space-y-6" style="display: none;">
+     <div class="rounded-lg bg-slate-900/50 border border-slate-800 p-6">
+      <h2 class="text-2xl font-bold text-cyan-300 mb-2">📝 Review Quiz</h2>
+      <p class="text-slate-400 mb-6">Test your understanding of DHCP concepts and configuration. Select one answer per question.</p>
+      <div id="quiz-container" class="space-y-6"></div>
+      <div class="mt-8 flex gap-4"><button class="px-6 py-2 rounded bg-cyan-600 hover:bg-cyan-700 text-white font-semibold transition-colors" onclick="submitQuiz()"> Submit Quiz </button> <button class="px-6 py-2 rounded bg-slate-700 hover:bg-slate-600 text-white font-semibold transition-colors" onclick="resetQuiz()"> Reset Quiz </button>
+      </div>
+      <div id="quiz-result" class="mt-6 hidden p-4 rounded-lg bg-slate-800/50 border border-slate-700">
+       <h3 class="text-lg font-semibold text-cyan-300 mb-3">Quiz Results</h3>
+       <p id="result-text" class="text-slate-300 mb-2"></p>
+       <p id="score-text" class="text-2xl font-bold text-cyan-400"></p>
+       <p id="feedback-text" class="text-slate-300 mt-4"></p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      course_code: 'IS103',
+      instructor_name: 'MKDB',
+      course_title: 'DHCP Configuration'
+    };
+
+    let config = { ...defaultConfig };
+
+    async function onConfigChange(cfg) {
+      config = { ...defaultConfig, ...cfg };
+      document.getElementById('course-code').textContent = config.course_code;
+      document.getElementById('instructor-name').textContent = config.instructor_name;
+      document.getElementById('course-title').textContent = config.course_title;
+    }
+
+    function mapToCapabilities(cfg) {
+      return {
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(cfg) {
+      return new Map([
+        ['course_code', cfg.course_code],
+        ['instructor_name', cfg.instructor_name]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    } else {
+      onConfigChange(defaultConfig);
+    }
+
+    // Tab Navigation
+    document.querySelectorAll('.tab-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const tabName = this.getAttribute('data-tab');
+        
+        document.querySelectorAll('.tab-content').forEach(tab => {
+          tab.style.display = 'none';
+        });
+        document.querySelectorAll('.tab-button').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        
+        document.getElementById(tabName).style.display = 'block';
+        this.classList.add('active');
+      });
+    });
+
+    function toggleIndividualSolution() {
+      const solution = document.getElementById('individual-solution');
+      solution.classList.toggle('hidden');
+    }
+
+    function toggleGroupSolution() {
+      const solution = document.getElementById('group-solution');
+      solution.classList.toggle('hidden');
+    }
+
+    // Quiz Data
+    const quizQuestions = [
+      {
+        question: "What does DHCP stand for?",
+        options: [
+          "Dynamic Host Configuration Protocol",
+          "Direct Host Communication Protocol",
+          "Dynamic Hardware Control Protocol",
+          "Digital Host Control Process"
+        ],
+        correct: 0,
+        explanation: "DHCP is the Dynamic Host Configuration Protocol, used for automatic IP address assignment."
+      },
+      {
+        question: "In the DHCP process, what is the second message sent by the DHCP server?",
+        options: [
+          "DHCPREQUEST",
+          "DHCPOFFER",
+          "DHCPACK",
+          "DHCPDISCOVER"
+        ],
+        correct: 1,
+        explanation: "After receiving DHCPDISCOVER, the server sends DHCPOFFER with an available IP address."
+      },
+      {
+        question: "What does the 'lease time' in DHCP determine?",
+        options: [
+          "The speed of IP assignment",
+          "How long an IP address is assigned to a client",
+          "The number of clients that can connect",
+          "The subnet mask to be used"
+        ],
+        correct: 1,
+        explanation: "Lease time specifies the duration (in days, hours, minutes) that an IP address is reserved for a client."
+      },
+      {
+        question: "Which command excludes IP addresses from DHCP assignment?",
+        options: [
+          "ip dhcp exclude",
+          "ip dhcp reserved",
+          "ip dhcp excluded-address",
+          "ip dhcp block"
+        ],
+        correct: 2,
+        explanation: "The 'ip dhcp excluded-address' command prevents specific IP ranges from being assigned by DHCP."
+      },
+      {
+        question: "What is a DHCP pool?",
+        options: [
+          "A collection of DHCP servers",
+          "A range of IP addresses configured for automatic assignment",
+          "A backup DHCP configuration",
+          "A list of clients using DHCP"
+        ],
+        correct: 1,
+        explanation: "A DHCP pool is a defined range of IP addresses from which the DHCP server assigns addresses to clients."
+      },
+      {
+        question: "What is the primary purpose of a DHCP relay agent?",
+        options: [
+          "To backup DHCP servers",
+          "To block DHCP requests",
+          "To forward DHCP requests to a server on a different network",
+          "To increase security"
+        ],
+        correct: 2,
+        explanation: "A DHCP relay agent forwards DHCP requests from clients to a DHCP server on a different subnet."
+      },
+      {
+        question: "Which Cisco command displays currently assigned IP addresses and lease information?",
+        options: [
+          "show ip dhcp pools",
+          "show ip dhcp binding",
+          "show ip dhcp statistics",
+          "show ip addresses"
+        ],
+        correct: 1,
+        explanation: "'show ip dhcp binding' displays all active DHCP leases with client MAC addresses and expiration times."
+      },
+      {
+        question: "In a DHCP configuration, what is the purpose of the 'default-router' option?",
+        options: [
+          "To set the primary DNS server",
+          "To specify the gateway for clients to reach other networks",
+          "To exclude IP addresses",
+          "To define the lease time"
+        ],
+        correct: 1,
+        explanation: "The default-router option (typically .1) tells clients where to send traffic destined for other networks."
+      },
+      {
+        question: "What happens when a DHCP client's lease expires without renewal?",
+        options: [
+          "The IP remains assigned indefinitely",
+          "The IP is returned to the pool and can be assigned to another client",
+          "The client crashes",
+          "The IP is permanently blocked"
+        ],
+        correct: 1,
+        explanation: "When a lease expires, the IP address is released back to the pool for assignment to other clients."
+      },
+      {
+        question: "Which command would you use to view DHCP server operational statistics?",
+        options: [
+          "show ip dhcp config",
+          "show ip dhcp server statistics",
+          "show dhcp summary",
+          "display dhcp info"
+        ],
+        correct: 1,
+        explanation: "'show ip dhcp server statistics' displays detailed information about DHCP server operations and message counts."
+      }
+    ];
+
+    // Initialize Quiz
+    function initQuiz() {
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = '';
+      
+      quizQuestions.forEach((q, index) => {
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'rounded-lg bg-slate-800/30 border border-slate-700 p-6';
+        
+        let optionsHTML = '';
+        q.options.forEach((option, optIndex) => {
+          optionsHTML += `
+            <div class="quiz-option mb-3 p-3 rounded-lg bg-slate-900/50 border border-slate-700 hover:border-cyan-500 cursor-pointer" 
+                 onclick="selectOption(${index}, ${optIndex})" data-question="${index}" data-option="${optIndex}">
+              <input type="radio" name="q${index}" value="${optIndex}" style="margin-right: 10px;">
+              <span>${option}</span>
+            </div>
+          `;
+        });
+        
+        questionDiv.innerHTML = `
+          <h3 class="text-lg font-semibold text-cyan-300 mb-4">Question ${index + 1}: ${q.question}</h3>
+          <div class="space-y-2">
+            ${optionsHTML}
+          </div>
+        `;
+        
+        container.appendChild(questionDiv);
+      });
+    }
+
+    function selectOption(questionIndex, optionIndex) {
+      const options = document.querySelectorAll(`[data-question="${questionIndex}"]`);
+      options.forEach(opt => opt.classList.remove('selected'));
+      options[optionIndex].classList.add('selected');
+      document.querySelector(`input[name="q${questionIndex}"][value="${optionIndex}"]`).checked = true;
+    }
+
+    function submitQuiz() {
+      let score = 0;
+      let feedback = '';
+      
+      quizQuestions.forEach((q, index) => {
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+        if (selected && parseInt(selected.value) === q.correct) {
+          score++;
+        }
+      });
+      
+      const percentage = Math.round((score / quizQuestions.length) * 100);
+      
+      if (percentage >= 90) {
+        feedback = '🎉 Excellent! You have mastered DHCP concepts!';
+      } else if (percentage >= 80) {
+        feedback = '✅ Good job! You have a solid understanding of DHCP.';
+      } else if (percentage >= 70) {
+        feedback = '📚 Good effort! Review the DHCP concepts and try again.';
+      } else {
+        feedback = '💪 Keep studying! DHCP is important - review the Concepts and Configuration tabs.';
+      }
+      
+      document.getElementById('result-text').textContent = `You got ${score} out of ${quizQuestions.length} questions correct.`;
+      document.getElementById('score-text').textContent = `${percentage}%`;
+      document.getElementById('feedback-text').textContent = feedback;
+      document.getElementById('quiz-result').classList.remove('hidden');
+    }
+
+    function resetQuiz() {
+      document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+      document.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+      document.getElementById('quiz-result').classList.add('hidden');
+    }
+
+    // Initialize on load
+    initQuiz();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d1eeff711a2fee1',t:'MTc3MTc2ODA2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
