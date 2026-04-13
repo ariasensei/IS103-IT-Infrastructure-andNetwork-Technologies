@@ -1,0 +1,2197 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Reliability &amp; Documentation</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet">
+  <style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  .font-heading { font-family: 'Space Mono', monospace; }
+  .font-body { font-family: 'DM Sans', sans-serif; }
+  .tab-active { border-bottom: 3px solid var(--primary); color: var(--primary); font-weight: 700; }
+  .tab-inactive { border-bottom: 3px solid transparent; color: #94a3b8; }
+  .tab-inactive:hover { color: var(--text); }
+  .card-glow { box-shadow: 0 0 0 1px rgba(99,255,182,0.08), 0 8px 32px rgba(0,0,0,0.35); }
+  .threat-card:hover { transform: translateY(-2px); transition: transform 0.2s; }
+  .step-line::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 40px;
+    bottom: -8px;
+    width: 2px;
+    background: var(--primary);
+    opacity: 0.25;
+  }
+  .step-line:last-child::before { display: none; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  .anim-in { animation: fadeUp 0.4s ease both; }
+  .quiz-option { transition: all 0.15s; cursor: pointer; }
+  .quiz-option:hover { background: rgba(99,255,182,0.08); }
+  .quiz-correct { background: rgba(99,255,182,0.15) !important; border-color: #63ffb6 !important; }
+  .quiz-wrong { background: rgba(255,99,99,0.12) !important; border-color: #ff6363 !important; }
+  .scenario-box { border-left: 4px solid var(--primary); }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+</style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full font-body">
+  <div id="app" class="h-full w-full overflow-auto" style="background:var(--bg);color:var(--text);"><!-- HEADER -->
+   <header class="sticky top-0 z-30" style="background:var(--surface);backdrop-filter:blur(8px);">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+     <div>
+      <p class="text-xs tracking-widest uppercase opacity-60 font-heading" id="el-course">IS103 - IT Infrastructure and Network Technologies</p>
+      <h1 class="font-heading text-lg sm:text-xl mt-1" id="el-title" style="color:var(--primary);">🎓 Final Integration, Defense &amp; Evaluation</h1>
+     </div>
+     <div class="text-right">
+      <p class="text-xs opacity-60" id="el-prof">Prof. MKDB</p>
+      <p class="text-xs opacity-40" id="el-week">Finals Week 5</p>
+     </div>
+    </div><!-- TABS -->
+    <div class="max-w-5xl mx-auto px-4 flex gap-1 overflow-x-auto" id="tab-bar"><button onclick="switchTab(0)" class="tab-active px-3 py-2 text-sm font-heading whitespace-nowrap" data-tab="0">📖 Lesson</button> <button onclick="switchTab(1)" class="tab-inactive px-3 py-2 text-sm font-heading whitespace-nowrap" data-tab="1">🎯 Integration Guide</button> <button onclick="switchTab(2)" class="tab-inactive px-3 py-2 text-sm font-heading whitespace-nowrap" data-tab="2">🗣️ Defense Prep</button> <button onclick="switchTab(3)" class="tab-inactive px-3 py-2 text-sm font-heading whitespace-nowrap" data-tab="3">📋 Evaluation Rubric</button> <button onclick="switchTab(4)" class="tab-inactive px-3 py-2 text-sm font-heading whitespace-nowrap" data-tab="4">✅ Final Quiz</button>
+    </div>
+   </header>
+   <main class="max-w-5xl mx-auto px-4 py-6"><!-- ==================== TAB 0: LESSON ==================== -->
+    <section id="tab-content-0" class="anim-in space-y-8"><!-- ILO -->
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="text-xs uppercase tracking-widest opacity-50 font-heading mb-2">Intended Learning Outcome</p>
+      <p class="text-base font-semibold" style="color:var(--primary);">Integrate all network infrastructure components into a cohesive design, defend technical decisions through oral presentation, and evaluate network performance against business requirements.</p>
+     </div><!-- REAL WORLD HOOK -->
+     <div class="scenario-box rounded-r-xl p-5" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-2" style="color:var(--secondary);">🎓 Real-Life Scenario</p>
+      <p class="text-sm leading-relaxed opacity-90">You're presenting to the Board of Directors at <strong>"PhilHealth Regional Hub"</strong>. They've reviewed your network design, security controls, and reliability plans. Now it's your turn to stand up and answer: <em>"Why should we trust this network? How does it solve our problems? What happens when things fail?"</em></p>
+      <p class="text-sm mt-3 opacity-70">This is your final exam. You'll integrate everything you've learned all semester, present it professionally, answer tough questions, and prove you can design enterprise networks. Let's go! 🏥</p>
+     </div><!-- SECTION: WHAT IS INTEGRATION? -->
+     <div>
+      <h2 class="font-heading text-lg mb-4" style="color:var(--primary);"><i data-lucide="layers" style="width:20px;height:20px;display:inline;vertical-align:middle;margin-right:6px;"></i>What is Network Integration?</h2>
+      <div class="rounded-xl p-5 mb-4" style="background:var(--surface);">
+       <p class="text-sm leading-relaxed mb-3"><strong>Integration</strong> means bringing together all the pieces you've built separately (security, reliability, documentation, performance) into ONE complete, working network that serves the business.</p>
+       <p class="text-sm opacity-70 leading-relaxed">Think of it like building a car: You've made the engine (routing), transmission (switching), brakes (security), and suspension (reliability). Now you assemble them so the car actually WORKS on the road.</p>
+      </div>
+      <h3 class="font-heading text-sm mb-3 opacity-70">The Five Layers of Integration</h3>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-1 gap-3">
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <div class="text-2xl mb-2">
+         🌐
+        </div>
+        <p class="font-heading text-sm mb-1">Layer 1: Physical Topology</p>
+        <p class="text-xs opacity-70 leading-relaxed"><strong>What:</strong> All routers, switches, servers, and cables physically connected. Every device has power and network connectivity.</p>
+        <p class="text-xs mt-2 opacity-50" style="color:var(--primary);">Example: PhilHealth has 3 office switches → main router → ISP modem → internet</p>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <div class="text-2xl mb-2">
+         📡
+        </div>
+        <p class="font-heading text-sm mb-1">Layer 2: Logical Connectivity</p>
+        <p class="text-xs opacity-70 leading-relaxed"><strong>What:</strong> IP addresses assigned, routing protocols enabled, subnets defined. Data can flow between locations.</p>
+        <p class="text-xs mt-2 opacity-50" style="color:var(--primary);">Example: Office A (10.0.1.0/24) can reach Office B (10.0.2.0/24) via RIP routing</p>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <div class="text-2xl mb-2">
+         🔒
+        </div>
+        <p class="font-heading text-sm mb-1">Layer 3: Security Integration</p>
+        <p class="text-xs opacity-70 leading-relaxed"><strong>What:</strong> Firewalls filter traffic, ACLs enforce policies, VLANs separate networks, encryption protects data.</p>
+        <p class="text-xs mt-2 opacity-50" style="color:var(--primary);">Example: Guest Wi-Fi can't access patient database — blocked by ACL on router</p>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <div class="text-2xl mb-2">
+         🔄
+        </div>
+        <p class="font-heading text-sm mb-1">Layer 4: Reliability Mechanisms</p>
+        <p class="text-xs opacity-70 leading-relaxed"><strong>What:</strong> Redundant paths, failover systems, monitoring alerts, backup links, RAID storage.</p>
+        <p class="text-xs mt-2 opacity-50" style="color:var(--primary);">Example: Main WAN link fails → automatic failover to secondary ISP connection</p>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <div class="text-2xl mb-2">
+         📊
+        </div>
+        <p class="font-heading text-sm mb-1">Layer 5: Operations &amp; Monitoring</p>
+        <p class="text-xs opacity-70 leading-relaxed"><strong>What:</strong> SNMP monitoring, documentation, runbooks, performance baselines, incident response.</p>
+        <p class="text-xs mt-2 opacity-50" style="color:var(--primary);">Example: Alert fires at 2 AM → admin checks runbook → problem fixed before users wake up</p>
+       </div>
+      </div>
+     </div><!-- SECTION: INTEGRATION CHECKLIST -->
+     <div>
+      <h2 class="font-heading text-lg mb-4" style="color:var(--primary);"><i data-lucide="check-circle-2" style="width:20px;height:20px;display:inline;vertical-align:middle;margin-right:6px;"></i>Pre-Defense Integration Checklist</h2>
+      <p class="text-sm opacity-70 mb-4">Before you present, verify that your complete network includes ALL of these:</p>
+      <div class="rounded-xl overflow-hidden card-glow" style="background:var(--surface);">
+       <div class="space-y-2">
+        <div class="p-4 border-b" style="border-color:rgba(255,255,255,0.06);">
+         <div class="flex items-start gap-3"><input type="checkbox" class="mt-1" disabled>
+          <div>
+           <p class="font-heading text-sm" style="color:var(--primary);">✅ Topology: Multi-site network with 3+ locations, redundant links</p>
+           <p class="text-xs opacity-60 mt-1">Each site has its own switch and devices. WAN links connect them. At least 1 backup link.</p>
+          </div>
+         </div>
+        </div>
+        <div class="p-4 border-b" style="border-color:rgba(255,255,255,0.06);">
+         <div class="flex items-start gap-3"><input type="checkbox" class="mt-1" disabled>
+          <div>
+           <p class="font-heading text-sm" style="color:var(--primary);">✅ IP Addressing: Documented subnets, proper gateway configuration</p>
+           <p class="text-xs opacity-60 mt-1">All devices have IPs from RFC 1918 (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16). Subnet masks are /24 or /25. Gateways match router interfaces.</p>
+          </div>
+         </div>
+        </div>
+        <div class="p-4 border-b" style="border-color:rgba(255,255,255,0.06);">
+         <div class="flex items-start gap-3"><input type="checkbox" class="mt-1" disabled>
+          <div>
+           <p class="font-heading text-sm" style="color:var(--primary);">✅ Routing: Dynamic routing protocol enabled (RIP, OSPF, or EIGRP)</p>
+           <p class="text-xs opacity-60 mt-1">Routers learn routes automatically. Ping tests between all sites succeed. show ip route displays all networks.</p>
+          </div>
+         </div>
+        </div>
+        <div class="p-4 border-b" style="border-color:rgba(255,255,255,0.06);">
+         <div class="flex items-start gap-3"><input type="checkbox" class="mt-1" disabled>
+          <div>
+           <p class="font-heading text-sm" style="color:var(--primary);">✅ Security: Passwords, ACLs, encryption, VLANs configured</p>
+           <p class="text-xs opacity-60 mt-1">Enable secret password set. At least 2 ACLs enforcing business policy. Service password-encryption enabled. Login banner present.</p>
+          </div>
+         </div>
+        </div>
+        <div class="p-4 border-b" style="border-color:rgba(255,255,255,0.06);">
+         <div class="flex items-start gap-3"><input type="checkbox" class="mt-1" disabled>
+          <div>
+           <p class="font-heading text-sm" style="color:var(--primary);">✅ Monitoring: SNMP enabled, baselines documented, alerting configured</p>
+           <p class="text-xs opacity-60 mt-1">SNMP community string set. Router location and contact info configured. Performance baselines (CPU, memory, bandwidth) documented.</p>
+          </div>
+         </div>
+        </div>
+        <div class="p-4 border-b" style="border-color:rgba(255,255,255,0.06);">
+         <div class="flex items-start gap-3"><input type="checkbox" class="mt-1" disabled>
+          <div>
+           <p class="font-heading text-sm" style="color:var(--primary);">✅ Reliability: Failover tested, disaster recovery plan written</p>
+           <p class="text-xs opacity-60 mt-1">Shut down a primary link — verify traffic reroutes automatically. DR plan includes RTO, RPO, recovery steps, and contact list.</p>
+          </div>
+         </div>
+        </div>
+        <div class="p-4 border-b" style="border-color:rgba(255,255,255,0.06);">
+         <div class="flex items-start gap-3"><input type="checkbox" class="mt-1" disabled>
+          <div>
+           <p class="font-heading text-sm" style="color:var(--primary);">✅ Documentation: All 6 doc types complete and professional</p>
+           <p class="text-xs opacity-60 mt-1">Physical diagram, logical diagram, device inventory, troubleshooting runbooks, DRP, monitoring baseline — all formatted neatly.</p>
+          </div>
+         </div>
+        </div>
+        <div class="p-4">
+         <div class="flex items-start gap-3"><input type="checkbox" class="mt-1" disabled>
+          <div>
+           <p class="font-heading text-sm" style="color:var(--primary);">✅ Packet Tracer File: Saved, functional, all tests pass</p>
+           <p class="text-xs opacity-60 mt-1">File named properly (e.g., "YourName-FinalNetwork.pkt"). All devices reachable. No errors in device configs.</p>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- ==================== TAB 1: INTEGRATION GUIDE ==================== -->
+    <section id="tab-content-1" class="hidden anim-in space-y-6">
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-1" style="color:var(--primary);">🎯 Step-by-Step Integration Guide</p>
+      <p class="text-xs opacity-70">Follow this process to integrate all 5 layers of your network design into one cohesive system.</p>
+     </div><!-- PHASE 1 -->
+     <div>
+      <h3 class="font-heading text-sm mb-4" style="color:var(--primary);">Phase 1: Consolidate Your Week-by-Week Work (30 min)</h3>
+      <div class="space-y-3">
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--secondary);">Step 1a: Gather all files from Weeks 1-5</p>
+        <p class="text-xs opacity-70 leading-relaxed">Collect: Week 1 basic topology, Week 2 security file, Week 3 reliability file, Week 4 documentation file, Week 5 final project.</p>
+        <p class="text-xs mt-2 opacity-50" style="color:var(--primary);">💡 Use the most advanced version. If Week 3 has redundancy but Week 1 doesn't, start with Week 3's file.</p>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--secondary);">Step 1b: Review your current Packet Tracer file</p>
+        <p class="text-xs opacity-70 leading-relaxed">Open the most recent .pkt file. Check: Does it have security controls? Redundancy? Monitoring? If missing any layer, add it now.</p>
+        <div class="rounded-lg p-3 text-xs mt-2" style="background:rgba(99,255,182,0.06);">
+         <p class="font-heading" style="color:var(--primary);">Checklist:</p>
+         <p class="opacity-70 mt-1">Has physical topology? ✓ | Has routing? ✓ | Has ACLs? ✓ | Has SNMP? ✓ | Has failover? ✓</p>
+        </div>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--secondary);">Step 1c: Verify all connectivity tests pass</p>
+        <p class="text-xs opacity-70 leading-relaxed">Run ping tests from every PC to every other PC. All should succeed. If any fails, troubleshoot the routing or firewall rules.</p>
+        <div class="rounded-lg p-3 text-xs mt-2 font-mono" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+         <p>PC-Office1 ping 10.0.2.10 ✓ (Office 2)</p>
+         <p>PC-Office1 ping 10.0.3.20 ✓ (Database Server)</p>
+         <p>PC-Office2 ping 10.0.1.10 ✓ (Office 1)</p>
+        </div>
+       </div>
+      </div>
+     </div><!-- PHASE 2 -->
+     <div>
+      <h3 class="font-heading text-sm mb-4" style="color:var(--primary);">Phase 2: Add Missing Layers (45 min)</h3>
+      <div class="space-y-3">
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--secondary);">If you're missing SECURITY layer:</p>
+        <p class="text-xs opacity-70 leading-relaxed">Add: (1) Router enable secret password, (2) Console/VTY line passwords, (3) At least 2 ACLs enforcing business policy, (4) Service password-encryption, (5) Banner message.</p>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--secondary);">If you're missing RELIABILITY layer:</p>
+        <p class="text-xs opacity-70 leading-relaxed">Add: (1) Secondary WAN link for failover, (2) Dynamic routing (RIP v2, OSPF), (3) Test failover by disabling primary link, (4) Document RTO/RPO targets.</p>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--secondary);">If you're missing MONITORING layer:</p>
+        <p class="text-xs opacity-70 leading-relaxed">Add: (1) SNMP enabled on all routers, (2) SNMP community string configured, (3) Router location/contact info set, (4) Create performance baseline document with normal thresholds.</p>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--secondary);">If you're missing DOCUMENTATION layer:</p>
+        <p class="text-xs opacity-70 leading-relaxed">Create: (1) Physical network diagram, (2) Logical network diagram, (3) Device inventory table, (4) Troubleshooting runbook (1-2 pages), (5) Disaster recovery plan (1 page), (6) Performance baseline (1 page).</p>
+       </div>
+      </div>
+     </div><!-- PHASE 3 -->
+     <div>
+      <h3 class="font-heading text-sm mb-4" style="color:var(--primary);">Phase 3: Create the Integration Summary (30 min)</h3>
+      <p class="text-xs opacity-70 mb-3">Write a 1-2 page executive summary that ties everything together. This is what you'll present to the board.</p>
+      <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+       <div class="space-y-3 text-xs">
+        <div>
+         <p class="font-heading" style="color:var(--primary);">Section 1: Business Problem (0.5 pages)</p>
+         <p class="opacity-70 mt-1">What was the problem? "Our network goes down, nobody knows how it's set up, we can't recover from disasters."</p>
+        </div>
+        <div>
+         <p class="font-heading" style="color:var(--primary);">Section 2: Our Solution (0.5 pages)</p>
+         <p class="opacity-70 mt-1">How does your network solve it? "Multi-site redundancy, security controls, 24/7 monitoring, documented procedures."</p>
+        </div>
+        <div>
+         <p class="font-heading" style="color:var(--primary);">Section 3: Technical Architecture (0.5 pages)</p>
+         <p class="opacity-70 mt-1">Topology diagram, IP ranges, routing protocol, key security measures, redundancy mechanism.</p>
+        </div>
+        <div>
+         <p class="font-heading" style="color:var(--primary);">Section 4: Performance Metrics (0.5 pages)</p>
+         <p class="opacity-70 mt-1">Uptime target (99.9%), MTBF/MTTR targets, failover time (&lt;30 sec), recovery time (RTO &lt; 4 hours).</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- ==================== TAB 2: DEFENSE PREP ==================== -->
+    <section id="tab-content-2" class="hidden anim-in space-y-6">
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-1" style="color:var(--primary);">🗣️ Oral Defense: How to Present &amp; Answer Questions</p>
+      <p class="text-xs opacity-70">Your defense is a 20-minute presentation + 10-minute Q&amp;A. Here's how to ace it.</p>
+      <div class="flex gap-3 mt-3 flex-wrap"><span class="text-xs px-3 py-1 rounded-full" style="background:rgba(99,255,182,0.12);color:var(--primary);">20 min talk</span> <span class="text-xs px-3 py-1 rounded-full" style="background:rgba(255,182,99,0.12);color:var(--secondary);">10 min Q&amp;A</span> <span class="text-xs px-3 py-1 rounded-full" style="background:rgba(99,182,255,0.12);color:#63b6ff;">Pro delivery</span>
+      </div>
+     </div><!-- PRESENTATION STRUCTURE -->
+     <div>
+      <h3 class="font-heading text-sm mb-4" style="color:var(--primary);">Your 20-Minute Presentation Outline</h3>
+      <div class="space-y-3">
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--secondary);">Slide 1-2 (2 min): Title + Executive Summary</p>
+        <p class="text-xs opacity-70"><strong>Say:</strong> "Good morning. I'm [Name] presenting a complete network design for PhilHealth Regional Hub. This network integrates security, reliability, and monitoring to support 24/7 healthcare operations."</p>
+        <p class="text-xs mt-2 opacity-50">💡 Show: Title slide + 1 summary graphic of your topology</p>
+       </div>
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--secondary);">Slide 3-4 (3 min): Business Requirements</p>
+        <p class="text-xs opacity-70"><strong>Say:</strong> "The organization needed: (1) Connectivity across 3 office locations, (2) Protection against security threats, (3) Ability to recover from disasters, (4) Monitoring to detect problems before users notice."</p>
+        <p class="text-xs mt-2 opacity-50">💡 Show: Problem statement + business metrics (uptime target, recovery time, etc.)</p>
+       </div>
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--secondary);">Slide 5-6 (4 min): Physical Topology</p>
+        <p class="text-xs opacity-70"><strong>Say:</strong> "Our network has 3 sites. Each site has a switch. The main office router connects to an ISP modem for internet. Sites connect via WAN links using a secondary ISP for failover."</p>
+        <p class="text-xs mt-2 opacity-50">💡 Show: Your physical network diagram with all devices clearly labeled</p>
+       </div>
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--secondary);">Slide 7-8 (3 min): Logical Configuration</p>
+        <p class="text-xs opacity-70"><strong>Say:</strong> "Main office is subnet 10.0.1.0/24, Remote office 10.0.2.0/24, Database site 10.0.3.0/24. We use RIP v2 routing so the network automatically finds the best paths."</p>
+        <p class="text-xs mt-2 opacity-50">💡 Show: IP addressing table + routing protocol description</p>
+       </div>
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--secondary);">Slide 9-10 (3 min): Security Measures</p>
+        <p class="text-xs opacity-70"><strong>Say:</strong> "All router access is protected by strong passwords. We use ACLs to prevent guests from accessing business networks. Passwords are encrypted. A warning banner displays on login."</p>
+        <p class="text-xs mt-2 opacity-50">💡 Show: ACL rules in a table + security checklist</p>
+       </div>
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--secondary);">Slide 11-12 (2 min): Reliability &amp; Failover</p>
+        <p class="text-xs opacity-70"><strong>Say:</strong> "If the primary ISP fails, traffic automatically reroutes through the backup ISP. Recovery is automatic — no manual intervention. Database has RAID backup. RTO is under 4 hours."</p>
+        <p class="text-xs mt-2 opacity-50">💡 Show: Failover diagram + RTO/RPO metrics</p>
+       </div>
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--secondary);">Slide 13 (2 min): Monitoring &amp; Operations</p>
+        <p class="text-xs opacity-70"><strong>Say:</strong> "SNMP monitoring watches CPU, memory, and bandwidth 24/7. If a threshold is exceeded, the system alerts operations staff. We also test our disaster recovery plan quarterly."</p>
+        <p class="text-xs mt-2 opacity-50">💡 Show: Monitoring dashboard mockup + alert thresholds table</p>
+       </div>
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--secondary);">Slide 14 (1 min): Conclusion</p>
+        <p class="text-xs opacity-70"><strong>Say:</strong> "This integrated design gives PhilHealth a secure, reliable, monitored network. It supports business continuity, protects patient data, and reduces operational risk. Thank you. I'm happy to answer questions."</p>
+        <p class="text-xs mt-2 opacity-50">💡 Show: Summary of benefits + your contact info</p>
+       </div>
+      </div>
+     </div><!-- ANTICIPATED QUESTIONS -->
+     <div>
+      <h3 class="font-heading text-sm mb-4" style="color:var(--primary);">🎯 Anticipated Questions (Be Ready!)</h3>
+      <div class="space-y-3">
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--primary);">Q: "What happens if BOTH ISP connections fail?"</p>
+        <p class="text-xs opacity-70"><strong>Answer:</strong> "We have a diesel backup generator that powers the network equipment for 48 hours. During that time, we restore service using a hot-standby data center or contact the ISP to restore connectivity. Our RTO is 4 hours."</p>
+       </div>
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--primary);">Q: "How do you prevent ransomware attacks like the BrewNet incident?"</p>
+        <p class="text-xs opacity-70"><strong>Answer:</strong> "Multiple layers: (1) Strong router passwords prevent unauthorized access, (2) ACLs block lateral movement from guest to business networks, (3) SNMP monitoring detects unusual traffic patterns, (4) Encrypted daily backups allow us to restore clean data, (5) We train staff to recognize phishing emails."</p>
+       </div>
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--primary);">Q: "What's the cost vs. the cost of downtime?"</p>
+        <p class="text-xs opacity-70"><strong>Answer:</strong> "Redundant router: ₱100k. Backup ISP: ₱5k/month. Total first-year cost: ₱160k. PhilHealth's downtime costs about ₱30k/hour (lost patient services, staff idle time). This investment pays for itself in ~6 hours of prevented downtime."</p>
+       </div>
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--primary);">Q: "How often should you test the disaster recovery plan?"</p>
+        <p class="text-xs opacity-70"><strong>Answer:</strong> "Quarterly (4 times per year). We simulate a full site failure and measure recovery time. If actual recovery takes longer than planned, we update procedures. Real disasters never follow the playbook perfectly, so practice is critical."</p>
+       </div>
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--primary);">Q: "Why RIP routing instead of OSPF?"</p>
+        <p class="text-xs opacity-70"><strong>Answer:</strong> "For a 3-site network, RIP is simpler and adequate. OSPF scales better for 100+ networks. RIP has slower convergence (max 15 hops) but PhilHealth's largest path is 2 hops. We documented that OSPF could be a future upgrade as the organization grows."</p>
+       </div>
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-sm mb-2" style="color:var(--primary);">Q: "How do you ensure staff actually follow security procedures?"</p>
+        <p class="text-xs opacity-70"><strong>Answer:</strong> "We document all procedures in the runbook and post them in the network ops room. We train all admins quarterly. We audit access logs monthly. We tie performance to IT staff bonuses — security compliance = good bonus."</p>
+       </div>
+      </div>
+     </div><!-- PRESENTATION TIPS -->
+     <div>
+      <h3 class="font-heading text-sm mb-4" style="color:var(--primary);">💡 Pro Presentation Tips</h3>
+      <div class="space-y-2 text-sm">
+       <div class="flex gap-3"><span style="color:var(--primary);">✓</span><span class="opacity-80"><strong>Make eye contact</strong> — Look at the audience, not your slides. Slides support you; you're the star.</span>
+       </div>
+       <div class="flex gap-3"><span style="color:var(--primary);">✓</span><span class="opacity-80"><strong>Tell a story</strong> — Start with the problem, show how your design solves it, end with confidence. People remember stories more than facts.</span>
+       </div>
+       <div class="flex gap-3"><span style="color:var(--primary);">✓</span><span class="opacity-80"><strong>Use visuals</strong> — Network diagrams are boring. Add colors, icons, icons for different device types. Make it visually appealing.</span>
+       </div>
+       <div class="flex gap-3"><span style="color:var(--primary);">✓</span><span class="opacity-80"><strong>Avoid jargon overload</strong> — Explain technical terms. "RIP v2 is a dynamic routing protocol" → "The routers automatically learn the best path to each network."</span>
+       </div>
+       <div class="flex gap-3"><span style="color:var(--primary);">✓</span><span class="opacity-80"><strong>Practice timing</strong> — Do a full run-through before defense. 20 minutes is tight. Cut slides if needed.</span>
+       </div>
+       <div class="flex gap-3"><span style="color:var(--primary);">✓</span><span class="opacity-80"><strong>Dress professionally</strong> — Business casual at minimum. You're presenting to the board.</span>
+       </div>
+       <div class="flex gap-3"><span style="color:var(--primary);">✓</span><span class="opacity-80"><strong>Bring backups</strong> — USB drive + cloud backup of your slides + Packet Tracer file. Technology fails. Be prepared.</span>
+       </div>
+      </div>
+     </div>
+    </section><!-- ==================== TAB 3: EVALUATION RUBRIC ==================== -->
+    <section id="tab-content-3" class="hidden anim-in space-y-6">
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-1" style="color:var(--primary);">📋 Final Project Evaluation Rubric</p>
+      <p class="text-xs opacity-70">This is exactly how you'll be graded. 200 points total.</p>
+     </div><!-- PACKET TRACER FILE -->
+     <div class="rounded-xl overflow-hidden card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm p-4 pb-2" style="color:var(--primary);">Part A: Packet Tracer File (50 pts)</p>
+      <div class="overflow-x-auto">
+       <table class="w-full text-xs">
+        <thead>
+         <tr style="background:rgba(99,255,182,0.08);">
+          <th class="text-left p-3 font-heading">Criteria</th>
+          <th class="text-center p-3 font-heading">Points</th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Multi-site topology (3+ sites with routing)</td>
+          <td class="text-center p-3">15</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Proper IP addressing &amp; subnets</td>
+          <td class="text-center p-3">10</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Security (passwords, ACLs, encryption)</td>
+          <td class="text-center p-3">12</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Reliability (redundancy, failover testing)</td>
+          <td class="text-center p-3">8</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Monitoring (SNMP configured)</td>
+          <td class="text-center p-3">5</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div><!-- DOCUMENTATION -->
+     <div class="rounded-xl overflow-hidden card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm p-4 pb-2" style="color:var(--primary);">Part B: Network Documentation (50 pts)</p>
+      <div class="overflow-x-auto">
+       <table class="w-full text-xs">
+        <thead>
+         <tr style="background:rgba(99,255,182,0.08);">
+          <th class="text-left p-3 font-heading">Document</th>
+          <th class="text-center p-3 font-heading">Points</th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Physical &amp; Logical Diagrams (clear, complete)</td>
+          <td class="text-center p-3">15</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Device Inventory (all info present)</td>
+          <td class="text-center p-3">10</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Runbooks &amp; Troubleshooting (detailed steps)</td>
+          <td class="text-center p-3">10</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Disaster Recovery Plan (RTO/RPO defined)</td>
+          <td class="text-center p-3">10</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Performance Baselines (monitoring thresholds)</td>
+          <td class="text-center p-3">5</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div><!-- ORAL DEFENSE -->
+     <div class="rounded-xl overflow-hidden card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm p-4 pb-2" style="color:var(--primary);">Part C: Oral Defense Presentation (60 pts)</p>
+      <div class="overflow-x-auto">
+       <table class="w-full text-xs">
+        <thead>
+         <tr style="background:rgba(99,255,182,0.08);">
+          <th class="text-left p-3 font-heading">Criteria</th>
+          <th class="text-center p-3 font-heading">Points</th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Presentation clarity &amp; organization</td>
+          <td class="text-center p-3">10</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Technical accuracy of content</td>
+          <td class="text-center p-3">15</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Ability to explain design decisions</td>
+          <td class="text-center p-3">15</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Q&amp;A responses (correct, confident)</td>
+          <td class="text-center p-3">15</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Professional presentation (delivery, slides)</td>
+          <td class="text-center p-3">5</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div><!-- INTEGRATION & STRATEGY -->
+     <div class="rounded-xl overflow-hidden card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm p-4 pb-2" style="color:var(--primary);">Part D: Integration Strategy (40 pts)</p>
+      <div class="overflow-x-auto">
+       <table class="w-full text-xs">
+        <thead>
+         <tr style="background:rgba(99,255,182,0.08);">
+          <th class="text-left p-3 font-heading">Criteria</th>
+          <th class="text-center p-3 font-heading">Points</th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">All 5 layers present (topology, logic, security, reliability, ops)</td>
+          <td class="text-center p-3">10</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Security &amp; reliability work together seamlessly</td>
+          <td class="text-center p-3">10</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Design solves stated business requirements</td>
+          <td class="text-center p-3">10</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Cost vs. benefit analysis provided</td>
+          <td class="text-center p-3">10</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div><!-- GRADING SCALE -->
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-3" style="color:var(--primary);">📊 Grading Scale (200 pts total)</p>
+      <div class="space-y-2 text-xs">
+       <div class="flex items-center gap-4">
+        <div class="w-20 font-heading" style="color:var(--primary);">
+         180-200
+        </div>
+        <div class="flex-1">
+         <div class="h-2 rounded-full" style="background:var(--primary);"></div>
+        </div>
+        <div class="font-heading">
+         A (90-100%)
+        </div>
+       </div>
+       <div class="flex items-center gap-4">
+        <div class="w-20 font-heading" style="color:var(--secondary);">
+         160-179
+        </div>
+        <div class="flex-1">
+         <div class="h-2 rounded-full" style="background:var(--secondary);"></div>
+        </div>
+        <div class="font-heading">
+         B (80-89%)
+        </div>
+       </div>
+       <div class="flex items-center gap-4">
+        <div class="w-20 font-heading" style="color:#63b6ff;">
+         140-159
+        </div>
+        <div class="flex-1">
+         <div class="h-2 rounded-full" style="background:#63b6ff;"></div>
+        </div>
+        <div class="font-heading">
+         C (70-79%)
+        </div>
+       </div>
+       <div class="flex items-center gap-4">
+        <div class="w-20 font-heading" style="color:#ff9999;">
+         120-139
+        </div>
+        <div class="flex-1">
+         <div class="h-2 rounded-full" style="background:#ff9999;"></div>
+        </div>
+        <div class="font-heading">
+         D (60-69%)
+        </div>
+       </div>
+       <div class="flex items-center gap-4">
+        <div class="w-20 font-heading" style="color:#ff6363;">
+         Below 120
+        </div>
+        <div class="flex-1">
+         <div class="h-2 rounded-full" style="background:#ff6363;"></div>
+        </div>
+        <div class="font-heading">
+         F (&lt;60%)
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- ==================== TAB 4: FINAL QUIZ ==================== -->
+    <section id="tab-content-4" class="hidden anim-in space-y-6">
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-1" style="color:var(--primary);">✅ Final Comprehensive Quiz</p>
+      <p class="text-xs opacity-70">Test everything you learned all semester! 15 questions covering weeks 1-5.</p>
+      <div class="flex items-center gap-3 mt-3">
+       <div class="text-xs px-3 py-1 rounded-full" style="background:rgba(99,255,182,0.12);color:var(--primary);" id="quiz-score">
+        Score: 0 / 15
+       </div><button onclick="resetQuiz()" class="text-xs px-3 py-1 rounded-full cursor-pointer" style="background:rgba(255,255,255,0.06);color:var(--text);border:1px solid rgba(255,255,255,0.1);">Reset</button>
+      </div>
+     </div>
+     <div id="quiz-container" class="space-y-4"></div>
+    </section>
+    <div>
+     <h2 class="font-heading text-lg mb-4" style="color:var(--primary);"><i data-lucide="alert-triangle" style="width:20px;height:20px;display:inline;vertical-align:middle;margin-right:6px;"></i>Network Reliability Concepts</h2>
+     <div class="rounded-xl p-5 mb-4" style="background:var(--surface);">
+      <p class="text-sm leading-relaxed mb-3"><strong>Network reliability</strong> means: <em>"When I need the network, it's there. When it fails, I know why and can fix it fast."</em></p>
+      <div class="grid sm:grid-cols-2 gap-4">
+       <div class="rounded-lg p-4 border" style="border-color:var(--primary);background:rgba(99,255,182,0.04);">
+        <p class="font-heading text-sm mb-1" style="color:var(--primary);">⏱️ Uptime</p>
+        <p class="text-sm opacity-80">The percentage of time the network is working. Target: <strong>99.9%</strong> (acceptable) to <strong>99.99%</strong> (excellent, called "4 nines").</p>
+        <p class="text-xs mt-2 opacity-60 italic">Example: 99.9% = only 43 min down per month</p>
+       </div>
+       <div class="rounded-lg p-4 border" style="border-color:var(--secondary);background:rgba(255,182,99,0.04);">
+        <p class="font-heading text-sm mb-1" style="color:var(--secondary);">⚡ MTBF &amp; MTTR</p>
+        <p class="text-sm opacity-80"><strong>MTBF</strong> = Mean Time Between Failures (how long before it breaks). <strong>MTTR</strong> = Mean Time To Repair (how fast you fix it).</p>
+        <p class="text-xs mt-2 opacity-60 italic">Higher MTBF + Lower MTTR = Better reliability</p>
+       </div>
+      </div>
+     </div><!-- REDUNDANCY -->
+     <h3 class="font-heading text-sm mb-3 opacity-70">Key Reliability Strategies</h3>
+     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+       <div class="text-2xl mb-2">
+        🔄
+       </div>
+       <p class="font-heading text-sm mb-1">Redundancy</p>
+       <p class="text-xs opacity-70 leading-relaxed">Have backup equipment ready. If Router A fails, Router B takes over automatically. Example: dual ISPs, redundant switches, failover servers.</p>
+       <p class="text-xs mt-2 opacity-50" style="color:var(--primary);">PhilHealth fix: Add a second internet connection + backup router</p>
+      </div>
+      <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+       <div class="text-2xl mb-2">
+        🛡️
+       </div>
+       <p class="font-heading text-sm mb-1">Fault Tolerance</p>
+       <p class="text-xs opacity-70 leading-relaxed">The system keeps running even when parts fail. RAID storage, link aggregation, clustering. One failure ≠ total system down.</p>
+       <p class="text-xs mt-2 opacity-50" style="color:var(--primary);">PhilHealth fix: Use RAID 1 (mirroring) for database server</p>
+      </div>
+      <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+       <div class="text-2xl mb-2">
+        📋
+       </div>
+       <p class="font-heading text-sm mb-1">Maintenance Planning</p>
+       <p class="text-xs opacity-70 leading-relaxed">Preventive maintenance (scheduled updates) beats emergency repairs. Test backups monthly. Monitor proactively.</p>
+       <p class="text-xs mt-2 opacity-50" style="color:var(--primary);">PhilHealth fix: Monthly device health checks + quarterly DR drills</p>
+      </div>
+      <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+       <div class="text-2xl mb-2">
+        📊
+       </div>
+       <p class="font-heading text-sm mb-1">Monitoring &amp; Alerting</p>
+       <p class="text-xs opacity-70 leading-relaxed">Real-time systems watch network health. Alert staff before problems explode. Know CPU usage, bandwidth, error rates.</p>
+       <p class="text-xs mt-2 opacity-50" style="color:var(--primary);">PhilHealth fix: Use SNMP monitoring to alert on high link utilization</p>
+      </div>
+      <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+       <div class="text-2xl mb-2">
+        📚
+       </div>
+       <p class="font-heading text-sm mb-1">SLA &amp; Recovery Plans</p>
+       <p class="text-xs opacity-70 leading-relaxed">Service Level Agreement defines "acceptable downtime." Disaster Recovery (DR) plan explains exact steps to restore critical services.</p>
+       <p class="text-xs mt-2 opacity-50" style="color:var(--primary);">PhilHealth fix: Define RTO (Recovery Time Objective) and RPO (Recovery Point Objective)</p>
+      </div>
+      <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+       <div class="text-2xl mb-2">
+        🧪
+       </div>
+       <p class="font-heading text-sm mb-1">Testing &amp; Validation</p>
+       <p class="text-xs opacity-70 leading-relaxed">Regularly test: failover, restore from backups, disaster recovery procedures. Find problems in drills, not real emergencies.</p>
+       <p class="text-xs mt-2 opacity-50" style="color:var(--primary);">PhilHealth fix: Quarterly disaster recovery simulation</p>
+      </div>
+     </div>
+    </div><!-- SECTION: NETWORK DOCUMENTATION -->
+    <div>
+     <h2 class="font-heading text-lg mb-4" style="color:var(--primary);"><i data-lucide="shield" style="width:20px;height:20px;display:inline;vertical-align:middle;margin-right:6px;"></i>Network Documentation Types</h2>
+     <p class="text-sm opacity-70 mb-4">Good documentation is like a <strong>recipe book for your network</strong>. When you're gone, anyone can follow it. When disasters happen, you have the playbook.</p>
+     <div class="space-y-3">
+      <div class="rounded-xl p-4 card-glow flex gap-4 items-start" style="background:var(--surface);">
+       <div class="text-2xl flex-shrink-0">
+        📐
+       </div>
+       <div>
+        <p class="font-heading text-sm" style="color:var(--primary);">1. Physical Network Diagram</p>
+        <p class="text-xs opacity-80 mt-1 leading-relaxed"><strong>What:</strong> Visual map showing actual devices: routers, switches, servers, PCs, printers, connections.</p>
+        <p class="text-xs opacity-60 mt-1"><strong>Includes:</strong> Device names, locations (which office), physical connections, cable types, power sources.</p>
+        <p class="text-xs opacity-50 mt-1 italic">📊 PhilHealth use: Instant location if a router dies — "It's on the 3rd floor in Comms Room"</p>
+       </div>
+      </div>
+      <div class="rounded-xl p-4 card-glow flex gap-4 items-start" style="background:var(--surface);">
+       <div class="text-2xl flex-shrink-0">
+        🌐
+       </div>
+       <div>
+        <p class="font-heading text-sm" style="color:var(--primary);">2. Logical Network Diagram</p>
+        <p class="text-xs opacity-80 mt-1 leading-relaxed"><strong>What:</strong> Shows how data flows: IP addresses, subnets, VLAN assignments, routing paths.</p>
+        <p class="text-xs opacity-60 mt-1"><strong>Includes:</strong> IP ranges per subnet, device IPs, firewall rules, DMZ, VPN connections.</p>
+        <p class="text-xs opacity-50 mt-1 italic">📊 PhilHealth use: Troubleshooting connectivity — "Why can't office B reach the database server?"</p>
+       </div>
+      </div>
+      <div class="rounded-xl p-4 card-glow flex gap-4 items-start" style="background:var(--surface);">
+       <div class="text-2xl flex-shrink-0">
+        📋
+       </div>
+       <div>
+        <p class="font-heading text-sm" style="color:var(--primary);">3. Device Inventory &amp; Configuration</p>
+        <p class="text-xs opacity-80 mt-1 leading-relaxed"><strong>What:</strong> Detailed list of every device: model, serial number, OS version, purchase date, warranty, config details.</p>
+        <p class="text-xs opacity-60 mt-1"><strong>Includes:</strong> MAC addresses, installed software, current configs, backup locations.</p>
+        <p class="text-xs opacity-50 mt-1 italic">📊 PhilHealth use: "The backup router needs warranty support — looking it up instantly"</p>
+       </div>
+      </div>
+      <div class="rounded-xl p-4 card-glow flex gap-4 items-start" style="background:var(--surface);">
+       <div class="text-2xl flex-shrink-0">
+        🧰
+       </div>
+       <div>
+        <p class="font-heading text-sm" style="color:var(--primary);">4. Troubleshooting Runbooks</p>
+        <p class="text-xs opacity-80 mt-1 leading-relaxed"><strong>What:</strong> Step-by-step guides for common issues: "Network down," "Can't reach server," "Slow internet."</p>
+        <p class="text-xs opacity-60 mt-1"><strong>Includes:</strong> Tests to run, expected results, resolution steps, escalation procedures.</p>
+        <p class="text-xs opacity-50 mt-1 italic">📊 PhilHealth use: New admin can fix 80% of problems without calling you at 2 AM</p>
+       </div>
+      </div>
+      <div class="rounded-xl p-4 card-glow flex gap-4 items-start" style="background:var(--surface);">
+       <div class="text-2xl flex-shrink-0">
+        🆘
+       </div>
+       <div>
+        <p class="font-heading text-sm" style="color:var(--primary);">5. Disaster Recovery Plan (DRP)</p>
+        <p class="text-xs opacity-80 mt-1 leading-relaxed"><strong>What:</strong> The "recover from apocalypse" playbook. Defines Recovery Time Objective (RTO) and Recovery Point Objective (RPO).</p>
+        <p class="text-xs opacity-60 mt-1"><strong>Includes:</strong> Contact list, backup locations, failover procedures, data restore steps, testing schedule.</p>
+        <p class="text-xs opacity-50 mt-1 italic">📊 PhilHealth use: Earthquake happens, data center flooded — follow DRP, critical services back in 4 hours</p>
+       </div>
+      </div>
+      <div class="rounded-xl p-4 card-glow flex gap-4 items-start" style="background:var(--surface);">
+       <div class="text-2xl flex-shrink-0">
+        📊
+       </div>
+       <div>
+        <p class="font-heading text-sm" style="color:var(--primary);">6. Performance &amp; Monitoring Baseline</p>
+        <p class="text-xs opacity-80 mt-1 leading-relaxed"><strong>What:</strong> "Normal" values for CPU, memory, bandwidth, latency, packet loss. Alerts trigger when these deviate.</p>
+        <p class="text-xs opacity-60 mt-1"><strong>Includes:</strong> Monitored metrics, alert thresholds, responsible parties, trending data.</p>
+        <p class="text-xs opacity-50 mt-1 italic">📊 PhilHealth use: Alert fires — "CPU on main switch = 95%, someone misconfigured?" vs normal 20%</p>
+       </div>
+      </div>
+     </div><!-- SUMMARY TABLE -->
+     <div class="mt-6 rounded-xl overflow-hidden card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm p-4 pb-2" style="color:var(--primary);">🗺️ Quick Reference: Documentation Uses</p>
+      <div class="overflow-x-auto">
+       <table class="w-full text-xs">
+        <thead>
+         <tr style="background:rgba(99,255,182,0.08);">
+          <th class="text-left p-3 font-heading">Document</th>
+          <th class="text-left p-3 font-heading">Who Uses It</th>
+          <th class="text-left p-3 font-heading">When It Saves You</th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Physical Diagram</td>
+          <td class="p-3 opacity-70">Technician onsite</td>
+          <td class="p-3" style="color:var(--primary);">Device failed — where is it physically?</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Logical Diagram</td>
+          <td class="p-3 opacity-70">Network engineer</td>
+          <td class="p-3" style="color:var(--primary);">Network not connecting — why? Data flow issue?</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Inventory</td>
+          <td class="p-3 opacity-70">IT Manager</td>
+          <td class="p-3" style="color:var(--primary);">Budgeting, warranty claims, replacement</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Runbook</td>
+          <td class="p-3 opacity-70">All support staff</td>
+          <td class="p-3" style="color:var(--primary);">Common problem — fix it FAST without escalation</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">DRP</td>
+          <td class="p-3 opacity-70">Emergency responders</td>
+          <td class="p-3" style="color:var(--primary);">Major disaster — recover services in order of criticality</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Baseline</td>
+          <td class="p-3 opacity-70">Monitoring system</td>
+          <td class="p-3" style="color:var(--primary);">Performance degradation — proactive alert</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div>
+    </div><!-- ==================== TAB 1: PACKET TRACER ==================== -->
+    <section id="tab-content-1" class="hidden anim-in space-y-6">
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-1" style="color:var(--primary);">🧪 Packet Tracer Lab: PhilHealth Network &amp; Monitoring</p>
+      <p class="text-xs opacity-70">Build a realistic multi-office network with monitoring to measure reliability.</p>
+     </div><!-- NETWORK TOPOLOGY -->
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-3" style="color:var(--secondary);">📐 Network Topology to Build</p>
+      <div class="rounded-lg p-4 text-xs font-mono leading-loose" style="background:rgba(0,0,0,0.3);color:var(--primary);overflow-x-auto;white-space:pre;">
+       PHILHEALTH REGIONAL HUB ISP Connection (Internet) | [Main Router] / | \ Office1 Office2 Database Switch Switch Server /|\ /|\ | PCs PCs Backup Srv Subnets: Main Office: 10.0.1.0/24 Remote Office: 10.0.2.0/24 Database Site: 10.0.3.0/24 WAN Links: 172.16.0.0/16
+      </div>
+      <p class="text-xs opacity-50 mt-2">Demonstrates redundancy, monitoring, and failover concepts</p>
+     </div><!-- STEPS -->
+     <div>
+      <h3 class="font-heading text-sm mb-4" style="color:var(--primary);">Step-by-Step Instructions (Complete in 45 min)</h3>
+      <div class="space-y-1"><!-- PART 1 -->
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-xs uppercase tracking-wider mb-3" style="color:var(--secondary);">Part 1: Network Topology Setup (15 min)</p>
+        <div class="space-y-3">
+         <div class="step-line relative flex gap-3">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-xs" style="background:var(--primary);color:var(--bg);">
+           1
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Create the network backbone</p>
+           <p class="text-xs opacity-70 mt-1">Add 1× Cisco 2821 (Main Router), 2× Cisco 1841 (Remote &amp; DB), 3× Cisco 2960 Switches</p>
+          </div>
+         </div>
+         <div class="step-line relative flex gap-3">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-xs" style="background:var(--primary);color:var(--bg);">
+           2
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Connect routers via WAN links</p>
+           <p class="text-xs opacity-70 mt-1">Serial connections: Main S0/0→Remote S0/0, Main S0/1→DB S0/0 (clock rate 64000)</p>
+          </div>
+         </div>
+         <div class="step-line relative flex gap-3">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-xs" style="background:var(--primary);color:var(--bg);">
+           3
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Connect routers to switches (LAN)</p>
+           <p class="text-xs opacity-70 mt-1">Each router Fa0/0 or Fa0/1 connects to switch Fa0/1 (copper straight-through)</p>
+          </div>
+         </div>
+         <div class="relative flex gap-3">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-xs" style="background:var(--primary);color:var(--bg);">
+           4
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Add end devices (6 total)</p>
+           <p class="text-xs opacity-70 mt-1">Office1: 2 PCs | Office2: 2 PCs | DB Site: 1 Server + 1 Backup → connect to switches Fa0/2, Fa0/3, etc.</p>
+          </div>
+         </div>
+        </div>
+       </div><!-- PART 2 -->
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-xs uppercase tracking-wider mb-3" style="color:var(--secondary);">Part 2: IP Configuration &amp; Routing (15 min)</p>
+        <div class="space-y-3">
+         <div class="step-line relative flex gap-3">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-xs" style="background:var(--primary);color:var(--bg);">
+           5
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Configure Main Router interfaces</p>
+           <div class="rounded-lg p-3 text-xs font-mono mt-1" style="background:rgba(0,0,0,0.3);color:var(--primary);overflow-x-auto;">
+            <p>enable → configure terminal</p>
+            <p>interface fa0/0 → ip address 10.0.1.1 255.255.255.0 → no shutdown</p>
+            <p>interface s0/0 → ip address 172.16.1.1 255.255.255.0 → clock rate 64000 → no shutdown</p>
+            <p>interface s0/1 → ip address 172.16.2.1 255.255.255.0 → clock rate 64000 → no shutdown</p>
+           </div>
+          </div>
+         </div>
+         <div class="step-line relative flex gap-3">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-xs" style="background:var(--primary);color:var(--bg);">
+           6
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Configure Remote &amp; DB routers similarly</p>
+           <p class="text-xs opacity-70 mt-1">Remote: Fa0/0=10.0.2.1, S0/0=172.16.1.2 | DB: Fa0/0=10.0.3.1, S0/0=172.16.2.2</p>
+          </div>
+         </div>
+         <div class="step-line relative flex gap-3">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-xs" style="background:var(--primary);color:var(--bg);">
+           7
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Enable RIP v2 routing on all routers</p>
+           <div class="rounded-lg p-2 text-xs font-mono mt-1" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            <p>router rip → version 2 → network 10.0.0.0 → network 172.16.0.0</p>
+           </div>
+          </div>
+         </div>
+         <div class="relative flex gap-3">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-xs" style="background:var(--primary);color:var(--bg);">
+           8
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Assign IPs to end devices</p>
+           <p class="text-xs opacity-70 mt-1">Main-PC1: 10.0.1.10 | Main-PC2: 10.0.1.20 | Remote-PC1: 10.0.2.30 | Remote-PC2: 10.0.2.40 | Server: 10.0.3.50 | Backup: 10.0.3.60 (all gateways = router on that segment)</p>
+          </div>
+         </div>
+        </div>
+       </div><!-- PART 3 -->
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-xs uppercase tracking-wider mb-3" style="color:var(--secondary);">Part 3: Monitoring &amp; Reliability (10 min)</p>
+        <div class="space-y-3">
+         <div class="step-line relative flex gap-3">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-xs" style="background:var(--primary);color:var(--bg);">
+           9
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Enable SNMP monitoring on main router</p>
+           <div class="rounded-lg p-2 text-xs font-mono mt-1" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            <p>snmp-server community PhilHealth RO</p>
+            <p>snmp-server location "HQ-3rdFloor"</p>
+            <p>snmp-server contact "NetAdmin-555-1234"</p>
+           </div>
+          </div>
+         </div>
+         <div class="relative flex gap-3">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-xs" style="background:var(--primary);color:var(--bg);">
+           10
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Test failover: Disable one WAN link &amp; verify rerouting</p>
+           <p class="text-xs opacity-70 mt-1">Shutdown Main S0/0 → wait 30sec → ping from Office1 to Office2 (should still work via alternate path)</p>
+          </div>
+         </div>
+        </div>
+       </div><!-- PART 4 -->
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-xs uppercase tracking-wider mb-3" style="color:var(--secondary);">Part 4: Validation &amp; Save (5 min)</p>
+        <div class="space-y-3">
+         <div class="step-line relative flex gap-3">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-xs" style="background:var(--primary);color:var(--bg);">
+           11
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Full connectivity test</p>
+           <p class="text-xs opacity-70 mt-1">Main-PC1 → ping 10.0.2.30, 10.0.3.50 (both should succeed) | Check show ip route on routers</p>
+          </div>
+         </div>
+         <div class="relative flex gap-3">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-xs" style="background:var(--primary);color:var(--bg);">
+           12
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Save file as: PhilHealth-Reliable-Network.pkt</p>
+           <p class="text-xs opacity-70 mt-1">File → Save As</p>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- ==================== TAB 2: ACTIVITY ==================== -->
+    <section id="tab-content-2" class="hidden anim-in space-y-6">
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-1" style="color:var(--primary);">📝 Student Activity: Build &amp; Document Your Network</p>
+      <p class="text-xs opacity-70">Create a reliable network and document it comprehensively.</p>
+      <div class="flex gap-3 mt-3 flex-wrap"><span class="text-xs px-3 py-1 rounded-full" style="background:rgba(99,255,182,0.12);color:var(--primary);">Individual</span> <span class="text-xs px-3 py-1 rounded-full" style="background:rgba(255,182,99,0.12);color:var(--secondary);">50 minutes</span> <span class="text-xs px-3 py-1 rounded-full" style="background:rgba(99,182,255,0.12);color:#63b6ff;">Network + Docs</span>
+      </div>
+     </div><!-- SCENARIO -->
+     <div class="scenario-box rounded-r-xl p-5" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-2" style="color:var(--secondary);">📖 Your Scenario</p>
+      <p class="text-sm leading-relaxed opacity-90">You're the network engineer for <strong>"MedTech Clinic"</strong> with 3 locations: Main (20 PCs), Branch (10 PCs), Server Farm (database). Current state: chaos! No documentation. Director needs: (1) a reliable network with failover capability, (2) complete documentation, (3) a 1-page reliability report.</p>
+     </div><!-- CHALLENGES -->
+     <div class="space-y-4">
+      <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--secondary);color:var(--bg);">
+         A
+        </div>
+        <div>
+         <p class="font-heading text-sm">Design a Reliable 3-Site Network in Packet Tracer</p>
+         <p class="text-xs opacity-70 mt-1 leading-relaxed">Must include: Redundant WAN links, RIP routing, at least 1 failover test scenario.</p>
+         <p class="text-xs mt-2 opacity-50">📊 Points: 20</p>
+        </div>
+       </div>
+      </div>
+      <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--secondary);color:var(--bg);">
+         B
+        </div>
+        <div>
+         <p class="font-heading text-sm">Create Physical Network Diagram</p>
+         <p class="text-xs opacity-70 mt-1 leading-relaxed">Draw/document: All routers, switches, PCs, connections, cable types, physical locations. (Hand-drawn or tool-drawn acceptable)</p>
+         <p class="text-xs mt-2 opacity-50">📊 Points: 15</p>
+        </div>
+       </div>
+      </div>
+      <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--secondary);color:var(--bg);">
+         C
+        </div>
+        <div>
+         <p class="font-heading text-sm">Create Logical Network Diagram</p>
+         <p class="text-xs opacity-70 mt-1 leading-relaxed">Document: All IP addresses, subnets, routing protocols, ACLs (if any), failover mechanism.</p>
+         <p class="text-xs mt-2 opacity-50">📊 Points: 15</p>
+        </div>
+       </div>
+      </div>
+      <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--secondary);color:var(--bg);">
+         D
+        </div>
+        <div>
+         <p class="font-heading text-sm">Device Inventory Spreadsheet</p>
+         <p class="text-xs opacity-70 mt-1 leading-relaxed">Create table: Device Name, Type, Model, IP Address, Location, Serial (fake OK), Purchase Date, Notes. At least 8 devices.</p>
+         <p class="text-xs mt-2 opacity-50">📊 Points: 10</p>
+        </div>
+       </div>
+      </div>
+     </div><!-- RUBRIC -->
+     <div class="rounded-xl overflow-hidden card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm p-4 pb-2" style="color:var(--primary);">📊 Grading Rubric (Total: 60 pts)</p>
+      <div class="overflow-x-auto">
+       <table class="w-full text-xs">
+        <thead>
+         <tr style="background:rgba(99,255,182,0.08);">
+          <th class="text-left p-3 font-heading">Criteria</th>
+          <th class="text-center p-3 font-heading">Points</th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Packet Tracer: 3-site network with redundancy + routing</td>
+          <td class="text-center p-3">20</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Physical diagram (clear, labeled, complete)</td>
+          <td class="text-center p-3">15</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Logical diagram (IPs, subnets, routing correct)</td>
+          <td class="text-center p-3">15</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Device inventory (8+ devices, complete info)</td>
+          <td class="text-center p-3">10</td>
+         </tr>
+         <tr class="border-t font-semibold" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3" style="color:var(--primary);">TOTAL</td>
+          <td class="text-center p-3" style="color:var(--primary);">60</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div>
+    </section><!-- ==================== TAB 3: DOCUMENTATION ==================== -->
+    <section id="tab-content-3" class="hidden anim-in space-y-6">
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-1" style="color:var(--primary);">📋 Network Documentation Templates &amp; Examples</p>
+      <p class="text-xs opacity-70">Use these templates to document YOUR network from the activity.</p>
+      <div class="flex gap-3 mt-3 flex-wrap"><span class="text-xs px-3 py-1 rounded-full" style="background:rgba(99,255,182,0.12);color:var(--primary);">Reference</span> <span class="text-xs px-3 py-1 rounded-full" style="background:rgba(255,182,99,0.12);color:var(--secondary);">Templates</span> <span class="text-xs px-3 py-1 rounded-full" style="background:rgba(99,182,255,0.12);color:#63b6ff;">Printable</span>
+      </div>
+     </div><!-- TEMPLATES -->
+     <div class="space-y-4">
+      <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+       <p class="font-heading text-sm mb-3" style="color:var(--primary);">🗂️ Template 1: Device Inventory Table</p>
+       <div class="overflow-x-auto">
+        <table class="w-full text-xs">
+         <thead>
+          <tr style="background:rgba(99,255,182,0.08);">
+           <th class="text-left p-2 font-heading">Device Name</th>
+           <th class="text-left p-2 font-heading">Type</th>
+           <th class="text-left p-2 font-heading">Model</th>
+           <th class="text-left p-2 font-heading">IP Address</th>
+           <th class="text-left p-2 font-heading">Location</th>
+           <th class="text-left p-2 font-heading">Serial #</th>
+           <th class="text-left p-2 font-heading">Notes</th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+           <td class="p-2">Main-Router</td>
+           <td class="p-2">Router</td>
+           <td class="p-2">Cisco 2821</td>
+           <td class="p-2">10.0.1.1</td>
+           <td class="p-2">HQ - Server Room</td>
+           <td class="p-2">ABC123456</td>
+           <td class="p-2">WAN failover enabled</td>
+          </tr>
+          <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+           <td class="p-2">Main-Switch</td>
+           <td class="p-2">Switch</td>
+           <td class="p-2">Cisco 2960</td>
+           <td class="p-2">10.0.1.2</td>
+           <td class="p-2">HQ - Server Room</td>
+           <td class="p-2">XYZ987654</td>
+           <td class="p-2">Backup power via UPS</td>
+          </tr>
+          <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+           <td class="p-2">Main-PC-1</td>
+           <td class="p-2">Workstation</td>
+           <td class="p-2">Dell OptiPlex</td>
+           <td class="p-2">10.0.1.10</td>
+           <td class="p-2">HQ - Admin Office</td>
+           <td class="p-2">DEL111222</td>
+           <td class="p-2">Admin use only</td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </div>
+      <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+       <p class="font-heading text-sm mb-3" style="color:var(--primary);">🧰 Template 2: Simple Troubleshooting Runbook</p>
+       <div class="space-y-3 text-xs">
+        <div>
+         <p class="font-heading" style="color:var(--primary);">Issue: "Network Down – No Internet"</p>
+         <div class="mt-1 space-y-1 opacity-80">
+          <p><strong>Step 1:</strong> Ping main router (10.0.1.1) from local PC</p>
+          <p class="opacity-60 ml-3">✓ Success → Go to Step 3 | ✗ Failure → Go to Step 2</p>
+          <p><strong>Step 2:</strong> Check physical connections: Router power ON? Cable plugged in? Lights on?</p>
+          <p class="opacity-60 ml-3">If not, reconnect/power cycle. Wait 2 min, retry step 1.</p>
+          <p><strong>Step 3:</strong> Ping external IP (8.8.8.8, Google DNS)</p>
+          <p class="opacity-60 ml-3">✓ Success → Internet OK | ✗ Failure → ISP issue, call provider</p>
+          <p><strong>Step 4:</strong> If issue unresolved after 10 min, escalate to Senior Admin</p>
+          <p class="opacity-60 ml-3">Contact: John (555-0100) or Sarah (555-0200)</p>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+       <p class="font-heading text-sm mb-3" style="color:var(--primary);">🆘 Template 3: Disaster Recovery Plan (1-page summary)</p>
+       <div class="space-y-2 text-xs">
+        <div class="rounded-lg p-2" style="background:rgba(0,0,0,0.2);">
+         <p><strong>Organization:</strong> MedTech Clinic | <strong>Date Created:</strong> [DATE] | <strong>Version:</strong> 1.0</p>
+         <p class="mt-1"><strong>RTO (Recovery Time Objective):</strong> 4 hours for critical systems</p>
+         <p><strong>RPO (Recovery Point Objective):</strong> 1 hour (data loss acceptable if &lt;1hr old)</p>
+         <p class="mt-1"><strong>Primary Disaster Scenarios:</strong></p>
+         <p class="opacity-70 ml-3">• Data center fire/flood → Activate backup location</p>
+         <p class="opacity-70 ml-3">• Network hardware failure → Automatic failover via HSRP</p>
+         <p class="opacity-70 ml-3">• Ransomware attack → Restore from offline backup (daily 6 PM)</p>
+         <p class="mt-1"><strong>Recovery Steps (in order):</strong></p>
+         <p class="opacity-70 ml-3">1. Notify all team members (phone tree: John→Sarah→Mike)</p>
+         <p class="opacity-70 ml-3">2. Activate backup router at alternate location (30 min)</p>
+         <p class="opacity-70 ml-3">3. Restore database from overnight backup (60 min)</p>
+         <p class="opacity-70 ml-3">4. Bring offices online one by one (90 min)</p>
+         <p class="opacity-70 ml-3">5. Total = ~4 hours to full operation</p>
+         <p class="mt-1"><strong>Backup Location:</strong> [ADDRESS] | <strong>Equipment:</strong> Router + Switch + Server</p>
+         <p class="mt-1"><strong>Last Tested:</strong> [DATE] | <strong>Next Test:</strong> [DATE, usually quarterly]</p>
+        </div>
+       </div>
+      </div>
+      <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+       <p class="font-heading text-sm mb-3" style="color:var(--primary);">📊 Template 4: Network Baseline (Monitoring Reference)</p>
+       <div class="space-y-2 text-xs">
+        <div class="rounded-lg p-2" style="background:rgba(0,0,0,0.2);">
+         <p><strong>Device:</strong> Main Router | <strong>Metric:</strong> CPU Utilization</p>
+         <p><strong>Normal Range:</strong> 5-20% | <strong>Warning Threshold:</strong> 60% | <strong>Critical Threshold:</strong> 85%</p>
+         <p class="mt-1"><strong>Device:</strong> Main Server | <strong>Metric:</strong> Memory Usage</p>
+         <p><strong>Normal Range:</strong> 40-60% | <strong>Warning:</strong> 75% | <strong>Critical:</strong> 90%</p>
+         <p class="mt-1"><strong>All Links:</strong> Packet Loss = 0% (normal) | &gt;1% = investigate | &gt;5% = critical</p>
+         <p class="mt-1"><strong>Internet Link (WAN):</strong> Avg Latency 30-50ms (normal) | &gt;200ms = slow</p>
+         <p class="mt-1"><strong>Monitoring Tool:</strong> Cisco Prime / PRTG / Zabbix | <strong>Check Frequency:</strong> Every 5 minutes</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- ==================== TAB 4: QUIZ ==================== -->
+    <section id="tab-content-4" class="hidden anim-in space-y-6">
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-1" style="color:var(--primary);">✅ Knowledge Check Quiz</p>
+      <p class="text-xs opacity-70">Test your understanding! 10 questions on reliability and documentation concepts.</p>
+      <div class="flex items-center gap-3 mt-3">
+       <div class="text-xs px-3 py-1 rounded-full" style="background:rgba(99,255,182,0.12);color:var(--primary);" id="quiz-score">
+        Score: 0 / 10
+       </div><button onclick="resetQuiz()" class="text-xs px-3 py-1 rounded-full cursor-pointer" style="background:rgba(255,255,255,0.06);color:var(--text);border:1px solid rgba(255,255,255,0.1);">Reset</button>
+      </div>
+     </div>
+     <div id="quiz-container" class="space-y-4"></div>
+    </section>
+   </main><!-- FOOTER -->
+   <footer class="max-w-5xl mx-auto px-4 py-6 text-center">
+    <p class="text-xs opacity-30 font-heading" id="el-footer">IS103 — IT Infrastructure and Network Technologies | Finals Week 4</p>
+   </footer>
+  </div>
+  <script>
+// ---- CONFIG & SDK ----
+const defaultConfig = {
+  background_color: '#0f172a',
+  surface_color: '#1e293b',
+  text_color: '#e2e8f0',
+  primary_color: '#63ffb6',
+  secondary_color: '#ffb663',
+  font_family: 'DM Sans',
+  font_size: 14,
+  course_title: 'IS103 - IT Infrastructure and Network Technologies',
+  professor_name: 'Prof. MKDB',
+  week_label: 'Finals Week 4'
+};
+
+function applyConfig(cfg) {
+  const c = { ...defaultConfig, ...cfg };
+  const root = document.getElementById('app');
+  root.style.setProperty('--bg', c.background_color);
+  root.style.setProperty('--surface', c.surface_color);
+  root.style.setProperty('--text', c.text_color);
+  root.style.setProperty('--primary', c.primary_color);
+  root.style.setProperty('--secondary', c.secondary_color);
+  root.style.background = c.background_color;
+  root.style.color = c.text_color;
+  root.style.fontFamily = `${c.font_family}, DM Sans, sans-serif`;
+
+  document.getElementById('el-course').textContent = c.course_title;
+  document.getElementById('el-prof').textContent = c.professor_name;
+  document.getElementById('el-week').textContent = c.week_label;
+  document.getElementById('el-footer').textContent = `${c.course_title} | ${c.week_label}`;
+
+  document.querySelectorAll('.tab-active').forEach(t => t.style.borderColor = c.primary_color);
+}
+
+applyConfig(defaultConfig);
+
+if (window.elementSdk) {
+  window.elementSdk.init({
+    defaultConfig,
+    onConfigChange: async (cfg) => applyConfig(cfg),
+    mapToCapabilities: (cfg) => ({
+      recolorables: [
+        { get: () => cfg.background_color || defaultConfig.background_color, set: v => { cfg.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+        { get: () => cfg.surface_color || defaultConfig.surface_color, set: v => { cfg.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+        { get: () => cfg.text_color || defaultConfig.text_color, set: v => { cfg.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+        { get: () => cfg.primary_color || defaultConfig.primary_color, set: v => { cfg.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); } },
+        { get: () => cfg.secondary_color || defaultConfig.secondary_color, set: v => { cfg.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); } },
+      ],
+      borderables: [],
+      fontEditable: { get: () => cfg.font_family || defaultConfig.font_family, set: v => { cfg.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+      fontSizeable: { get: () => cfg.font_size || defaultConfig.font_size, set: v => { cfg.font_size = v; window.elementSdk.setConfig({ font_size: v }); } },
+    }),
+    mapToEditPanelValues: (cfg) => new Map([
+      ['course_title', cfg.course_title || defaultConfig.course_title],
+      ['professor_name', cfg.professor_name || defaultConfig.professor_name],
+      ['week_label', cfg.week_label || defaultConfig.week_label],
+    ])
+  });
+}
+
+// ---- TABS ----
+let activeTab = 0;
+function switchTab(idx) {
+  document.getElementById(`tab-content-${activeTab}`).classList.add('hidden');
+  document.getElementById(`tab-content-${idx}`).classList.remove('hidden');
+  const tabs = document.querySelectorAll('#tab-bar button');
+  tabs[activeTab].className = tabs[activeTab].className.replace('tab-active', 'tab-inactive');
+  tabs[idx].className = tabs[idx].className.replace('tab-inactive', 'tab-active');
+  const cfg = window.elementSdk ? window.elementSdk.config : defaultConfig;
+  tabs[idx].style.borderColor = cfg.primary_color || defaultConfig.primary_color;
+  tabs[activeTab].style.borderColor = 'transparent';
+  activeTab = idx;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ---- QUIZ ----
+const quizData = [
+  { q: "Uptime of 99.9% means your network is down how long per month?", opts: ["1 hour", "43 minutes", "5 minutes", "1 day"], ans: 1 },
+  { q: "MTBF stands for:", opts: ["Mean Time Before Failure", "Mean Time Between Failures", "Mean Total Backup Files", "Mean Traffic Bandwidth Flow"], ans: 1 },
+  { q: "Redundancy in networking means:", opts: ["Using one powerful device", "Having backup equipment ready", "Reducing bandwidth costs", "Limiting access"], ans: 1 },
+  { q: "What is the primary purpose of a Physical Network Diagram?", opts: ["Show data flow", "Show device locations physically", "Show IP addresses", "Show security rules"], ans: 1 },
+  { q: "A Logical Network Diagram should include:", opts: ["Cable types", "Device physical locations", "IP addresses and subnets", "Paint colors"], ans: 2 },
+  { q: "RTO means:", opts: ["Redundant Timing Operator", "Recovery Time Objective", "Router Throughput Output", "Real-time Traffic Optimization"], ans: 1 },
+  { q: "When should you test your Disaster Recovery Plan?", opts: ["Only when disaster happens", "Every month", "Every quarter (recommended)", "Once every 5 years"], ans: 2 },
+  { q: "SNMP is used for:", opts: ["Network monitoring and alerts", "File transfer", "Email delivery", "Video streaming"], ans: 0 },
+  { q: "A Device Inventory should track:", opts: ["Employee names", "Model, serial, IP, location, warranty", "Only passwords", "Competitor info"], ans: 1 },
+  { q: "The best time to document your network is:", opts: ["After a major failure", "When you have free time", "Proactively, before problems occur", "Never needed"], ans: 2 },
+];
+
+let quizScore = 0;
+let answered = new Set();
+
+function buildQuiz() {
+  const c = document.getElementById('quiz-container');
+  c.innerHTML = '';
+  quizData.forEach((item, qi) => {
+    const div = document.createElement('div');
+    div.className = 'rounded-xl p-5 card-glow';
+    div.style.background = 'var(--surface)';
+    div.innerHTML = `
+      <p class="font-heading text-xs opacity-50 mb-1">Question ${qi+1} of ${quizData.length}</p>
+      <p class="text-sm font-semibold mb-3">${item.q}</p>
+      <div class="space-y-2" id="q${qi}-opts">
+        ${item.opts.map((o,oi) => `
+          <button onclick="checkAnswer(${qi},${oi})" class="quiz-option w-full text-left text-xs p-3 rounded-lg border" style="border-color:rgba(255,255,255,0.08);" id="q${qi}-o${oi}">
+            <span class="font-heading mr-2">${String.fromCharCode(65+oi)}.</span>${o}
+          </button>
+        `).join('')}
+      </div>
+      <p class="text-xs mt-2 hidden" id="q${qi}-fb"></p>
+    `;
+    c.appendChild(div);
+  });
+}
+
+function checkAnswer(qi, oi) {
+  if (answered.has(qi)) return;
+  answered.add(qi);
+  const correct = quizData[qi].ans;
+  const fb = document.getElementById(`q${qi}-fb`);
+  const chosen = document.getElementById(`q${qi}-o${oi}`);
+  const correctEl = document.getElementById(`q${qi}-o${correct}`);
+
+  if (oi === correct) {
+    chosen.classList.add('quiz-correct');
+    fb.textContent = '✅ Correct!';
+    fb.style.color = '#63ffb6';
+    quizScore++;
+  } else {
+    chosen.classList.add('quiz-wrong');
+    correctEl.classList.add('quiz-correct');
+    fb.textContent = `❌ Incorrect. The answer is ${String.fromCharCode(65+correct)}.`;
+    fb.style.color = '#ff6363';
+  }
+  fb.classList.remove('hidden');
+
+  quizData[qi].opts.forEach((_, i) => {
+    document.getElementById(`q${qi}-o${i}`).style.pointerEvents = 'none';
+  });
+
+  document.getElementById('quiz-score').textContent = `Score: ${quizScore} / ${quizData.length}`;
+}
+
+function resetQuiz() {
+  quizScore = 0;
+  answered.clear();
+  document.getElementById('quiz-score').textContent = `Score: 0 / ${quizData.length}`;
+  buildQuiz();
+}
+
+buildQuiz();
+lucide.createIcons();
+</script>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet">
+  <style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  .font-heading { font-family: 'Space Mono', monospace; }
+  .font-body { font-family: 'DM Sans', sans-serif; }
+  .tab-active { border-bottom: 3px solid var(--primary); color: var(--primary); font-weight: 700; }
+  .tab-inactive { border-bottom: 3px solid transparent; color: #94a3b8; }
+  .tab-inactive:hover { color: var(--text); }
+  .card-glow { box-shadow: 0 0 0 1px rgba(99,255,182,0.08), 0 8px 32px rgba(0,0,0,0.35); }
+  .threat-card:hover { transform: translateY(-2px); transition: transform 0.2s; }
+  .step-line::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 40px;
+    bottom: -8px;
+    width: 2px;
+    background: var(--primary);
+    opacity: 0.25;
+  }
+  .step-line:last-child::before { display: none; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  .anim-in { animation: fadeUp 0.4s ease both; }
+  .quiz-option { transition: all 0.15s; cursor: pointer; }
+  .quiz-option:hover { background: rgba(99,255,182,0.08); }
+  .quiz-correct { background: rgba(99,255,182,0.15) !important; border-color: #63ffb6 !important; }
+  .quiz-wrong { background: rgba(255,99,99,0.12) !important; border-color: #ff6363 !important; }
+  .scenario-box { border-left: 4px solid var(--primary); }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+</style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <div id="app" class="h-full w-full overflow-auto" style="background:var(--bg);color:var(--text);"><!-- HEADER -->
+   <header class="sticky top-0 z-30" style="background:var(--surface);backdrop-filter:blur(8px);">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+     <div>
+      <p class="text-xs tracking-widest uppercase opacity-60 font-heading" id="el-course">IS103 - IT Infrastructure and Network Technologies</p>
+      <h1 class="font-heading text-lg sm:text-xl mt-1" id="el-title" style="color:var(--primary);">📊 Network Reliability &amp; Documentation</h1>
+     </div>
+     <div class="text-right">
+      <p class="text-xs opacity-60" id="el-prof">Prof. MKDB</p>
+      <p class="text-xs opacity-40" id="el-week">Finals Week 4</p>
+     </div>
+    </div><!-- TABS -->
+    <div class="max-w-5xl mx-auto px-4 flex gap-1 overflow-x-auto" id="tab-bar"><button onclick="switchTab(0)" class="tab-active px-3 py-2 text-sm font-heading whitespace-nowrap" data-tab="0">📖 Lesson</button> <button onclick="switchTab(1)" class="tab-inactive px-3 py-2 text-sm font-heading whitespace-nowrap" data-tab="1">🧪 Packet Tracer</button> <button onclick="switchTab(2)" class="tab-inactive px-3 py-2 text-sm font-heading whitespace-nowrap" data-tab="2">📝 Activity</button> <button onclick="switchTab(3)" class="tab-inactive px-3 py-2 text-sm font-heading whitespace-nowrap" data-tab="3">📊 Case Analysis</button> <button onclick="switchTab(4)" class="tab-inactive px-3 py-2 text-sm font-heading whitespace-nowrap" data-tab="4">✅ Quiz</button>
+    </div>
+   </header>
+   <main class="max-w-5xl mx-auto px-4 py-6"><!-- ==================== TAB 0: LESSON ==================== -->
+    <section id="tab-content-0" class="anim-in space-y-8"><!-- ILO -->
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="text-xs uppercase tracking-widest opacity-50 font-heading mb-2">Intended Learning Outcome</p>
+      <p class="text-base font-semibold" style="color:var(--primary);">Evaluate network infrastructure reliability and create comprehensive network documentation to support operations and troubleshooting.</p>
+     </div><!-- REAL WORLD HOOK -->
+     <div class="scenario-box rounded-r-xl p-5" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-2" style="color:var(--secondary);">🏢 Real-Life Scenario</p>
+      <p class="text-sm leading-relaxed opacity-90">You've been promoted to <strong>Network Operations Manager</strong> at <strong>"PhilHealth Regional Hub"</strong> — a government health facility with 50+ computers, 3 offices across the city, and a 24/7 critical database. The director asks: <em>"Our network keeps going down unexpectedly, nobody understands how it's set up, and when disasters happen, we're completely blind. Create documentation and tell me how reliable our network really is."</em></p>
+      <p class="text-sm mt-3 opacity-70">By the end of this lesson, you'll know how to measure reliability, document everything properly, and help the organization run smoothly. Let's go! 🏥</p>
+     </div><!-- SECTION: NETWORK RELIABILITY -->
+     <div>
+      <h2 class="font-heading text-lg mb-4" style="color:var(--primary);"><i data-lucide="alert-triangle" style="width:20px;height:20px;display:inline;vertical-align:middle;margin-right:6px;"></i>Network Reliability Concepts</h2>
+      <div class="rounded-xl p-5 mb-4" style="background:var(--surface);">
+       <p class="text-sm leading-relaxed mb-3"><strong>Network reliability</strong> means: <em>"When I need the network, it's there. When it fails, I know why and can fix it fast."</em></p>
+       <div class="grid sm:grid-cols-2 gap-4">
+        <div class="rounded-lg p-4 border" style="border-color:var(--primary);background:rgba(99,255,182,0.04);">
+         <p class="font-heading text-sm mb-1" style="color:var(--primary);">⏱️ Uptime</p>
+         <p class="text-sm opacity-80">The percentage of time the network is working. Target: <strong>99.9%</strong> (acceptable) to <strong>99.99%</strong> (excellent, called "4 nines").</p>
+         <p class="text-xs mt-2 opacity-60 italic">Example: 99.9% = only 43 min down per month</p>
+        </div>
+        <div class="rounded-lg p-4 border" style="border-color:var(--secondary);background:rgba(255,182,99,0.04);">
+         <p class="font-heading text-sm mb-1" style="color:var(--secondary);">⚡ MTBF &amp; MTTR</p>
+         <p class="text-sm opacity-80"><strong>MTBF</strong> = Mean Time Between Failures (how long before it breaks). <strong>MTTR</strong> = Mean Time To Repair (how fast you fix it).</p>
+         <p class="text-xs mt-2 opacity-60 italic">Higher MTBF + Lower MTTR = Better reliability</p>
+        </div>
+       </div>
+      </div><!-- REDUNDANCY -->
+      <h3 class="font-heading text-sm mb-3 opacity-70">Key Reliability Strategies</h3>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <div class="text-2xl mb-2">
+         🔄
+        </div>
+        <p class="font-heading text-sm mb-1">Redundancy</p>
+        <p class="text-xs opacity-70 leading-relaxed">Have backup equipment ready. If Router A fails, Router B takes over automatically. Example: dual ISPs, redundant switches, failover servers.</p>
+        <p class="text-xs mt-2 opacity-50" style="color:var(--primary);">PhilHealth fix: Add a second internet connection + backup router</p>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <div class="text-2xl mb-2">
+         🛡️
+        </div>
+        <p class="font-heading text-sm mb-1">Fault Tolerance</p>
+        <p class="text-xs opacity-70 leading-relaxed">The system keeps running even when parts fail. RAID storage, link aggregation, clustering. One failure ≠ total system down.</p>
+        <p class="text-xs mt-2 opacity-50" style="color:var(--primary);">PhilHealth fix: Use RAID 1 (mirroring) for database server</p>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <div class="text-2xl mb-2">
+         📋
+        </div>
+        <p class="font-heading text-sm mb-1">Maintenance Planning</p>
+        <p class="text-xs opacity-70 leading-relaxed">Preventive maintenance (scheduled updates) beats emergency repairs. Test backups monthly. Monitor proactively.</p>
+        <p class="text-xs mt-2 opacity-50" style="color:var(--primary);">PhilHealth fix: Monthly device health checks + quarterly DR drills</p>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <div class="text-2xl mb-2">
+         📊
+        </div>
+        <p class="font-heading text-sm mb-1">Monitoring &amp; Alerting</p>
+        <p class="text-xs opacity-70 leading-relaxed">Real-time systems watch network health. Alert staff before problems explode. Know CPU usage, bandwidth, error rates.</p>
+        <p class="text-xs mt-2 opacity-50" style="color:var(--primary);">PhilHealth fix: Use SNMP monitoring to alert on high link utilization</p>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <div class="text-2xl mb-2">
+         📚
+        </div>
+        <p class="font-heading text-sm mb-1">SLA &amp; Recovery Plans</p>
+        <p class="text-xs opacity-70 leading-relaxed">Service Level Agreement defines "acceptable downtime." Disaster Recovery (DR) plan explains exact steps to restore critical services.</p>
+        <p class="text-xs mt-2 opacity-50" style="color:var(--primary);">PhilHealth fix: Define RTO (Recovery Time Objective) and RPO (Recovery Point Objective)</p>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <div class="text-2xl mb-2">
+         🧪
+        </div>
+        <p class="font-heading text-sm mb-1">Testing &amp; Validation</p>
+        <p class="text-xs opacity-70 leading-relaxed">Regularly test: failover, restore from backups, disaster recovery procedures. Find problems in drills, not real emergencies.</p>
+        <p class="text-xs mt-2 opacity-50" style="color:var(--primary);">PhilHealth fix: Quarterly disaster recovery simulation</p>
+       </div>
+      </div>
+     </div><!-- SECTION: NETWORK DOCUMENTATION -->
+     <div>
+      <h2 class="font-heading text-lg mb-4" style="color:var(--primary);"><i data-lucide="shield" style="width:20px;height:20px;display:inline;vertical-align:middle;margin-right:6px;"></i>Network Documentation Types</h2>
+      <p class="text-sm opacity-70 mb-4">Good documentation is like a <strong>recipe book for your network</strong>. When you're gone, anyone can follow it. When disasters happen, you have the playbook.</p>
+      <div class="space-y-3">
+       <div class="rounded-xl p-4 card-glow flex gap-4 items-start" style="background:var(--surface);">
+        <div class="text-2xl flex-shrink-0">
+         📐
+        </div>
+        <div>
+         <p class="font-heading text-sm" style="color:var(--primary);">1. Physical Network Diagram</p>
+         <p class="text-xs opacity-80 mt-1 leading-relaxed"><strong>What:</strong> Visual map showing actual devices: routers, switches, servers, PCs, printers, connections.</p>
+         <p class="text-xs opacity-60 mt-1"><strong>Includes:</strong> Device names, locations (which office), physical connections, cable types, power sources.</p>
+         <p class="text-xs opacity-50 mt-1 italic">📊 PhilHealth use: Instant location if a router dies — "It's on the 3rd floor in Comms Room"</p>
+        </div>
+       </div>
+       <div class="rounded-xl p-4 card-glow flex gap-4 items-start" style="background:var(--surface);">
+        <div class="text-2xl flex-shrink-0">
+         🌐
+        </div>
+        <div>
+         <p class="font-heading text-sm" style="color:var(--primary);">2. Logical Network Diagram</p>
+         <p class="text-xs opacity-80 mt-1 leading-relaxed"><strong>What:</strong> Shows how data flows: IP addresses, subnets, VLAN assignments, routing paths.</p>
+         <p class="text-xs opacity-60 mt-1"><strong>Includes:</strong> IP ranges per subnet, device IPs, firewall rules, DMZ, VPN connections.</p>
+         <p class="text-xs opacity-50 mt-1 italic">📊 PhilHealth use: Troubleshooting connectivity — "Why can't office B reach the database server?"</p>
+        </div>
+       </div>
+       <div class="rounded-xl p-4 card-glow flex gap-4 items-start" style="background:var(--surface);">
+        <div class="text-2xl flex-shrink-0">
+         📋
+        </div>
+        <div>
+         <p class="font-heading text-sm" style="color:var(--primary);">3. Device Inventory &amp; Configuration</p>
+         <p class="text-xs opacity-80 mt-1 leading-relaxed"><strong>What:</strong> Detailed list of every device: model, serial number, OS version, purchase date, warranty, config details.</p>
+         <p class="text-xs opacity-60 mt-1"><strong>Includes:</strong> MAC addresses, installed software, current configs, backup locations.</p>
+         <p class="text-xs opacity-50 mt-1 italic">📊 PhilHealth use: "The backup router needs warranty support — looking it up instantly"</p>
+        </div>
+       </div>
+       <div class="rounded-xl p-4 card-glow flex gap-4 items-start" style="background:var(--surface);">
+        <div class="text-2xl flex-shrink-0">
+         🧰
+        </div>
+        <div>
+         <p class="font-heading text-sm" style="color:var(--primary);">4. Troubleshooting Runbooks</p>
+         <p class="text-xs opacity-80 mt-1 leading-relaxed"><strong>What:</strong> Step-by-step guides for common issues: "Network down," "Can't reach server," "Slow internet."</p>
+         <p class="text-xs opacity-60 mt-1"><strong>Includes:</strong> Tests to run, expected results, resolution steps, escalation procedures.</p>
+         <p class="text-xs opacity-50 mt-1 italic">📊 PhilHealth use: New admin can fix 80% of problems without calling you at 2 AM</p>
+        </div>
+       </div>
+       <div class="rounded-xl p-4 card-glow flex gap-4 items-start" style="background:var(--surface);">
+        <div class="text-2xl flex-shrink-0">
+         🆘
+        </div>
+        <div>
+         <p class="font-heading text-sm" style="color:var(--primary);">5. Disaster Recovery Plan (DRP)</p>
+         <p class="text-xs opacity-80 mt-1 leading-relaxed"><strong>What:</strong> The "recover from apocalypse" playbook. Defines Recovery Time Objective (RTO) and Recovery Point Objective (RPO).</p>
+         <p class="text-xs opacity-60 mt-1"><strong>Includes:</strong> Contact list, backup locations, failover procedures, data restore steps, testing schedule.</p>
+         <p class="text-xs opacity-50 mt-1 italic">📊 PhilHealth use: Earthquake happens, data center flooded — follow DRP, critical services back in 4 hours</p>
+        </div>
+       </div>
+       <div class="rounded-xl p-4 card-glow flex gap-4 items-start" style="background:var(--surface);">
+        <div class="text-2xl flex-shrink-0">
+         📊
+        </div>
+        <div>
+         <p class="font-heading text-sm" style="color:var(--primary);">6. Performance &amp; Monitoring Baseline</p>
+         <p class="text-xs opacity-80 mt-1 leading-relaxed"><strong>What:</strong> "Normal" values for CPU, memory, bandwidth, latency, packet loss. Alerts trigger when these deviate.</p>
+         <p class="text-xs opacity-60 mt-1"><strong>Includes:</strong> Monitored metrics, alert thresholds, responsible parties, trending data.</p>
+         <p class="text-xs opacity-50 mt-1 italic">📊 PhilHealth use: Alert fires — "CPU on main switch = 95%, someone misconfigured?" vs normal 20%</p>
+        </div>
+       </div>
+      </div><!-- SUMMARY TABLE -->
+      <div class="mt-6 rounded-xl overflow-hidden card-glow" style="background:var(--surface);">
+       <p class="font-heading text-sm p-4 pb-2" style="color:var(--primary);">🗺️ Quick Reference: Documentation Uses</p>
+       <div class="overflow-x-auto">
+        <table class="w-full text-xs">
+         <thead>
+          <tr style="background:rgba(99,255,182,0.08);">
+           <th class="text-left p-3 font-heading">Document</th>
+           <th class="text-left p-3 font-heading">Who Uses It</th>
+           <th class="text-left p-3 font-heading">When It Saves You</th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+           <td class="p-3">Physical Diagram</td>
+           <td class="p-3 opacity-70">Technician onsite</td>
+           <td class="p-3" style="color:var(--primary);">Device failed — where is it physically?</td>
+          </tr>
+          <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+           <td class="p-3">Logical Diagram</td>
+           <td class="p-3 opacity-70">Network engineer</td>
+           <td class="p-3" style="color:var(--primary);">Network not connecting — why? Data flow issue?</td>
+          </tr>
+          <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+           <td class="p-3">Inventory</td>
+           <td class="p-3 opacity-70">IT Manager</td>
+           <td class="p-3" style="color:var(--primary);">Budgeting, warranty claims, replacement</td>
+          </tr>
+          <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+           <td class="p-3">Runbook</td>
+           <td class="p-3 opacity-70">All support staff</td>
+           <td class="p-3" style="color:var(--primary);">Common problem — fix it FAST without escalation</td>
+          </tr>
+          <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+           <td class="p-3">DRP</td>
+           <td class="p-3 opacity-70">Emergency responders</td>
+           <td class="p-3" style="color:var(--primary);">Major disaster — recover services in order of criticality</td>
+          </tr>
+          <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+           <td class="p-3">Baseline</td>
+           <td class="p-3 opacity-70">Monitoring system</td>
+           <td class="p-3" style="color:var(--primary);">Performance degradation — proactive alert</td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </div>
+     </div>
+    </section><!-- ==================== TAB 1: PACKET TRACER ==================== -->
+    <section id="tab-content-1" class="hidden anim-in space-y-6">
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-1" style="color:var(--primary);">🧪 Packet Tracer Lab: Securing BrewNet Café</p>
+      <p class="text-xs opacity-70">Follow these step-by-step instructions in Cisco Packet Tracer. This lab simulates securing the BrewNet Café network.</p>
+     </div><!-- NETWORK TOPOLOGY -->
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-3" style="color:var(--secondary);">📐 Network Topology to Build</p>
+      <div class="rounded-lg p-4 text-xs font-mono leading-loose" style="background:rgba(0,0,0,0.3);color:var(--primary);overflow-x:auto;white-space:pre;">
+       ☁️ INTERNET | [Router0] 192.168.1.1 / \ [Switch0] [Switch1] STAFF VLAN GUEST VLAN VLAN 10 VLAN 20 / \ \ [PC-Manager] [PC-Cashier] [Laptop-Guest] .10 .20 .100
+      </div>
+      <p class="text-xs opacity-50 mt-2">All devices on 192.168.1.0/24 subnet</p>
+     </div><!-- STEPS -->
+     <div>
+      <h3 class="font-heading text-sm mb-4" style="color:var(--primary);">Step-by-Step Instructions</h3>
+      <div class="space-y-1"><!-- PART 1 -->
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-xs uppercase tracking-wider mb-3" style="color:var(--secondary);">Part 1: Build the Topology (10 min)</p>
+        <div class="space-y-4">
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           1
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Open Packet Tracer → New Project</p>
+           <p class="text-xs opacity-70 mt-1">File → New or Ctrl+N</p>
+          </div>
+         </div>
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           2
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Add devices from the bottom panel</p>
+           <div class="text-xs opacity-70 mt-1 space-y-1">
+            <p>• <strong>Network Devices → Routers →</strong> 1841 (drag to workspace)</p>
+            <p>• <strong>Network Devices → Switches →</strong> 2960 × 2</p>
+            <p>• <strong>End Devices →</strong> PC × 2, Laptop × 1</p>
+           </div>
+          </div>
+         </div>
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           3
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Connect with cables</p>
+           <div class="text-xs opacity-70 mt-1 space-y-1">
+            <p>• Router Fa0/0 → Switch0 Fa0/1 (Copper Straight-Through)</p>
+            <p>• Router Fa0/1 → Switch1 Fa0/1 (Copper Straight-Through)</p>
+            <p>• Switch0 Fa0/2 → PC-Manager (Copper Straight-Through)</p>
+            <p>• Switch0 Fa0/3 → PC-Cashier (Copper Straight-Through)</p>
+            <p>• Switch1 Fa0/2 → Laptop-Guest (Copper Straight-Through)</p>
+           </div>
+          </div>
+         </div>
+         <div class="relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           4
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Rename devices</p>
+           <p class="text-xs opacity-70 mt-1">Click each device → Config tab → Display Name. Use: Router0, Switch-Staff, Switch-Guest, PC-Manager, PC-Cashier, Laptop-Guest</p>
+          </div>
+         </div>
+        </div>
+       </div><!-- PART 2 -->
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-xs uppercase tracking-wider mb-3" style="color:var(--secondary);">Part 2: Configure IP Addresses (10 min)</p>
+        <div class="space-y-4">
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           5
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Configure the Router interfaces</p>
+           <p class="text-xs opacity-70 mt-1 mb-2">Click Router0 → CLI tab → Type these commands:</p>
+           <div class="rounded-lg p-3 text-xs font-mono" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            <p>enable</p>
+            <p>configure terminal</p>
+            <p>interface fa0/0</p>
+            <p>ip address 192.168.1.1 255.255.255.128</p>
+            <p>no shutdown</p>
+            <p>exit</p>
+            <p>interface fa0/1</p>
+            <p>ip address 192.168.1.129 255.255.255.128</p>
+            <p>no shutdown</p>
+            <p>exit</p>
+           </div>
+          </div>
+         </div>
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           6
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Configure PC-Manager</p>
+           <p class="text-xs opacity-70 mt-1">Click PC-Manager → Desktop tab → IP Configuration</p>
+           <div class="rounded-lg p-3 text-xs font-mono mt-2" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            <p>IP: 192.168.1.10</p>
+            <p>Subnet: 255.255.255.128</p>
+            <p>Gateway: 192.168.1.1</p>
+           </div>
+          </div>
+         </div>
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           7
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Configure PC-Cashier</p>
+           <div class="rounded-lg p-3 text-xs font-mono mt-1" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            <p>IP: 192.168.1.20</p>
+            <p>Subnet: 255.255.255.128</p>
+            <p>Gateway: 192.168.1.1</p>
+           </div>
+          </div>
+         </div>
+         <div class="relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           8
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Configure Laptop-Guest</p>
+           <div class="rounded-lg p-3 text-xs font-mono mt-1" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            <p>IP: 192.168.1.200</p>
+            <p>Subnet: 255.255.255.128</p>
+            <p>Gateway: 192.168.1.129</p>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div><!-- PART 3 -->
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-xs uppercase tracking-wider mb-3" style="color:var(--secondary);">Part 3: Apply Security Controls (15 min)</p>
+        <div class="space-y-4">
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           9
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Set a strong router password</p>
+           <p class="text-xs opacity-70 mt-1 mb-2">On Router0 CLI:</p>
+           <div class="rounded-lg p-3 text-xs font-mono" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            <p>enable</p>
+            <p>configure terminal</p>
+            <p>enable secret Br3wN3t$ecure!</p>
+            <p>line console 0</p>
+            <p>password C0ns0le@2024</p>
+            <p>login</p>
+            <p>exit</p>
+            <p>line vty 0 4</p>
+            <p>password R3m0te#Acc3ss</p>
+            <p>login</p>
+            <p>exit</p>
+            <p>service password-encryption</p>
+           </div>
+           <p class="text-xs mt-2 opacity-50 italic">💡 "service password-encryption" encrypts all plaintext passwords in the config file</p>
+          </div>
+         </div>
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           10
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Create an Access Control List (ACL)</p>
+           <p class="text-xs opacity-70 mt-1 mb-2">Block guest network from accessing staff network:</p>
+           <div class="rounded-lg p-3 text-xs font-mono" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            <p>access-list 100 deny ip 192.168.1.128 0.0.0.127 192.168.1.0 0.0.0.127</p>
+            <p>access-list 100 permit ip any any</p>
+            <p>interface fa0/1</p>
+            <p>ip access-group 100 in</p>
+            <p>exit</p>
+           </div>
+           <p class="text-xs mt-2 opacity-50 italic">💡 This means: "Anything from guest network trying to reach staff network → DENIED"</p>
+          </div>
+         </div>
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           11
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Configure a login banner</p>
+           <div class="rounded-lg p-3 text-xs font-mono" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            <p>banner motd #WARNING: Unauthorized access is prohibited!#</p>
+           </div>
+           <p class="text-xs mt-2 opacity-50 italic">💡 Legal protection — warns unauthorized users they're being monitored</p>
+          </div>
+         </div>
+         <div class="relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           12
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Save your configuration</p>
+           <div class="rounded-lg p-3 text-xs font-mono" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            <p>end</p>
+            <p>copy running-config startup-config</p>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div><!-- PART 4: VERIFY -->
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-xs uppercase tracking-wider mb-3" style="color:var(--secondary);">Part 4: Test &amp; Verify (5 min)</p>
+        <div class="space-y-4">
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           13
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Test: Staff can ping each other</p>
+           <p class="text-xs opacity-70 mt-1">PC-Manager → Desktop → Command Prompt</p>
+           <div class="rounded-lg p-3 text-xs font-mono mt-1" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            ping 192.168.1.20
+           </div>
+           <p class="text-xs mt-1" style="color:var(--primary);">✅ Expected: Reply from 192.168.1.20</p>
+          </div>
+         </div>
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           14
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Test: Guest CANNOT ping staff</p>
+           <p class="text-xs opacity-70 mt-1">Laptop-Guest → Desktop → Command Prompt</p>
+           <div class="rounded-lg p-3 text-xs font-mono mt-1" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            ping 192.168.1.10
+           </div>
+           <p class="text-xs mt-1" style="color:#ff6363;">❌ Expected: Request timed out (BLOCKED by ACL!)</p>
+          </div>
+         </div>
+         <div class="relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           15
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Verify password protection</p>
+           <p class="text-xs opacity-70 mt-1">Close and reopen Router0 CLI. You should be prompted for a password.</p>
+           <p class="text-xs mt-1" style="color:var(--primary);">✅ Expected: "User Access Verification" prompt + banner message</p>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- ==================== TAB 2: ACTIVITY ==================== -->
+    <section id="tab-content-2" class="hidden anim-in space-y-6">
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-1" style="color:var(--primary);">📝 Student Activity: Secure Your Own Network</p>
+      <p class="text-xs opacity-70">Now it's YOUR turn! Using what you learned, complete these challenges in Packet Tracer.</p>
+      <div class="flex gap-3 mt-3 flex-wrap"><span class="text-xs px-3 py-1 rounded-full" style="background:rgba(99,255,182,0.12);color:var(--primary);">Individual</span> <span class="text-xs px-3 py-1 rounded-full" style="background:rgba(255,182,99,0.12);color:var(--secondary);">40 minutes</span> <span class="text-xs px-3 py-1 rounded-full" style="background:rgba(99,182,255,0.12);color:#63b6ff;">Submit .pkt file</span>
+      </div>
+     </div><!-- SCENARIO -->
+     <div class="scenario-box rounded-r-xl p-5" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-2" style="color:var(--secondary);">📖 Your Scenario</p>
+      <p class="text-sm leading-relaxed opacity-90">You've been hired by <strong>"TechStart Co."</strong>, a small startup with 3 departments: <strong>Management</strong> (2 PCs), <strong>Development</strong> (2 PCs), and a <strong>Visitor</strong> area (1 Laptop). The CEO says: <em>"We just had a security incident — a visitor accessed our dev servers. Lock it down!"</em></p>
+     </div><!-- CHALLENGES -->
+     <div class="space-y-4">
+      <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--secondary);color:var(--bg);">
+         A
+        </div>
+        <div>
+         <p class="font-heading text-sm">Build the TechStart Network</p>
+         <p class="text-xs opacity-70 mt-1 leading-relaxed">Create a network with: 1 Router, 3 Switches (one per department), 2 PCs for Management, 2 PCs for Development, 1 Laptop for Visitors. Assign appropriate IP addresses using the <strong>10.0.0.0/8</strong> network.</p>
+         <div class="mt-3 rounded-lg p-3 text-xs" style="background:rgba(99,255,182,0.06);border:1px dashed rgba(99,255,182,0.2);">
+          <p class="font-heading" style="color:var(--primary);">Suggested Subnets:</p>
+          <p class="opacity-70 mt-1">Management: 10.0.1.0/24 &nbsp;|&nbsp; Development: 10.0.2.0/24 &nbsp;|&nbsp; Visitors: 10.0.3.0/24</p>
+         </div>
+         <p class="text-xs mt-2 opacity-50">📊 Points: 15</p>
+        </div>
+       </div>
+      </div>
+      <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--secondary);color:var(--bg);">
+         B
+        </div>
+        <div>
+         <p class="font-heading text-sm">Secure the Router</p>
+         <p class="text-xs opacity-70 mt-1 leading-relaxed">Apply these security controls:</p>
+         <ul class="text-xs opacity-70 mt-2 space-y-1 list-disc ml-4">
+          <li>Set an <strong>enable secret</strong> password (must be 10+ characters with symbols)</li>
+          <li>Set console and VTY line passwords</li>
+          <li>Enable <strong>service password-encryption</strong></li>
+          <li>Add a warning <strong>banner</strong></li>
+         </ul>
+         <p class="text-xs mt-2 opacity-50">📊 Points: 15</p>
+        </div>
+       </div>
+      </div>
+      <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--secondary);color:var(--bg);">
+         C
+        </div>
+        <div>
+         <p class="font-heading text-sm">Create ACLs (Access Control Lists)</p>
+         <p class="text-xs opacity-70 mt-1 leading-relaxed">Write and apply ACLs that enforce these rules:</p>
+         <div class="mt-2 space-y-2">
+          <div class="flex items-center gap-2 text-xs">
+           <span style="color:#ff6363;">❌</span><span class="opacity-80">Visitors CANNOT access Management network</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+           <span style="color:#ff6363;">❌</span><span class="opacity-80">Visitors CANNOT access Development network</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+           <span style="color:var(--primary);">✅</span><span class="opacity-80">Management CAN access Development</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+           <span style="color:var(--primary);">✅</span><span class="opacity-80">Development CAN access Management</span>
+          </div>
+         </div>
+         <p class="text-xs mt-2 opacity-50">📊 Points: 20</p>
+        </div>
+       </div>
+      </div>
+      <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--secondary);color:var(--bg);">
+         D
+        </div>
+        <div>
+         <p class="font-heading text-sm">Test and Document</p>
+         <p class="text-xs opacity-70 mt-1 leading-relaxed">Take screenshots of these ping tests and paste into a Word document:</p>
+         <div class="mt-2 space-y-2">
+          <div class="flex items-center gap-2 text-xs">
+           <span style="color:var(--primary);">✅</span><span class="opacity-80">Management PC → Development PC (should SUCCEED)</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+           <span style="color:#ff6363;">❌</span><span class="opacity-80">Visitor Laptop → Management PC (should FAIL)</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+           <span style="color:#ff6363;">❌</span><span class="opacity-80">Visitor Laptop → Development PC (should FAIL)</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+           <span style="color:var(--primary);">✅</span><span class="opacity-80">Router login prompt shows banner and requires password</span>
+          </div>
+         </div>
+         <p class="text-xs mt-2 opacity-50">📊 Points: 10</p>
+        </div>
+       </div>
+      </div>
+     </div><!-- RUBRIC -->
+     <div class="rounded-xl overflow-hidden card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm p-4 pb-2" style="color:var(--primary);">📊 Grading Rubric (Total: 60 pts)</p>
+      <div class="overflow-x-auto">
+       <table class="w-full text-xs">
+        <thead>
+         <tr style="background:rgba(99,255,182,0.08);">
+          <th class="text-left p-3 font-heading">Criteria</th>
+          <th class="text-center p-3 font-heading">Points</th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Correct topology and IP addressing</td>
+          <td class="text-center p-3">15</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Router secured (passwords + encryption + banner)</td>
+          <td class="text-center p-3">15</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">ACLs correctly implemented and applied</td>
+          <td class="text-center p-3">20</td>
+         </tr>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Testing documentation with screenshots</td>
+          <td class="text-center p-3">10</td>
+         </tr>
+         <tr class="border-t font-semibold" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3" style="color:var(--primary);">TOTAL</td>
+          <td class="text-center p-3" style="color:var(--primary);">60</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div>
+    </section><!-- ==================== TAB 3: CASE ANALYSIS ==================== -->
+    <section id="tab-content-3" class="hidden anim-in space-y-6">
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-1" style="color:var(--primary);">📊 Case Analysis: The BrewNet Breach</p>
+      <p class="text-xs opacity-70">Read the case study below and answer the analysis questions. Submit as a written document.</p>
+      <div class="flex gap-3 mt-3 flex-wrap"><span class="text-xs px-3 py-1 rounded-full" style="background:rgba(99,255,182,0.12);color:var(--primary);">Groups of 3-4</span> <span class="text-xs px-3 py-1 rounded-full" style="background:rgba(255,182,99,0.12);color:var(--secondary);">30 minutes</span> <span class="text-xs px-3 py-1 rounded-full" style="background:rgba(99,182,255,0.12);color:#63b6ff;">Written Report</span>
+      </div>
+     </div><!-- CASE STUDY -->
+     <div class="scenario-box rounded-r-xl p-5 space-y-4" style="background:var(--surface);">
+      <p class="font-heading text-sm" style="color:var(--secondary);">📖 The Incident Report</p>
+      <p class="text-sm leading-relaxed opacity-90">On March 15, BrewNet Café's manager arrived to find the POS system displaying a ransomware message demanding ₱50,000 in Bitcoin. Here's what the investigation revealed:</p>
+      <div class="space-y-3 text-sm leading-relaxed opacity-85">
+       <div class="rounded-lg p-3" style="background:rgba(255,99,99,0.06);border-left:3px solid #ff6363;">
+        <p class="font-heading text-xs" style="color:#ff6363;">Finding 1: Weak Credentials</p>
+        <p class="text-xs mt-1">The router admin panel was accessible at 192.168.1.1 with username "admin" and password "admin". It had never been changed since installation 2 years ago.</p>
+       </div>
+       <div class="rounded-lg p-3" style="background:rgba(255,99,99,0.06);border-left:3px solid #ff6363;">
+        <p class="font-heading text-xs" style="color:#ff6363;">Finding 2: Open Wi-Fi</p>
+        <p class="text-xs mt-1">The café's Wi-Fi had no password. Both customers and staff devices connected to the same network. There was no separation between guest and business traffic.</p>
+       </div>
+       <div class="rounded-lg p-3" style="background:rgba(255,99,99,0.06);border-left:3px solid #ff6363;">
+        <p class="font-heading text-xs" style="color:#ff6363;">Finding 3: Phishing Email</p>
+        <p class="text-xs mt-1">A cashier received an email appearing to be from "Google Security" asking them to verify their account. They clicked the link on the POS computer and entered their password. Logs show the attacker used these credentials to access the router remotely.</p>
+       </div>
+       <div class="rounded-lg p-3" style="background:rgba(255,99,99,0.06);border-left:3px solid #ff6363;">
+        <p class="font-heading text-xs" style="color:#ff6363;">Finding 4: No Backups</p>
+        <p class="text-xs mt-1">The POS database had not been backed up in over 6 months. All recent sales data, inventory records, and customer information were encrypted by the ransomware.</p>
+       </div>
+       <div class="rounded-lg p-3" style="background:rgba(255,99,99,0.06);border-left:3px solid #ff6363;">
+        <p class="font-heading text-xs" style="color:#ff6363;">Finding 5: Outdated Firmware</p>
+        <p class="text-xs mt-1">The router was running firmware from 2021 with 3 known critical vulnerabilities. The POS software hadn't been updated in 8 months.</p>
+       </div>
+      </div>
+      <div class="rounded-lg p-3 text-xs" style="background:rgba(0,0,0,0.2);">
+       <p class="font-heading" style="color:var(--secondary);">💰 Total Damage</p>
+       <p class="opacity-70 mt-1">₱50,000 ransom (unpaid) + ₱60,000 lost revenue (2 days closed) + ₱40,000 IT recovery costs = <strong style="color:#ff6363;">₱150,000 total loss</strong></p>
+      </div>
+     </div><!-- QUESTIONS -->
+     <div class="rounded-xl p-5 card-glow space-y-5" style="background:var(--surface);">
+      <p class="font-heading text-sm" style="color:var(--primary);">❓ Analysis Questions (Answer all 5)</p>
+      <div class="space-y-4">
+       <div class="rounded-lg p-4" style="background:rgba(99,255,182,0.04);border:1px solid rgba(99,255,182,0.1);">
+        <p class="font-heading text-xs mb-1" style="color:var(--primary);">Question 1 — Identify (10 pts)</p>
+        <p class="text-xs opacity-80">List ALL vulnerabilities present in BrewNet's network before the attack. For each vulnerability, identify which security principle it violates (Confidentiality, Integrity, or Availability from the CIA Triad).</p>
+       </div>
+       <div class="rounded-lg p-4" style="background:rgba(99,255,182,0.04);border:1px solid rgba(99,255,182,0.1);">
+        <p class="font-heading text-xs mb-1" style="color:var(--primary);">Question 2 — Trace the Attack (10 pts)</p>
+        <p class="text-xs opacity-80">Write a step-by-step timeline of how you think the attacker compromised BrewNet's network, from initial entry to ransomware deployment. Use the findings as evidence.</p>
+       </div>
+       <div class="rounded-lg p-4" style="background:rgba(99,255,182,0.04);border:1px solid rgba(99,255,182,0.1);">
+        <p class="font-heading text-xs mb-1" style="color:var(--primary);">Question 3 — Prevent (10 pts)</p>
+        <p class="text-xs opacity-80">For EACH vulnerability you identified in Q1, recommend a specific security control that would have prevented or mitigated the attack. Explain why each control works.</p>
+       </div>
+       <div class="rounded-lg p-4" style="background:rgba(99,255,182,0.04);border:1px solid rgba(99,255,182,0.1);">
+        <p class="font-heading text-xs mb-1" style="color:var(--primary);">Question 4 — Prioritize (5 pts)</p>
+        <p class="text-xs opacity-80">If BrewNet could only implement THREE security controls due to budget constraints, which three would you recommend and why? Rank them by importance.</p>
+       </div>
+       <div class="rounded-lg p-4" style="background:rgba(99,255,182,0.04);border:1px solid rgba(99,255,182,0.1);">
+        <p class="font-heading text-xs mb-1" style="color:var(--primary);">Question 5 — Reflect (5 pts)</p>
+        <p class="text-xs opacity-80">Should BrewNet pay the ransom? Defend your answer with at least 2 reasons. What should they do instead?</p>
+       </div>
+      </div>
+      <div class="rounded-lg p-3 text-xs" style="background:rgba(99,255,182,0.06);border:1px dashed rgba(99,255,182,0.2);">
+       <p class="font-heading" style="color:var(--primary);">📊 Total Case Analysis Points: 40</p>
+      </div>
+     </div>
+    </section><!-- ==================== TAB 4: QUIZ ==================== -->
+    <section id="tab-content-4" class="hidden anim-in space-y-6">
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-1" style="color:var(--primary);">✅ Knowledge Check</p>
+      <p class="text-xs opacity-70">Test your understanding! Click an answer to check. Score shown at the bottom.</p>
+      <div class="flex items-center gap-3 mt-3">
+       <div class="text-xs px-3 py-1 rounded-full" style="background:rgba(99,255,182,0.12);color:var(--primary);" id="quiz-score">
+        Score: 0 / 10
+       </div><button onclick="resetQuiz()" class="text-xs px-3 py-1 rounded-full cursor-pointer" style="background:rgba(255,255,255,0.06);color:var(--text);border:1px solid rgba(255,255,255,0.1);">Reset</button>
+      </div>
+     </div>
+     <div id="quiz-container" class="space-y-4"></div>
+    </section>
+   </main><!-- FOOTER -->
+   <footer class="max-w-5xl mx-auto px-4 py-6 text-center">
+    <p class="text-xs opacity-30 font-heading" id="el-footer">IS103 — IT Infrastructure and Network Technologies | Finals Week 5</p>
+   </footer>
+  </div>
+  <script>
+// ---- CONFIG & SDK ----
+const defaultConfig = {
+  background_color: '#0f172a',
+  surface_color: '#1e293b',
+  text_color: '#e2e8f0',
+  primary_color: '#63ffb6',
+  secondary_color: '#ffb663',
+  font_family: 'DM Sans',
+  font_size: 14,
+  course_title: 'IS103 - IT Infrastructure and Network Technologies',
+  professor_name: 'Prof. MKDB',
+  week_label: 'Finals Week 5'
+};
+
+function applyConfig(cfg) {
+  const c = { ...defaultConfig, ...cfg };
+  const root = document.getElementById('app');
+  root.style.setProperty('--bg', c.background_color);
+  root.style.setProperty('--surface', c.surface_color);
+  root.style.setProperty('--text', c.text_color);
+  root.style.setProperty('--primary', c.primary_color);
+  root.style.setProperty('--secondary', c.secondary_color);
+  root.style.background = c.background_color;
+  root.style.color = c.text_color;
+  root.style.fontFamily = `${c.font_family}, DM Sans, sans-serif`;
+
+  const base = c.font_size || 14;
+  document.querySelectorAll('.font-heading').forEach(el => {
+    if (el.classList.contains('text-lg') || el.classList.contains('text-xl')) return;
+  });
+  root.style.fontSize = base + 'px';
+
+  document.getElementById('el-course').textContent = c.course_title;
+  document.getElementById('el-title').textContent = '🔒 Network Security Principles';
+  document.getElementById('el-prof').textContent = c.professor_name;
+  document.getElementById('el-week').textContent = c.week_label;
+  document.getElementById('el-footer').textContent = `${c.course_title} | ${c.week_label}`;
+
+  // Update tab active color
+  document.querySelectorAll('.tab-active').forEach(t => t.style.borderColor = c.primary_color);
+}
+
+applyConfig(defaultConfig);
+
+if (window.elementSdk) {
+  window.elementSdk.init({
+    defaultConfig,
+    onConfigChange: async (cfg) => applyConfig(cfg),
+    mapToCapabilities: (cfg) => ({
+      recolorables: [
+        { get: () => cfg.background_color || defaultConfig.background_color, set: v => { cfg.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+        { get: () => cfg.surface_color || defaultConfig.surface_color, set: v => { cfg.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+        { get: () => cfg.text_color || defaultConfig.text_color, set: v => { cfg.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+        { get: () => cfg.primary_color || defaultConfig.primary_color, set: v => { cfg.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); } },
+        { get: () => cfg.secondary_color || defaultConfig.secondary_color, set: v => { cfg.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); } },
+      ],
+      borderables: [],
+      fontEditable: { get: () => cfg.font_family || defaultConfig.font_family, set: v => { cfg.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+      fontSizeable: { get: () => cfg.font_size || defaultConfig.font_size, set: v => { cfg.font_size = v; window.elementSdk.setConfig({ font_size: v }); } },
+    }),
+    mapToEditPanelValues: (cfg) => new Map([
+      ['course_title', cfg.course_title || defaultConfig.course_title],
+      ['professor_name', cfg.professor_name || defaultConfig.professor_name],
+      ['week_label', cfg.week_label || defaultConfig.week_label],
+    ])
+  });
+}
+
+// ---- TABS ----
+let activeTab = 0;
+function switchTab(idx) {
+  document.getElementById(`tab-content-${activeTab}`).classList.add('hidden');
+  document.getElementById(`tab-content-${idx}`).classList.remove('hidden');
+  const tabs = document.querySelectorAll('#tab-bar button');
+  tabs[activeTab].className = tabs[activeTab].className.replace('tab-active', 'tab-inactive');
+  tabs[idx].className = tabs[idx].className.replace('tab-inactive', 'tab-active');
+  const cfg = window.elementSdk ? window.elementSdk.config : defaultConfig;
+  tabs[idx].style.borderColor = cfg.primary_color || defaultConfig.primary_color;
+  tabs[activeTab].style.borderColor = 'transparent';
+  activeTab = idx;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ---- QUIZ ----
+const quizData = [
+  { q: "What are the five layers of network integration?", opts: ["Physical, Logical, Security, Reliability, Ops", "Hardware, Software, People, Process, Tools", "Routing, Switching, Firewalling, Backup, Monitoring", "Access, Distribution, Core, DMZ, Guest"], ans: 0 },
+  { q: "During an oral defense, how long should your presentation be?", opts: ["10 minutes", "15 minutes", "20 minutes", "30 minutes"], ans: 2 },
+  { q: "Which layer addresses how IP addresses and routing protocols work?", opts: ["Physical Topology", "Logical Connectivity", "Security Integration", "Reliability Mechanisms"], ans: 1 },
+  { q: "What is a key part of the oral defense preparation?", opts: ["Memorizing all configs", "Anticipating questions", "Making slides fancy", "Avoiding eye contact"], ans: 1 },
+  { q: "Before your defense, all pings between sites should:", opts: ["Fail to test failover", "Succeed to verify connectivity", "Time out after 30 seconds", "Return no response"], ans: 1 },
+  { q: "Integration means bringing together:", opts: ["Just the routers", "All layers (topology, security, reliability, ops, docs)", "Only the firewalls", "Just the backups"], ans: 1 },
+  { q: "Which document defines RTO and RPO?", opts: ["Physical Diagram", "Device Inventory", "Disaster Recovery Plan", "Monitoring Baseline"], ans: 2 },
+  { q: "A failover test should verify that:", opts: ["The backup link is active", "Traffic reroutes automatically", "Devices show alerts", "All devices restart"], ans: 1 },
+  { q: "In your presentation, what should you lead with?", opts: ["Technical jargon", "The business problem you're solving", "Your favorite feature", "Cost savings only"], ans: 1 },
+  { q: "SNMP monitoring in your network watches:", opts: ["Only security logs", "CPU, memory, bandwidth, and alerts", "Just firewall rules", "Device locations"], ans: 1 },
+  { q: "When presenting to executives, you should:", opts: ["Use maximum technical terminology", "Explain benefits in business terms", "Skip the diagrams", "Read from your slides"], ans: 1 },
+  { q: "Your Packet Tracer file should be named:", opts: ["network.pkt", "YourName-FinalNetwork.pkt", "final.pkt", "weeks1-5.pkt"], ans: 1 },
+  { q: "An ACL in your network should:", opts: ["Allow all traffic", "Enforce your business security policy", "Log all packets", "Block the internet"], ans: 1 },
+  { q: "The rubric allocates 60 points to:", opts: ["Packet Tracer file only", "Documentation only", "Oral Defense Presentation", "Quiz answers"], ans: 2 },
+  { q: "If both your ISP connections fail, your recovery should:", opts: ["Restore manually", "Halt all operations", "Use backup generator + alternate site", "Ask for extension"], ans: 2 },
+];
+
+let quizScore = 0;
+let answered = new Set();
+
+function buildQuiz() {
+  const c = document.getElementById('quiz-container');
+  c.innerHTML = '';
+  quizData.forEach((item, qi) => {
+    const div = document.createElement('div');
+    div.className = 'rounded-xl p-5 card-glow';
+    div.style.background = 'var(--surface)';
+    div.innerHTML = `
+      <p class="font-heading text-xs opacity-50 mb-1">Question ${qi+1} of ${quizData.length}</p>
+      <p class="text-sm font-semibold mb-3">${item.q}</p>
+      <div class="space-y-2" id="q${qi}-opts">
+        ${item.opts.map((o,oi) => `
+          <button onclick="checkAnswer(${qi},${oi})" class="quiz-option w-full text-left text-xs p-3 rounded-lg border" style="border-color:rgba(255,255,255,0.08);" id="q${qi}-o${oi}">
+            <span class="font-heading mr-2">${String.fromCharCode(65+oi)}.</span>${o}
+          </button>
+        `).join('')}
+      </div>
+      <p class="text-xs mt-2 hidden" id="q${qi}-fb"></p>
+    `;
+    c.appendChild(div);
+  });
+}
+
+function checkAnswer(qi, oi) {
+  if (answered.has(qi)) return;
+  answered.add(qi);
+  const correct = quizData[qi].ans;
+  const fb = document.getElementById(`q${qi}-fb`);
+  const chosen = document.getElementById(`q${qi}-o${oi}`);
+  const correctEl = document.getElementById(`q${qi}-o${correct}`);
+
+  if (oi === correct) {
+    chosen.classList.add('quiz-correct');
+    fb.textContent = '✅ Correct!';
+    fb.style.color = '#63ffb6';
+    quizScore++;
+  } else {
+    chosen.classList.add('quiz-wrong');
+    correctEl.classList.add('quiz-correct');
+    fb.textContent = `❌ Incorrect. The answer is ${String.fromCharCode(65+correct)}.`;
+    fb.style.color = '#ff6363';
+  }
+  fb.classList.remove('hidden');
+
+  // Disable all options for this question
+  quizData[qi].opts.forEach((_, i) => {
+    document.getElementById(`q${qi}-o${i}`).style.pointerEvents = 'none';
+  });
+
+  document.getElementById('quiz-score').textContent = `Score: ${quizScore} / ${quizData.length}`;
+}
+
+function resetQuiz() {
+  quizScore = 0;
+  answered.clear();
+  document.getElementById('quiz-score').textContent = `Score: 0 / ${quizData.length}`;
+  buildQuiz();
+}
+
+buildQuiz();
+lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9eb91873162511d9',t:'MTc3NjA2ODg4OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
