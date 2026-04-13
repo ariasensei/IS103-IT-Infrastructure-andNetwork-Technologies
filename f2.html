@@ -1,0 +1,1580 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Monitoring &amp; Performance Tools Lesson</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&amp;family=Poppins:ital,wght@0,400;0,600;0,700&amp;display=swap" rel="stylesheet">
+  <style>
+  html, body { height: 100%; margin: 0; }
+  * { box-sizing: border-box; }
+  .font-display { font-family: 'JetBrains Mono', monospace; }
+  .font-body { font-family: 'Poppins', sans-serif; }
+  .tab-active { border-bottom: 3px solid; }
+  .step-card { border-left: 3px solid; transition: all 0.3s ease; }
+  .step-card:hover { transform: translateX(4px); }
+  .fade-in { animation: fadeIn 0.4s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .quiz-option { transition: all 0.2s ease; cursor: pointer; }
+  .quiz-option:hover { transform: scale(1.02); }
+  .quiz-option.correct { background: #d1fae5 !important; border-color: #10b981 !important; }
+  .quiz-option.incorrect { background: #fee2e2 !important; border-color: #ef4444 !important; }
+  .metric-chart { position: relative; height: 150px; }
+  .checklist-item input:checked + span { text-decoration: line-through; opacity: 0.6; }
+  .progress-fill { transition: width 0.5s ease; }
+  table { border-collapse: collapse; }
+  td, th { padding: 10px 14px; }
+  .tool-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .scenario-box { position: relative; overflow: hidden; }
+  .scenario-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+  .code-block { font-family: 'JetBrains Mono', monospace; }
+  </style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full font-body overflow-auto" style="background:#0f172a; color:#e2e8f0;">
+  <div id="app" class="w-full min-h-full" style="background:#0f172a;">
+   <!-- Header -->
+   <header class="w-full" style="background:linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-bottom:1px solid #1e3a5f;">
+    <div class="max-w-5xl mx-auto px-6 py-8">
+     <div class="flex items-center gap-3 mb-2">
+      <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:#10b981;">
+       <i data-lucide="activity" style="width:22px;height:22px;color:#0f172a;"></i>
+      </div><span id="el-course" class="text-sm font-display tracking-wider" style="color:#10b981;">IS103 - IT Infrastructure and Network Technologies</span>
+     </div>
+     <h1 id="el-title" class="font-display text-3xl md:text-4xl font-bold mb-2" style="color:#f1f5f9;">Network Monitoring &amp; Performance Tools</h1>
+     <div class="flex flex-wrap items-center gap-4 text-sm" style="color:#94a3b8;">
+      <span id="el-prof" class="flex items-center gap-1"><i data-lucide="user" style="width:14px;height:14px;"></i> Prof. MKDB</span> <span id="el-week" class="flex items-center gap-1"><i data-lucide="calendar" style="width:14px;height:14px;"></i> Finals Week 2</span> <span class="flex items-center gap-1"><i data-lucide="target" style="width:14px;height:14px;"></i> ILO: Monitor and evaluate network performance</span>
+     </div>
+    </div>
+   </header><!-- Progress Bar -->
+   <div class="w-full" style="background:#1e293b; height:4px;">
+    <div id="progress-bar" class="progress-fill h-full" style="background:#10b981; width:0%;"></div>
+   </div><!-- Navigation Tabs -->
+   <nav class="w-full sticky top-0 z-30" style="background:#0f172a; border-bottom:1px solid #1e3a5f;">
+    <div class="max-w-5xl mx-auto px-6 flex gap-1 overflow-x-auto" id="tab-nav">
+     <button onclick="switchTab(0)" class="tab-btn tab-active px-4 py-3 text-sm font-semibold whitespace-nowrap" style="color:#10b981; border-color:#10b981;" data-idx="0"> <i data-lucide="book-open" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Lesson </button> <button onclick="switchTab(1)" class="tab-btn px-4 py-3 text-sm font-semibold whitespace-nowrap" style="color:#64748b;" data-idx="1"> <i data-lucide="monitor" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Packet Tracer Guide </button> <button onclick="switchTab(2)" class="tab-btn px-4 py-3 text-sm font-semibold whitespace-nowrap" style="color:#64748b;" data-idx="2"> <i data-lucide="clipboard-list" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Student Activity </button> <button onclick="switchTab(3)" class="tab-btn px-4 py-3 text-sm font-semibold whitespace-nowrap" style="color:#64748b;" data-idx="3"> <i data-lucide="help-circle" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Quiz </button>
+    </div>
+   </nav><!-- Content Area -->
+   <main class="max-w-5xl mx-auto px-6 py-8">
+    <!-- TAB 0: LESSON -->
+    <section id="tab-0" class="tab-content fade-in">
+     <!-- Real Life Scenario -->
+     <div class="scenario-box rounded-xl p-6 mb-8" style="background:#1e293b; border:1px solid #1e3a5f;">
+      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#10b981,#0ea5e9);"></div>
+      <div class="flex items-start gap-4">
+       <div class="text-4xl">
+        🏢
+       </div>
+       <div>
+        <h3 class="font-display font-bold text-lg mb-2" style="color:#f1f5f9;">Real-Life Scenario: Corporate Network Slowdown</h3>
+        <p class="leading-relaxed" style="color:#cbd5e1;">You work at <strong style="color:#10b981;">TechCorp Inc.</strong>, a 50-employee company. Suddenly, employees report the network is <em>"slow and laggy"</em> — files upload slowly, video calls drop, and productivity suffers. The boss asks: <em>"What's wrong with our network?"</em> To find out, you need network monitoring tools to measure performance, identify bottlenecks, and troubleshoot. That's what this lesson teaches you.</p>
+       </div>
+      </div>
+     </div><!-- What is Network Monitoring -->
+     <div class="mb-8">
+      <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color:#f1f5f9;"><span class="inline-block w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:#10b981;color:#0f172a;">1</span> What is Network Monitoring?</h2>
+      <div class="rounded-xl p-6" style="background:#1e293b; border:1px solid #1e3a5f;">
+       <p class="mb-4 leading-relaxed" style="color:#cbd5e1;">Network monitoring is the process of <strong style="color:#10b981;">continuously observing and measuring</strong> your network to ensure it's healthy, fast, and reliable. It's like having a doctor check your vital signs — if something's wrong, you catch it early.</p>
+       <p class="mb-4 leading-relaxed" style="color:#cbd5e1;"><strong>Think of it this way:</strong> Your network is like a highway. Without monitoring, you wouldn't know if traffic is backed up, if an accident occurred, or if a lane is closed. With monitoring, you see exactly what's happening in real-time.</p>
+       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+        <div class="rounded-lg p-4 text-center" style="background:#0f172a; border:1px solid #1e3a5f;">
+         <div class="text-3xl mb-2">
+          📊
+         </div>
+         <p class="text-sm font-semibold" style="color:#10b981;">Bandwidth Usage</p>
+         <p class="text-xs mt-1" style="color:#94a3b8;">How much data flows through your network</p>
+        </div>
+        <div class="rounded-lg p-4 text-center" style="background:#0f172a; border:1px solid #1e3a5f;">
+         <div class="text-3xl mb-2">
+          ⏱️
+         </div>
+         <p class="text-sm font-semibold" style="color:#10b981;">Latency/Delay</p>
+         <p class="text-xs mt-1" style="color:#94a3b8;">Time it takes for data to travel from A to B</p>
+        </div>
+        <div class="rounded-lg p-4 text-center" style="background:#0f172a; border:1px solid #1e3a5f;">
+         <div class="text-3xl mb-2">
+          📉
+         </div>
+         <p class="text-sm font-semibold" style="color:#10b981;">Packet Loss</p>
+         <p class="text-xs mt-1" style="color:#94a3b8;">Percentage of data that fails to reach destination</p>
+        </div>
+       </div>
+      </div>
+     </div><!-- Key Monitoring Concepts -->
+     <div class="mb-8">
+      <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color:#f1f5f9;"><span class="inline-block w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:#10b981;color:#0f172a;">2</span> Key Monitoring Concepts</h2>
+      <div class="space-y-3">
+       <div class="rounded-lg p-4" style="background:#1e293b; border-left:3px solid #10b981;">
+        <p class="font-display font-bold text-sm mb-2" style="color:#10b981;">🔗 Bandwidth (Throughput)</p>
+        <p class="text-sm" style="color:#cbd5e1;">Maximum data transmission rate. Example: "Your internet connection is 100 Mbps" means max 100 megabits per second.</p>
+        <p class="text-xs mt-2" style="color:#94a3b8;">💡 Think: The width of the highway — wider = more cars can pass</p>
+       </div>
+       <div class="rounded-lg p-4" style="background:#1e293b; border-left:3px solid #f59e0b;">
+        <p class="font-display font-bold text-sm mb-2" style="color:#f59e0b;">⏱️ Latency (Ping Time)</p>
+        <p class="text-sm" style="color:#cbd5e1;">Time delay for data to travel from source to destination, measured in milliseconds (ms). Lower is better. Normal: &lt;50ms. Slow: &gt;100ms.</p>
+        <p class="text-xs mt-2" style="color:#94a3b8;">💡 Think: How long it takes a driver to reach their destination</p>
+       </div>
+       <div class="rounded-lg p-4" style="background:#1e293b; border-left:3px solid #ef4444;">
+        <p class="font-display font-bold text-sm mb-2" style="color:#ef4444;">📉 Packet Loss</p>
+        <p class="text-sm" style="color:#cbd5e1;">Percentage of data packets that never reach their destination. Normal: 0%. Bad: &gt;1% causes noticeable issues (video freezes, dropouts).</p>
+        <p class="text-xs mt-2" style="color:#94a3b8;">💡 Think: Percentage of mail that gets lost in transit</p>
+       </div>
+       <div class="rounded-lg p-4" style="background:#1e293b; border-left:3px solid #0ea5e9;">
+        <p class="font-display font-bold text-sm mb-2" style="color:#0ea5e9;">💾 Jitter</p>
+        <p class="text-sm" style="color:#cbd5e1;">Variation in latency over time. Inconsistent delay causes choppy video calls and lag in gaming. Should be &lt;20ms.</p>
+        <p class="text-xs mt-2" style="color:#94a3b8;">💡 Think: A bumpy vs. smooth ride — smoothness = low jitter</p>
+       </div>
+      </div>
+     </div><!-- Network Performance Tools -->
+     <div class="mb-8">
+      <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color:#f1f5f9;"><span class="inline-block w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:#10b981;color:#0f172a;">3</span> Essential Network Performance Tools</h2>
+      <div class="space-y-3">
+       <div class="rounded-lg p-5 border-l-4" style="background:#1e293b; border-color:#10b981; border-left-width:4px;">
+        <div class="flex items-start justify-between mb-2">
+         <div>
+          <p class="font-display font-bold text-sm" style="color:#10b981;">PING (Packet InterNet Groper)</p>
+          <p class="text-xs mt-1" style="color:#94a3b8;">Command: <code style="background:#0f172a;padding:2px 6px;border-radius:3px;">ping 8.8.8.8</code></p>
+         </div><span class="tool-badge" style="background:#d1fae5;color:#065f46;">Basic</span>
+        </div>
+        <p class="text-sm mb-3" style="color:#cbd5e1;">Tests <strong>connectivity</strong> and <strong>latency</strong>. Sends small packets to a host and waits for replies.</p>
+        <div class="text-xs" style="background:#0f172a;padding:3px 6px;border-radius:3px;color:#94a3b8;font-family:'JetBrains Mono';">
+         C:&gt; ping 8.8.8.8<br>
+          Reply from 8.8.8.8: bytes=32 time=15ms TTL=53<br><span style="color:#10b981;">✓ Success! Latency = 15ms</span>
+        </div>
+       </div>
+       <div class="rounded-lg p-5 border-l-4" style="background:#1e293b; border-color:#0ea5e9; border-left-width:4px;">
+        <div class="flex items-start justify-between mb-2">
+         <div>
+          <p class="font-display font-bold text-sm" style="color:#0ea5e9;">TRACERT / TRACEROUTE</p>
+          <p class="text-xs mt-1" style="color:#94a3b8;">Command: <code style="background:#0f172a;padding:2px 6px;border-radius:3px;">tracert google.com</code></p>
+         </div><span class="tool-badge" style="background:#dbeafe;color:#0c4a6e;">Intermediate</span>
+        </div>
+        <p class="text-sm mb-3" style="color:#cbd5e1;">Shows the <strong>path</strong> your data takes to reach a destination, hop by hop. Identifies where slowdown or failure occurs.</p>
+        <p class="text-xs" style="color:#94a3b8;">Use when: Data reaches the server but takes forever. Helps find problematic router or network segment.</p>
+       </div>
+       <div class="rounded-lg p-5 border-l-4" style="background:#1e293b; border-color:#f59e0b; border-left-width:4px;">
+        <div class="flex items-start justify-between mb-2">
+         <div>
+          <p class="font-display font-bold text-sm" style="color:#f59e0b;">IPCONFIG / IFCONFIG</p>
+          <p class="text-xs mt-1" style="color:#94a3b8;">Windows: <code style="background:#0f172a;padding:2px 6px;border-radius:3px;">ipconfig</code> | Linux: <code style="background:#0f172a;padding:2px 6px;border-radius:3px;">ifconfig</code></p>
+         </div><span class="tool-badge" style="background:#fed7aa;color:#7c2d12;">Basic</span>
+        </div>
+        <p class="text-sm mb-3" style="color:#cbd5e1;">Shows your device's <strong>network configuration</strong> — IP address, subnet mask, gateway, DNS server.</p>
+        <p class="text-xs" style="color:#94a3b8;">Use when: Need to check if DHCP assigned correct IP, or manually set static IP for testing.</p>
+       </div>
+       <div class="rounded-lg p-5 border-l-4" style="background:#1e293b; border-color:#8b5cf6; border-left-width:4px;">
+        <div class="flex items-start justify-between mb-2">
+         <div>
+          <p class="font-display font-bold text-sm" style="color:#8b5cf6;">NSLOOKUP / DIG</p>
+          <p class="text-xs mt-1" style="color:#94a3b8;">Command: <code style="background:#0f172a;padding:2px 6px;border-radius:3px;">nslookup google.com</code></p>
+         </div><span class="tool-badge" style="background:#ede9fe;color:#5b21b6;">Intermediate</span>
+        </div>
+        <p class="text-sm mb-3" style="color:#cbd5e1;">Performs <strong>DNS lookups</strong> — translates domain names (google.com) to IP addresses (142.250.185.46).</p>
+        <p class="text-xs" style="color:#94a3b8;">Use when: Websites don't load. Verify DNS is working and resolving correctly.</p>
+       </div>
+       <div class="rounded-lg p-5 border-l-4" style="background:#1e293b; border-color:#ec4899; border-left-width:4px;">
+        <div class="flex items-start justify-between mb-2">
+         <div>
+          <p class="font-display font-bold text-sm" style="color:#ec4899;">IPERF / SPEEDTEST</p>
+          <p class="text-xs mt-1" style="color:#94a3b8;">Tool: Dedicated apps or websites</p>
+         </div><span class="tool-badge" style="background:#fbcfe8;color:#831843;">Advanced</span>
+        </div>
+        <p class="text-sm mb-3" style="color:#cbd5e1;">Measures actual <strong>bandwidth/throughput</strong> — how much data can be transferred in a time period.</p>
+        <p class="text-xs" style="color:#94a3b8;">Use when: Need to verify "you get what you paid for" from ISP or identify bottlenecks in data transfer speed.</p>
+       </div>
+      </div>
+     </div><!-- Performance Thresholds Table -->
+     <div class="mb-8">
+      <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color:#f1f5f9;"><span class="inline-block w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:#10b981;color:#0f172a;">4</span> Performance Benchmarks</h2>
+      <div class="rounded-xl p-6 overflow-x-auto" style="background:#1e293b; border:1px solid #1e3a5f;">
+       <table class="w-full text-sm">
+        <thead style="background:#0f172a;">
+         <tr>
+          <th class="text-left font-display text-xs tracking-wider" style="color:#10b981; padding:10px;">Metric</th>
+          <th class="text-left font-display text-xs tracking-wider" style="color:#10b981; padding:10px;">Excellent ✅</th>
+          <th class="text-left font-display text-xs tracking-wider" style="color:#f59e0b; padding:10px;">Good ⚠️</th>
+          <th class="text-left font-display text-xs tracking-wider" style="color:#ef4444; padding:10px;">Poor ❌</th>
+         </tr>
+        </thead>
+        <tbody style="color:#cbd5e1;">
+         <tr style="border-top:1px solid #1e3a5f;">
+          <td style="padding:10px;"><strong>Ping (Latency)</strong></td>
+          <td style="padding:10px;">&lt;20ms</td>
+          <td style="padding:10px;">20-50ms</td>
+          <td style="padding:10px;">&gt;100ms</td>
+         </tr>
+         <tr style="border-top:1px solid #1e3a5f;background:#0f172a40;">
+          <td style="padding:10px;"><strong>Jitter</strong></td>
+          <td style="padding:10px;">&lt;5ms</td>
+          <td style="padding:10px;">5-20ms</td>
+          <td style="padding:10px;">&gt;30ms</td>
+         </tr>
+         <tr style="border-top:1px solid #1e3a5f;">
+          <td style="padding:10px;"><strong>Packet Loss</strong></td>
+          <td style="padding:10px;">0%</td>
+          <td style="padding:10px;">0-1%</td>
+          <td style="padding:10px;">&gt;1%</td>
+         </tr>
+         <tr style="border-top:1px solid #1e3a5f;background:#0f172a40;">
+          <td style="padding:10px;"><strong>Download Speed</strong></td>
+          <td style="padding:10px;">&gt;100 Mbps</td>
+          <td style="padding:10px;">50-100 Mbps</td>
+          <td style="padding:10px;">&lt;25 Mbps</td>
+         </tr>
+         <tr style="border-top:1px solid #1e3a5f;">
+          <td style="padding:10px;"><strong>Upload Speed</strong></td>
+          <td style="padding:10px;">&gt;25 Mbps</td>
+          <td style="padding:10px;">10-25 Mbps</td>
+          <td style="padding:10px;">&lt;5 Mbps</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div>
+     <div class="text-center pt-4">
+      <button onclick="switchTab(1)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#10b981; color:#0f172a;"> Next: Packet Tracer Guide → </button>
+     </div>
+    </section><!-- TAB 1: PACKET TRACER GUIDE -->
+    <section id="tab-1" class="tab-content fade-in hidden">
+     <div class="scenario-box rounded-xl p-6 mb-8" style="background:#1e293b; border:1px solid #1e3a5f;">
+      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#10b981,#0ea5e9);"></div>
+      <div class="flex items-start gap-4">
+       <div class="text-4xl">
+        🛠️
+       </div>
+       <div>
+        <h3 class="font-display font-bold text-lg mb-2" style="color:#f1f5f9;">Guided Lab: Monitoring TechCorp Network Performance</h3>
+        <p class="leading-relaxed" style="color:#cbd5e1;">Follow these steps in <strong>Cisco Packet Tracer</strong> to set up a corporate network and use monitoring tools to measure performance, identify latency issues, and verify connectivity between departments.</p>
+       </div>
+      </div>
+     </div><!-- Network Diagram -->
+     <div class="rounded-xl p-6 mb-8 text-center" style="background:#1e293b; border:1px solid #1e3a5f;">
+      <h4 class="font-display font-bold text-sm mb-4" style="color:#10b981;">Network Topology: TechCorp Multi-Office Setup</h4>
+      <svg width="500" height="240" viewbox="0 0 500 240" class="mx-auto">
+       <!-- Internet --> <ellipse cx="250" cy="30" rx="50" ry="20" fill="#334155" stroke="#64748b" /> <text x="250" y="34" text-anchor="middle" fill="#94a3b8" font-size="11">
+        ☁ Internet
+       </text> <!-- HQ Router --> <rect x="150" y="70" width="90" height="40" rx="8" fill="#10b981" /> <text x="195" y="90" text-anchor="middle" fill="#0f172a" font-size="9" font-weight="bold">
+        HQ Router
+       </text> <text x="195" y="102" text-anchor="middle" fill="#0f172a" font-size="8">
+        (HQ)
+       </text> <!-- Branch Router --> <rect x="310" y="70" width="90" height="40" rx="8" fill="#10b981" /> <text x="355" y="90" text-anchor="middle" fill="#0f172a" font-size="9" font-weight="bold">
+        Branch Router
+       </text> <text x="355" y="102" text-anchor="middle" fill="#0f172a" font-size="8">
+        (Branch)
+       </text> <!-- Internet connections --> <line x1="250" y1="50" x2="195" y2="70" stroke="#0ea5e9" stroke-width="2" /> <line x1="250" y1="50" x2="355" y2="70" stroke="#0ea5e9" stroke-width="2" /> <!-- WAN Link (slow) --> <line x1="240" y1="95" x2="310" y2="95" stroke="#ef4444" stroke-width="2" stroke-dasharray="5" /> <text x="275" y="85" text-anchor="middle" fill="#ef4444" font-size="8" font-weight="bold">
+        WAN Link
+       </text> <!-- HQ Workstations --> <rect x="50" y="160" width="50" height="30" rx="4" fill="#334155" stroke="#64748b" /> <text x="75" y="178" text-anchor="middle" fill="#cbd5e1" font-size="9">
+        PC0 (Sales)
+       </text> <line x1="100" y1="175" x2="150" y2="95" stroke="#64748b" stroke-width="1" stroke-dasharray="3" /> <rect x="130" y="160" width="50" height="30" rx="4" fill="#334155" stroke="#64748b" /> <text x="155" y="178" text-anchor="middle" fill="#cbd5e1" font-size="9">
+        PC1 (HR)
+       </text> <line x1="155" y1="160" x2="175" y2="110" stroke="#64748b" stroke-width="1" stroke-dasharray="3" /> <!-- Branch Workstations --> <rect x="300" y="160" width="50" height="30" rx="4" fill="#334155" stroke="#64748b" /> <text x="325" y="178" text-anchor="middle" fill="#cbd5e1" font-size="9">
+        PC2 (IT)
+       </text> <line x1="325" y1="160" x2="340" y2="110" stroke="#64748b" stroke-width="1" stroke-dasharray="3" /> <rect x="380" y="160" width="50" height="30" rx="4" fill="#334155" stroke="#64748b" /> <text x="405" y="178" text-anchor="middle" fill="#cbd5e1" font-size="9">
+        PC3 (Eng)
+       </text> <line x1="405" y1="160" x2="390" y2="110" stroke="#64748b" stroke-width="1" stroke-dasharray="3" /> <!-- Legend --> <text x="250" y="225" text-anchor="middle" fill="#64748b" font-size="10">
+        WAN Link slow on purpose—simulates real office bottleneck
+       </text>
+      </svg>
+     </div><!-- Steps -->
+     <div class="space-y-4" id="pt-steps">
+      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#10b981; border-left-color:#10b981;">
+       <div class="flex items-center gap-3 mb-3">
+        <span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#10b981; color:#0f172a;">1</span>
+        <h4 class="font-display font-bold" style="color:#f1f5f9;">Set Up the Network Topology</h4>
+       </div>
+       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
+        <li>1. Open Cisco Packet Tracer and create a <strong>new blank project</strong></li>
+        <li>2. From <strong>Routers → Cisco 2901</strong>, drag <strong>2 routers</strong> to the workspace</li>
+        <li>3. From <strong>End Devices → Computers</strong>, drag <strong>4 PCs</strong> to the workspace</li>
+        <li>4. From <strong>Network Devices → Switches</strong>, drag <strong>2 Ethernet Switches</strong></li>
+        <li>5. Arrange: Place routers in center, switches below them, and PCs around switches</li>
+       </ol>
+       <div class="mt-3 ml-11 p-3 rounded-lg text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#94a3b8;">
+        💡 <strong>Naming:</strong> Rename routers to "HQ-Router" and "Branch-Router" for clarity (right-click → Edit Config)
+       </div>
+      </div>
+      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#10b981;">
+       <div class="flex items-center gap-3 mb-3">
+        <span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#10b981; color:#0f172a;">2</span>
+        <h4 class="font-display font-bold" style="color:#f1f5f9;">Connect Devices with Cables</h4>
+       </div>
+       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
+        <li>1. Go to the <strong>Connections panel</strong> (bottom left) → select <strong>Copper Straight-Through cable</strong></li>
+        <li>2. Connect <strong>PC0 → Switch0</strong> (LAN port)</li>
+        <li>3. Connect <strong>PC1 → Switch0</strong> (LAN port)</li>
+        <li>4. Connect <strong>Switch0 → HQ-Router (Fa0/0)</strong> (FastEthernet port)</li>
+        <li>5. Repeat for Branch: PC2, PC3 → Switch1 → Branch-Router (Fa0/0)</li>
+        <li>6. Connect <strong>HQ-Router (Fa0/1) ↔ Branch-Router (Fa0/1)</strong> — this is your WAN link</li>
+       </ol>
+       <div class="mt-3 ml-11 p-3 rounded-lg text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#94a3b8;">
+        💡 <strong>Tip:</strong> Cables turn green when properly connected, red if there's an error.
+       </div>
+      </div>
+      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#f59e0b;">
+       <div class="flex items-center gap-3 mb-3">
+        <span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#f59e0b; color:#0f172a;">3</span>
+        <h4 class="font-display font-bold" style="color:#f1f5f9;">Configure IP Addresses on Routers</h4>
+       </div>
+       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
+        <li><strong>HQ-Router Configuration:</strong>
+         <ul class="ml-4 mt-1 space-y-1" style="color:#94a3b8;">
+          <li>• Click <strong>HQ-Router → CLI tab</strong></li>
+          <li>• Type: <code style="color:#0ea5e9;">enable</code> → <code style="color:#0ea5e9;">configure terminal</code></li>
+          <li>• <code style="color:#0ea5e9;">interface Fa0/0</code> → <code style="color:#0ea5e9;">ip address 192.168.1.1 255.255.255.0</code> → <code style="color:#0ea5e9;">no shutdown</code></li>
+          <li>• <code style="color:#0ea5e9;">interface Fa0/1</code> → <code style="color:#0ea5e9;">ip address 192.168.12.1 255.255.255.0</code> → <code style="color:#0ea5e9;">no shutdown</code></li>
+         </ul></li>
+        <li><strong>Branch-Router Configuration:</strong>
+         <ul class="ml-4 mt-1 space-y-1" style="color:#94a3b8;">
+          <li>• Same process for Branch-Router</li>
+          <li>• Fa0/0: <code style="color:#0ea5e9;">192.168.2.1 255.255.255.0</code></li>
+          <li>• Fa0/1: <code style="color:#0ea5e9;">192.168.12.2 255.255.255.0</code></li>
+         </ul></li>
+       </ol>
+       <div class="mt-3 ml-11 p-3 rounded-lg text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#94a3b8;">
+        💡 <strong>Note:</strong> The Fa0/1 addresses (192.168.12.x) form the WAN link between routers.
+       </div>
+      </div>
+      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#0ea5e9;">
+       <div class="flex items-center gap-3 mb-3">
+        <span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#0ea5e9; color:#0f172a;">4</span>
+        <h4 class="font-display font-bold" style="color:#f1f5f9;">Enable DHCP on Routers (for PCs)</h4>
+       </div>
+       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
+        <li>1. Click <strong>HQ-Router → GUI tab</strong></li>
+        <li>2. Go to <strong>Services → DHCP</strong></li>
+        <li>3. Enable <strong>DHCP</strong> with these settings: 
+         <ul class="ml-4 mt-1 space-y-1" style="color:#94a3b8;">
+          <li>• Network: <code style="color:#0ea5e9;">192.168.1.0</code></li>
+          <li>• Subnet Mask: <code style="color:#0ea5e9;">255.255.255.0</code></li>
+          <li>• Default Gateway: <code style="color:#0ea5e9;">192.168.1.1</code></li>
+         </ul></li>
+        <li>4. Repeat for <strong>Branch-Router</strong> (Network: 192.168.2.0)</li>
+       </ol>
+      </div>
+      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#10b981;">
+       <div class="flex items-center gap-3 mb-3">
+        <span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#10b981; color:#0f172a;">5</span>
+        <h4 class="font-display font-bold" style="color:#f1f5f9;">Configure PCs to Get IP via DHCP</h4>
+       </div>
+       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
+        <li>1. Click <strong>PC0 → Desktop tab → IP Configuration</strong></li>
+        <li>2. Select <strong>DHCP</strong> (NOT Static)</li>
+        <li>3. Wait a few seconds — you should see PC0 get an IP like <strong>192.168.1.100</strong></li>
+        <li>4. Repeat for <strong>PC1, PC2, PC3</strong></li>
+       </ol>
+       <div class="mt-3 ml-11 p-3 rounded-lg text-xs" style="background:#10b981; color:#0f172a;">
+        <strong>✓ Success!</strong> All PCs should now have IPs. Green lights on cables = good connection.
+       </div>
+      </div>
+      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#8b5cf6;">
+       <div class="flex items-center gap-3 mb-3">
+        <span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#8b5cf6; color:#fff;">6</span>
+        <h4 class="font-display font-bold" style="color:#f1f5f9;">Set Up Routing Between HQ and Branch</h4>
+       </div>
+       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
+        <li>1. Click <strong>HQ-Router → CLI</strong> and type: 
+         <div class="mt-1 p-2 rounded font-display text-xs" style="background:#0f172a;color:#0ea5e9;">
+          configure terminal<br>
+           ip route 192.168.2.0 255.255.255.0 192.168.12.2
+         </div></li>
+        <li>2. Click <strong>Branch-Router → CLI</strong> and type: 
+         <div class="mt-1 p-2 rounded font-display text-xs" style="background:#0f172a;color:#0ea5e9;">
+          configure terminal<br>
+           ip route 192.168.1.0 255.255.255.0 192.168.12.1
+         </div></li>
+       </ol>
+       <div class="mt-3 ml-11 p-3 rounded-lg text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#94a3b8;">
+        💡 <strong>What this does:</strong> Tells routers how to reach the other office's network.
+       </div>
+      </div>
+      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#ef4444;">
+       <div class="flex items-center gap-3 mb-3">
+        <span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#ef4444; color:#fff;">7</span>
+        <h4 class="font-display font-bold" style="color:#f1f5f9;">Test Connectivity with PING</h4>
+       </div>
+       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
+        <li>1. Click <strong>PC0 → Desktop → Command Prompt</strong></li>
+        <li>2. Type: <code style="color:#0ea5e9;">ping 192.168.2.1</code> (ping the Branch router)</li>
+        <li>3. You should see replies like: <code style="color:#10b981;">Reply from 192.168.2.1: bytes=32 time=30ms</code></li>
+        <li>4. Now type: <code style="color:#0ea5e9;">ping 192.168.2.100</code> (ping a PC in the Branch office)</li>
+        <li>5. Note the <strong>latency (time=XXms)</strong> — this simulates the WAN delay between offices</li>
+       </ol>
+       <div class="mt-3 ml-11 p-4 rounded-lg font-display text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#cbd5e1;">
+        <div style="color:#10b981;">
+         C:\&gt; ping 192.168.2.1
+        </div>
+        <div style="color:#94a3b8;">
+         Pinging 192.168.2.1 with 32 bytes of data:
+        </div>
+        <div style="color:#10b981;">
+         Reply from 192.168.2.1: bytes=32 time=30ms TTL=63
+        </div>
+        <div style="color:#10b981;">
+         Reply from 192.168.2.1: bytes=32 time=28ms TTL=63
+        </div>
+        <div style="color:#10b981;">
+         Ping statistics: Sent=4, Received=4, Lost=0 (0% loss)
+        </div>
+       </div>
+      </div>
+      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#10b981;">
+       <div class="flex items-center gap-3 mb-3">
+        <span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#10b981; color:#0f172a;">8</span>
+        <h4 class="font-display font-bold" style="color:#f1f5f9;">Trace the Route with TRACERT</h4>
+       </div>
+       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
+        <li>1. Still in <strong>PC0 Command Prompt</strong>, type: <code style="color:#0ea5e9;">tracert 192.168.2.100</code></li>
+        <li>2. You'll see the path: PC0 → HQ-Router (192.168.1.1) → Branch-Router (192.168.12.2) → PC3 (192.168.2.100)</li>
+        <li>3. Note each <strong>hop's latency</strong> — this shows where delay occurs</li>
+       </ol>
+       <div class="mt-3 ml-11 p-4 rounded-lg font-display text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#cbd5e1;">
+        <div style="color:#94a3b8;">
+         C:\&gt; tracert 192.168.2.100
+        </div>
+        <div style="color:#f59e0b;">
+         Hop 1: 192.168.1.1 (HQ-Router) — 2ms ✓
+        </div>
+        <div style="color:#ef4444;">
+         Hop 2: 192.168.12.2 (WAN Link) — 25ms ⚠️ (slow!)
+        </div>
+        <div style="color:#f59e0b;">
+         Hop 3: 192.168.2.100 (PC3) — 5ms ✓
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="text-center pt-8 flex justify-center gap-4">
+      <button onclick="switchTab(0)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#334155; color:#cbd5e1;"> ← Back to Lesson </button> <button onclick="switchTab(2)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#10b981; color:#0f172a;"> Next: Student Activity → </button>
+     </div>
+    </section><!-- TAB 2: STUDENT ACTIVITY -->
+    <section id="tab-2" class="tab-content fade-in hidden">
+     <div class="scenario-box rounded-xl p-6 mb-8" style="background:#1e293b; border:1px solid #1e3a5f;">
+      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#8b5cf6,#ec4899);"></div>
+      <div class="flex items-start gap-4">
+       <div class="text-4xl">
+        🎯
+       </div>
+       <div>
+        <h3 class="font-display font-bold text-lg mb-2" style="color:#f1f5f9;">Student Activity: Troubleshoot CloudSync Data Center</h3>
+        <p class="leading-relaxed" style="color:#cbd5e1;">CloudSync Inc. has 3 data center locations (HQ, East, West) connected by WAN links. Users report slow file transfers and video conference delays. YOU must set up the network, monitor performance, and identify the bottleneck. Build and troubleshoot this network on your own.</p>
+       </div>
+      </div>
+     </div><!-- Requirements -->
+     <div class="rounded-xl p-6 mb-6" style="background:#1e293b; border:1px solid #1e3a5f;">
+      <h4 class="font-display font-bold text-base mb-4 flex items-center gap-2" style="color:#8b5cf6;"><i data-lucide="list-checks" style="width:18px;height:18px;"></i> Setup Requirements</h4>
+      <div class="overflow-x-auto rounded-lg" style="border:1px solid #1e3a5f;">
+       <table class="w-full text-sm">
+        <thead style="background:#0f172a;">
+         <tr>
+          <th class="text-left font-display text-xs tracking-wider" style="color:#8b5cf6;">Component</th>
+          <th class="text-left font-display text-xs tracking-wider" style="color:#8b5cf6;">Configuration</th>
+         </tr>
+        </thead>
+        <tbody style="color:#cbd5e1;">
+         <tr style="border-top:1px solid #1e3a5f;">
+          <td class="font-semibold">3 Routers</td>
+          <td>HQ (192.168.1.x), East (192.168.2.x), West (192.168.3.x)</td>
+         </tr>
+         <tr style="border-top:1px solid #1e3a5f; background:#0f172a40;">
+          <td class="font-semibold">6 PCs Total</td>
+          <td>2 per location (get IPs via DHCP)</td>
+         </tr>
+         <tr style="border-top:1px solid #1e3a5f;">
+          <td class="font-semibold">3 Switches</td>
+          <td>One per location for local network</td>
+         </tr>
+         <tr style="border-top:1px solid #1e3a5f; background:#0f172a40;">
+          <td class="font-semibold">Routing</td>
+          <td>All 3 routers can reach each other's networks</td>
+         </tr>
+         <tr style="border-top:1px solid #1e3a5f;">
+          <td class="font-semibold">WAN Performance</td>
+          <td>WAN links should have 15-40ms latency (simulate real delay)</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div><!-- Tasks Checklist -->
+     <div class="rounded-xl p-6 mb-6" style="background:#1e293b; border:1px solid #1e3a5f;">
+      <h4 class="font-display font-bold text-base mb-4 flex items-center gap-2" style="color:#8b5cf6;"><i data-lucide="check-square" style="width:18px;height:18px;"></i> Task Checklist</h4>
+      <p class="text-sm mb-4" style="color:#94a3b8;">Check off each task as you complete it:</p>
+      <div class="space-y-3" id="checklist">
+       <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 1:</strong> Create topology: 3 routers, 3 switches, 6 PCs (2 per location)</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 2:</strong> Connect all devices with cables (all green lights)</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 3:</strong> Configure router IPs (HQ: 192.168.1.1, East: 192.168.2.1, West: 192.168.3.1) and WAN links</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 4:</strong> Enable DHCP on all 3 routers for their local networks</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 5:</strong> Set all 6 PCs to use DHCP (verify they get IPs)</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 6:</strong> Configure static routing on all routers so they can reach other locations</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" type="checkbox" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 7:</strong> PING from HQ PC to East PC — measure latency</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" type="checkbox" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 8:</strong> PING from HQ PC to West PC — measure latency</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" type="checkbox" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 9:</strong> Run TRACERT from HQ PC to West PC — document the hops and latencies</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" type="checkbox" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 10:</strong> Verify 0% packet loss on all PINGs — all connections work</span> </label>
+      </div>
+      <div class="mt-4 flex items-center gap-3">
+       <div class="flex-1 h-3 rounded-full overflow-hidden" style="background:#0f172a;">
+        <div id="checklist-bar" class="h-full rounded-full progress-fill" style="background:#8b5cf6; width:0%;"></div>
+       </div><span id="checklist-pct" class="font-display text-sm font-bold" style="color:#8b5cf6;">0%</span>
+      </div>
+     </div><!-- Performance Analysis Challenge -->
+     <div class="rounded-xl p-6 mb-6" style="background:linear-gradient(135deg, #1e1b4b 0%, #1e293b 100%); border:1px solid #4c1d95;">
+      <h4 class="font-display font-bold text-base mb-3 flex items-center gap-2" style="color:#c4b5fd;">⭐ Analysis Challenge (Extra Credit)</h4>
+      <ol class="space-y-3 text-sm" style="color:#cbd5e1;">
+       <li><strong>1. Identify the Bottleneck:</strong>
+        <ul class="ml-4 mt-1 space-y-1" style="color:#94a3b8;">
+         <li>• Which WAN link has the highest latency?</li>
+         <li>• Use TRACERT to compare HQ→East vs HQ→West</li>
+         <li>• Which one would cause video conference lag?</li>
+        </ul></li>
+       <li><strong>2. Document Performance:</strong>
+        <ul class="ml-4 mt-1 space-y-1" style="color:#94a3b8;">
+         <li>• Create a table showing: From Location → To Location → Latency (ms) → Status (Good/Poor)</li>
+         <li>• Use the benchmarks from the lesson (≤20ms = Excellent, ≤50ms = Good, &gt;100ms = Poor)</li>
+        </ul></li>
+       <li><strong>3. Recommendations:</strong>
+        <ul class="ml-4 mt-1 space-y-1" style="color:#94a3b8;">
+         <li>• If West has high latency (40+ms), what would you recommend to the CEO?</li>
+         <li>• Would this be acceptable for: email? File transfers? Video calls? VoIP?</li>
+        </ul></li>
+      </ol>
+     </div><!-- Submission Requirements -->
+     <div class="rounded-xl p-6 mb-6" style="background:#1e293b; border:1px solid #1e3a5f;">
+      <h4 class="font-display font-bold text-base mb-3 flex items-center gap-2" style="color:#f59e0b;"><i data-lucide="upload" style="width:18px;height:18px;"></i> What to Submit</h4>
+      <ol class="space-y-2 text-sm" style="color:#cbd5e1;">
+       <li><strong>1.</strong> The Packet Tracer file (<code>.pkt</code>) with full working network</li>
+       <li><strong>2.</strong> Screenshot of network topology showing all 3 locations</li>
+       <li><strong>3.</strong> Screenshot of successful PING from HQ to East (show latency)</li>
+       <li><strong>4.</strong> Screenshot of TRACERT output from HQ to West (show all hops)</li>
+       <li><strong>5.</strong> Document: Performance analysis table (From → To → Latency → Status)</li>
+       <li><strong>6.</strong> One-paragraph answer to: "If you were the network admin, what would you tell the CEO about data center performance?"</li>
+      </ol>
+     </div>
+     <div class="text-center pt-4 flex justify-center gap-4">
+      <button onclick="switchTab(1)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#334155; color:#cbd5e1;"> ← Back to Guide </button> <button onclick="switchTab(3)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#10b981; color:#0f172a;"> Take the Quiz → </button>
+     </div>
+    </section><!-- TAB 3: QUIZ -->
+    <section id="tab-3" class="tab-content fade-in hidden">
+     <div class="scenario-box rounded-xl p-6 mb-8" style="background:#1e293b; border:1px solid #1e3a5f;">
+      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#10b981,#0ea5e9);"></div>
+      <div class="flex items-start gap-4">
+       <div class="text-4xl">
+        🧠
+       </div>
+       <div>
+        <h3 class="font-display font-bold text-lg mb-2" style="color:#f1f5f9;">Knowledge Check</h3>
+        <p class="leading-relaxed" style="color:#cbd5e1;">Test your understanding of network monitoring concepts. Click the correct answer for each question.</p>
+       </div>
+      </div>
+     </div>
+     <div id="quiz-container" class="space-y-6"></div>
+     <div id="quiz-result" class="hidden rounded-xl p-6 mt-6 text-center" style="background:#1e293b; border:1px solid #1e3a5f;">
+      <div id="quiz-score" class="font-display text-3xl font-bold mb-2" style="color:#10b981;"></div>
+      <p id="quiz-msg" class="text-sm" style="color:#cbd5e1;"></p><button onclick="resetQuiz()" class="mt-4 px-6 py-2 rounded-lg font-semibold text-sm" style="background:#10b981; color:#0f172a;">Try Again</button>
+     </div>
+     <div class="text-center pt-8">
+      <button onclick="switchTab(0)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#334155; color:#cbd5e1;"> ← Back to Lesson </button>
+     </div>
+    </section>
+   </main><!-- Footer -->
+   <footer class="w-full py-6 text-center text-xs" style="color:#475569; border-top:1px solid #1e3a5f;">
+    IS103 - IT Infrastructure and Network Technologies | Prof. MKDB | Finals Week 2
+   </footer>
+  </div>
+  <script>
+  // Quiz Data
+  const quizData = [
+    {
+      q: "What does PING measure in a network?",
+      opts: ["Bandwidth available", "Connectivity and latency (response time)", "Number of devices connected", "Data transfer speed"],
+      correct: 1
+    },
+    {
+      q: "Which metric shows the time delay for data to travel from source to destination?",
+      opts: ["Bandwidth", "Latency (Ping time)", "Packet loss", "Throughput"],
+      correct: 1
+    },
+    {
+      q: "What is considered EXCELLENT latency performance?",
+      opts: ["50-100 ms", "<20 ms", "100-200 ms", "Any value <500 ms"],
+      correct: 1
+    },
+    {
+      q: "If your ping shows 45 packets sent, 44 received, what is your packet loss?",
+      opts: ["2.2%", "0%", "1%", "44%"],
+      correct: 0
+    },
+    {
+      q: "What does TRACERT / TRACEROUTE show?",
+      opts: ["Total bandwidth usage", "The path data takes hop-by-hop to reach destination", "Your IP address", "Internet connection speed"],
+      correct: 1
+    },
+    {
+      q: "Which command shows your device's IP address, gateway, and DNS?",
+      opts: ["ping", "tracert", "ipconfig / ifconfig", "nslookup"],
+      correct: 2
+    },
+    {
+      q: "What is jitter in network monitoring?",
+      opts: ["Loss of internet connection", "Variation in latency over time", "Speed of light delay", "Maximum possible bandwidth"],
+      correct: 1
+    },
+    {
+      q: "A video conference is choppy and users report freezing. Which metric would you check FIRST?",
+      opts: ["Total bandwidth", "Packet loss and latency consistency (jitter)", "Number of connected devices", "Router temperature"],
+      correct: 1
+    }
+  ];
+
+  let quizAnswered = new Array(quizData.length).fill(null);
+
+  function buildQuiz() {
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = '';
+    quizData.forEach((item, i) => {
+      const card = document.createElement('div');
+      card.className = 'rounded-xl p-5';
+      card.style.cssText = 'background:#1e293b; border:1px solid #1e3a5f;';
+      card.innerHTML = `
+        <p class="font-display font-bold text-sm mb-3" style="color:#f1f5f9;">
+          <span style="color:#10b981;">${i + 1}.</span> ${item.q}
+        </p>
+        <div class="space-y-2" id="quiz-q-${i}">
+          ${item.opts.map((opt, j) => `
+            <div class="quiz-option rounded-lg p-3 text-sm cursor-pointer" style="background:#0f172a; border:2px solid #1e3a5f; color:#cbd5e1;" data-q="${i}" data-o="${j}" onclick="selectAnswer(${i},${j})">
+              <span class="font-semibold" style="color:#64748b;">${String.fromCharCode(65 + j)}.</span> ${opt}
+            </div>
+          `).join('')}
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function selectAnswer(qi, oi) {
+    if (quizAnswered[qi] !== null) return;
+    quizAnswered[qi] = oi;
+    const opts = document.querySelectorAll(`#quiz-q-${qi} .quiz-option`);
+    opts.forEach((el, j) => {
+      el.style.cursor = 'default';
+      if (j === quizData[qi].correct) {
+        el.classList.add('correct');
+        el.innerHTML = el.innerHTML + ' ✅';
+      } else if (j === oi && oi !== quizData[qi].correct) {
+        el.classList.add('incorrect');
+        el.innerHTML = el.innerHTML + ' ❌';
+      }
+    });
+    checkQuizDone();
+  }
+
+  function checkQuizDone() {
+    if (quizAnswered.every(a => a !== null)) {
+      const score = quizAnswered.filter((a, i) => a === quizData[i].correct).length;
+      document.getElementById('quiz-result').classList.remove('hidden');
+      document.getElementById('quiz-score').textContent = `${score} / ${quizData.length}`;
+      const pct = Math.round((score / quizData.length) * 100);
+      let msg = pct >= 88 ? "🎉 Excellent! You're a network monitoring pro!" : pct >= 63 ? "👍 Good job! Review the topics you missed." : "📖 Keep studying! Focus on monitoring metrics.";
+      document.getElementById('quiz-msg').textContent = msg;
+    }
+  }
+
+  function resetQuiz() {
+    quizAnswered = new Array(quizData.length).fill(null);
+    document.getElementById('quiz-result').classList.add('hidden');
+    buildQuiz();
+  }
+
+  // Tabs
+  let currentTab = 0;
+  function switchTab(idx) {
+    currentTab = idx;
+    document.querySelectorAll('.tab-content').forEach((el, i) => {
+      el.classList.toggle('hidden', i !== idx);
+    });
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+      if (i === idx) {
+        btn.classList.add('tab-active');
+        btn.style.color = '#10b981';
+        btn.style.borderColor = '#10b981';
+      } else {
+        btn.classList.remove('tab-active');
+        btn.style.color = '#64748b';
+        btn.style.borderColor = 'transparent';
+      }
+    });
+    updateProgressBar();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateProgressBar() {
+    const pct = ((currentTab + 1) / 4) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  }
+
+  // Checklist
+  function updateProgress() {
+    const checks = document.querySelectorAll('#checklist input[type="checkbox"]');
+    const done = [...checks].filter(c => c.checked).length;
+    const pct = Math.round((done / checks.length) * 100);
+    document.getElementById('checklist-bar').style.width = pct + '%';
+    document.getElementById('checklist-pct').textContent = pct + '%';
+  }
+
+  // Element SDK
+  const defaultConfig = {
+    course_title: 'IS103 - IT Infrastructure and Network Technologies',
+    professor_name: 'Prof. MKDB',
+    week_label: 'Finals Week 2',
+    background_color: '#0f172a',
+    surface_color: '#1e293b',
+    text_color: '#e2e8f0',
+    accent_color: '#10b981',
+    secondary_accent: '#8b5cf6',
+    font_family: 'Poppins',
+    font_size: 16
+  };
+
+  async function onConfigChange(config) {
+    const c = { ...defaultConfig, ...config };
+    document.getElementById('el-course').textContent = c.course_title;
+    document.getElementById('el-prof').innerHTML = `<i data-lucide="user" style="width:14px;height:14px;"></i> ${c.professor_name}`;
+    document.getElementById('el-week').innerHTML = `<i data-lucide="calendar" style="width:14px;height:14px;"></i> ${c.week_label}`;
+
+    document.getElementById('app').style.background = c.background_color;
+    document.body.style.background = c.background_color;
+    document.querySelectorAll('.tab-btn.tab-active').forEach(el => { el.style.color = c.accent_color; el.style.borderColor = c.accent_color; });
+
+    const font = c.font_family || defaultConfig.font_family;
+    document.body.style.fontFamily = `${font}, Poppins, sans-serif`;
+
+    const base = c.font_size || defaultConfig.font_size;
+    document.body.style.fontSize = base + 'px';
+
+    lucide.createIcons();
+  }
+
+  if (window.elementSdk) {
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange,
+      mapToCapabilities: (config) => ({
+        recolorables: [
+          { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+          { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+          { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+          { get: () => config.accent_color || defaultConfig.accent_color, set: (v) => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); } },
+          { get: () => config.secondary_accent || defaultConfig.secondary_accent, set: (v) => { config.secondary_accent = v; window.elementSdk.setConfig({ secondary_accent: v }); } }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => config.font_family || defaultConfig.font_family,
+          set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
+        },
+        fontSizeable: {
+          get: () => config.font_size || defaultConfig.font_size,
+          set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
+        }
+      }),
+      mapToEditPanelValues: (config) => new Map([
+        ['course_title', config.course_title || defaultConfig.course_title],
+        ['professor_name', config.professor_name || defaultConfig.professor_name],
+        ['week_label', config.week_label || defaultConfig.week_label]
+      ])
+    });
+  }
+
+  // Init
+  buildQuiz();
+  updateProgressBar();
+  lucide.createIcons();
+</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Monitoring &amp; Performance Tools Lesson</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&amp;display=swap" rel="stylesheet">
+  <style>
+  html, body { height: 100%; margin: 0; }
+  * { box-sizing: border-box; }
+  .font-display { font-family: 'Space Mono', monospace; }
+  .font-body { font-family: 'DM Sans', sans-serif; }
+  .tab-active { border-bottom: 3px solid; }
+  .step-card { border-left: 3px solid; transition: all 0.3s ease; }
+  .step-card:hover { transform: translateX(4px); }
+  .fade-in { animation: fadeIn 0.4s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .quiz-option { transition: all 0.2s ease; cursor: pointer; }
+  .quiz-option:hover { transform: scale(1.02); }
+  .quiz-option.correct { background: #d1fae5 !important; border-color: #10b981 !important; }
+  .quiz-option.incorrect { background: #fee2e2 !important; border-color: #ef4444 !important; }
+  .signal-ring { animation: pulse-ring 2s ease-out infinite; }
+  @keyframes pulse-ring { 0% { opacity: 0.6; transform: scale(1); } 100% { opacity: 0; transform: scale(1.8); } }
+  .blink { animation: blink 1.2s ease-in-out infinite; }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .checklist-item input:checked + span { text-decoration: line-through; opacity: 0.6; }
+  .tooltip-trigger:hover .tooltip-box { display: block; }
+  .tooltip-box { display: none; }
+  .progress-fill { transition: width 0.5s ease; }
+  table { border-collapse: collapse; }
+  td, th { padding: 10px 14px; }
+  .scenario-box { position: relative; overflow: hidden; }
+  .scenario-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+</style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <div id="app" class="w-full min-h-full" style="background:#0f172a;">
+   <!-- Header -->
+   <header class="w-full" style="background:linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-bottom:1px solid #1e3a5f;">
+    <div class="max-w-5xl mx-auto px-6 py-8">
+     <div class="flex items-center gap-3 mb-2">
+      <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:#10b981;">
+       <i data-lucide="activity" style="width:22px;height:22px;color:#0f172a;"></i>
+      </div><span id="el-course" class="text-sm font-display tracking-wider" style="color:#10b981;">IS103 - IT Infrastructure and Network Technologies</span>
+     </div>
+     <h1 id="el-title" class="font-display text-3xl md:text-4xl font-bold mb-2" style="color:#f1f5f9;">Network Monitoring &amp; Performance Tools</h1>
+     <div class="flex flex-wrap items-center gap-4 text-sm" style="color:#94a3b8;">
+      <span id="el-prof" class="flex items-center gap-1"><i data-lucide="user" style="width:14px;height:14px;"></i> Prof. MKDB</span> <span id="el-week" class="flex items-center gap-1"><i data-lucide="calendar" style="width:14px;height:14px;"></i> Finals Week 1</span> <span class="flex items-center gap-1"><i data-lucide="target" style="width:14px;height:14px;"></i> ILO: Configure basic wireless networks</span>
+     </div>
+    </div>
+   </header><!-- Progress Bar -->
+   <div class="w-full" style="background:#1e293b; height:4px;">
+    <div id="progress-bar" class="progress-fill h-full" style="background:#10b981; width:0%;"></div>
+   </div><!-- Navigation Tabs -->
+   <nav class="w-full sticky top-0 z-30" style="background:#0f172a; border-bottom:1px solid #1e3a5f;">
+    <div class="max-w-5xl mx-auto px-6 flex gap-1 overflow-x-auto" id="tab-nav">
+     <button onclick="switchTab(0)" class="tab-btn tab-active px-4 py-3 text-sm font-semibold whitespace-nowrap" style="color:#10b981; border-color:#10b981;" data-idx="0"> <i data-lucide="book-open" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Lesson </button> <button onclick="switchTab(1)" class="tab-btn px-4 py-3 text-sm font-semibold whitespace-nowrap" style="color:#64748b;" data-idx="1"> <i data-lucide="monitor" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Packet Tracer Guide </button> <button onclick="switchTab(2)" class="tab-btn px-4 py-3 text-sm font-semibold whitespace-nowrap" style="color:#64748b;" data-idx="2"> <i data-lucide="clipboard-list" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Student Activity </button> <button onclick="switchTab(3)" class="tab-btn px-4 py-3 text-sm font-semibold whitespace-nowrap" style="color:#64748b;" data-idx="3"> <i data-lucide="help-circle" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Quiz </button>
+    </div>
+   </nav><!-- Content Area -->
+   <main class="max-w-5xl mx-auto px-6 py-8">
+    <!-- TAB 0: LESSON -->
+    <section id="tab-0" class="tab-content fade-in">
+     <!-- Real Life Scenario -->
+     <div class="scenario-box rounded-xl p-6 mb-8" style="background:#1e293b; border:1px solid #1e3a5f;">
+      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#0ea5e9,#8b5cf6);"></div>
+      <div class="flex items-start gap-4">
+       <div class="text-4xl">
+        ☕
+       </div>
+       <div>
+        <h3 class="font-display font-bold text-lg mb-2" style="color:#f1f5f9;">Real-Life Scenario: The Coffee Shop Problem</h3>
+        <p class="leading-relaxed" style="color:#cbd5e1;">Imagine you just opened <strong style="color:#0ea5e9;">"Brew &amp; Byte Café"</strong> — a coffee shop where students come to study. Customers keep asking: <em>"What's the Wi-Fi password?"</em> You need to set up a wireless network that's fast, secure, and covers the whole shop. But how do you choose the right equipment? What settings do you configure? That's exactly what this lesson teaches you.</p>
+       </div>
+      </div>
+     </div><!-- What is Wireless Networking -->
+     <div class="mb-8">
+      <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color:#f1f5f9;"><span class="inline-block w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:#0ea5e9;color:#0f172a;">1</span> What is Wireless Networking?</h2>
+      <div class="rounded-xl p-6" style="background:#1e293b; border:1px solid #1e3a5f;">
+       <p class="mb-4 leading-relaxed" style="color:#cbd5e1;">A <strong style="color:#0ea5e9;">wireless network</strong> lets devices (laptops, phones, tablets) connect to the internet or each other <em>without physical cables</em> — using radio waves instead.</p>
+       <p class="mb-4 leading-relaxed" style="color:#cbd5e1;"><strong>Think of it this way:</strong> A wired network is like talking through tin cans connected by string. A wireless network is like talking through walkie-talkies — no string needed, but you need to be within range.</p><!-- Visual: How Wi-Fi Works -->
+       <div class="flex flex-col items-center my-6">
+        <svg width="360" height="140" viewbox="0 0 360 140">
+         <!-- Router --> <rect x="150" y="50" width="60" height="40" rx="6" fill="#0ea5e9" opacity="0.9" /> <text x="180" y="75" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="bold">
+          Router
+         </text> <!-- Signal rings --> <circle cx="180" cy="70" r="50" fill="none" stroke="#0ea5e9" stroke-width="1.5" opacity="0.3" class="signal-ring" /> <circle cx="180" cy="70" r="70" fill="none" stroke="#0ea5e9" stroke-width="1" opacity="0.2" class="signal-ring" style="animation-delay:0.5s;" /> <!-- Laptop --> <rect x="20" y="55" width="45" height="30" rx="4" fill="#334155" stroke="#64748b" /> <text x="42" y="74" text-anchor="middle" fill="#94a3b8" font-size="9">
+          💻
+         </text> <line x1="65" y1="70" x2="150" y2="70" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="4" opacity="0.5" /> <!-- Phone --> <rect x="295" y="55" width="30" height="30" rx="4" fill="#334155" stroke="#64748b" /> <text x="310" y="75" text-anchor="middle" fill="#94a3b8" font-size="9">
+          📱
+         </text> <line x1="210" y1="70" x2="295" y2="70" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="4" opacity="0.5" /> <!-- Internet cloud --> <text x="180" y="25" text-anchor="middle" fill="#94a3b8" font-size="10">
+          ☁️ Internet
+         </text> <line x1="180" y1="30" x2="180" y2="50" stroke="#64748b" stroke-width="1" stroke-dasharray="3" /> <text x="180" y="125" text-anchor="middle" fill="#64748b" font-size="10">
+          Radio waves connect devices to the router
+         </text>
+        </svg>
+       </div>
+       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+        <div class="rounded-lg p-4 text-center" style="background:#0f172a; border:1px solid #1e3a5f;">
+         <div class="text-2xl mb-2">
+          📡
+         </div>
+         <p class="text-sm font-semibold" style="color:#0ea5e9;">Wireless Access Point</p>
+         <p class="text-xs mt-1" style="color:#94a3b8;">Broadcasts the Wi-Fi signal</p>
+        </div>
+        <div class="rounded-lg p-4 text-center" style="background:#0f172a; border:1px solid #1e3a5f;">
+         <div class="text-2xl mb-2">
+          📶
+         </div>
+         <p class="text-sm font-semibold" style="color:#0ea5e9;">SSID</p>
+         <p class="text-xs mt-1" style="color:#94a3b8;">The network name you see (e.g., "BrewByte_WiFi")</p>
+        </div>
+        <div class="rounded-lg p-4 text-center" style="background:#0f172a; border:1px solid #1e3a5f;">
+         <div class="text-2xl mb-2">
+          🔐
+         </div>
+         <p class="text-sm font-semibold" style="color:#0ea5e9;">Security Key</p>
+         <p class="text-xs mt-1" style="color:#94a3b8;">The password to join the network</p>
+        </div>
+       </div>
+      </div>
+     </div><!-- 802.11 Standards -->
+     <div class="mb-8">
+      <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color:#f1f5f9;"><span class="inline-block w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:#0ea5e9;color:#0f172a;">2</span> IEEE 802.11 Wireless Standards</h2>
+      <div class="rounded-xl p-6" style="background:#1e293b; border:1px solid #1e3a5f;">
+       <p class="mb-4 leading-relaxed" style="color:#cbd5e1;">The <strong style="color:#0ea5e9;">IEEE 802.11</strong> is a family of standards that define how Wi-Fi works. Think of them as <em>"versions"</em> of Wi-Fi — each newer version is faster and better.</p>
+       <p class="mb-4 leading-relaxed" style="color:#cbd5e1;"><strong>☕ Back to our café:</strong> Choosing a Wi-Fi standard is like choosing a highway. 802.11b is a two-lane road. 802.11ac is a six-lane expressway. More lanes = more speed and capacity.</p><!-- Standards Table -->
+       <div class="overflow-x-auto rounded-lg mt-4" style="border:1px solid #1e3a5f;">
+        <table class="w-full text-sm">
+         <thead style="background:#0f172a;">
+          <tr>
+           <th class="text-left font-display text-xs tracking-wider" style="color:#0ea5e9;">Standard</th>
+           <th class="text-left font-display text-xs tracking-wider" style="color:#0ea5e9;">Also Called</th>
+           <th class="text-left font-display text-xs tracking-wider" style="color:#0ea5e9;">Frequency</th>
+           <th class="text-left font-display text-xs tracking-wider" style="color:#0ea5e9;">Max Speed</th>
+           <th class="text-left font-display text-xs tracking-wider" style="color:#0ea5e9;">Year</th>
+          </tr>
+         </thead>
+         <tbody style="color:#cbd5e1;">
+          <tr style="border-top:1px solid #1e3a5f;">
+           <td class="font-semibold">802.11b</td>
+           <td>Wi-Fi 1</td>
+           <td>2.4 GHz</td>
+           <td>11 Mbps</td>
+           <td>1999</td>
+          </tr>
+          <tr style="border-top:1px solid #1e3a5f; background:#0f172a40;">
+           <td class="font-semibold">802.11a</td>
+           <td>Wi-Fi 2</td>
+           <td>5 GHz</td>
+           <td>54 Mbps</td>
+           <td>1999</td>
+          </tr>
+          <tr style="border-top:1px solid #1e3a5f;">
+           <td class="font-semibold">802.11g</td>
+           <td>Wi-Fi 3</td>
+           <td>2.4 GHz</td>
+           <td>54 Mbps</td>
+           <td>2003</td>
+          </tr>
+          <tr style="border-top:1px solid #1e3a5f; background:#0f172a40;">
+           <td class="font-semibold">802.11n</td>
+           <td>Wi-Fi 4</td>
+           <td>2.4 / 5 GHz</td>
+           <td>600 Mbps</td>
+           <td>2009</td>
+          </tr>
+          <tr style="border-top:1px solid #1e3a5f;">
+           <td class="font-semibold" style="color:#0ea5e9;">802.11ac</td>
+           <td style="color:#0ea5e9;">Wi-Fi 5</td>
+           <td>5 GHz</td>
+           <td>6.9 Gbps</td>
+           <td>2013</td>
+          </tr>
+          <tr style="border-top:1px solid #1e3a5f; background:#0f172a40;">
+           <td class="font-semibold">802.11ax</td>
+           <td>Wi-Fi 6</td>
+           <td>2.4 / 5 / 6 GHz</td>
+           <td>9.6 Gbps</td>
+           <td>2020</td>
+          </tr>
+         </tbody>
+        </table>
+       </div><!-- Frequency Explanation -->
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+        <div class="rounded-lg p-4" style="background:#0f172a; border:1px solid #1e3a5f;">
+         <h4 class="font-display font-bold text-sm mb-2" style="color:#f59e0b;">📻 2.4 GHz Band</h4>
+         <ul class="text-sm space-y-1" style="color:#cbd5e1;">
+          <li>✅ Longer range (goes through walls better)</li>
+          <li>✅ Better for large areas</li>
+          <li>❌ Slower speeds</li>
+          <li>❌ More interference (microwaves, Bluetooth, neighbors)</li>
+         </ul>
+         <p class="text-xs mt-2 italic" style="color:#94a3b8;">☕ Good for reaching the café's outdoor patio</p>
+        </div>
+        <div class="rounded-lg p-4" style="background:#0f172a; border:1px solid #1e3a5f;">
+         <h4 class="font-display font-bold text-sm mb-2" style="color:#8b5cf6;">⚡ 5 GHz Band</h4>
+         <ul class="text-sm space-y-1" style="color:#cbd5e1;">
+          <li>✅ Faster speeds</li>
+          <li>✅ Less interference</li>
+          <li>❌ Shorter range</li>
+          <li>❌ Doesn't go through walls as well</li>
+         </ul>
+         <p class="text-xs mt-2 italic" style="color:#94a3b8;">☕ Perfect for streaming inside the café</p>
+        </div>
+       </div>
+      </div>
+     </div><!-- Wireless Security -->
+     <div class="mb-8">
+      <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color:#f1f5f9;"><span class="inline-block w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:#0ea5e9;color:#0f172a;">3</span> Wireless Security Protocols</h2>
+      <div class="rounded-xl p-6" style="background:#1e293b; border:1px solid #1e3a5f;">
+       <p class="mb-4 leading-relaxed" style="color:#cbd5e1;">Without security, anyone nearby can snoop on your network. It's like having a conversation in a crowded café — anyone can listen unless you whisper in code. 🤫</p>
+       <div class="space-y-3">
+        <div class="rounded-lg p-4 flex items-start gap-3" style="background:#0f172a; border:1px solid #ef4444;">
+         <span class="text-xl">🚫</span>
+         <div>
+          <p class="font-semibold text-sm" style="color:#ef4444;">WEP (Wired Equivalent Privacy)</p>
+          <p class="text-xs" style="color:#94a3b8;">Old &amp; broken. Can be cracked in minutes. <strong>Never use this.</strong></p>
+         </div>
+        </div>
+        <div class="rounded-lg p-4 flex items-start gap-3" style="background:#0f172a; border:1px solid #f59e0b;">
+         <span class="text-xl">⚠️</span>
+         <div>
+          <p class="font-semibold text-sm" style="color:#f59e0b;">WPA (Wi-Fi Protected Access)</p>
+          <p class="text-xs" style="color:#94a3b8;">Better than WEP but has known vulnerabilities. Avoid if possible.</p>
+         </div>
+        </div>
+        <div class="rounded-lg p-4 flex items-start gap-3" style="background:#0f172a; border:1px solid #0ea5e9;">
+         <span class="text-xl">✅</span>
+         <div>
+          <p class="font-semibold text-sm" style="color:#0ea5e9;">WPA2 (Wi-Fi Protected Access 2)</p>
+          <p class="text-xs" style="color:#94a3b8;">Industry standard. Uses AES encryption. <strong>This is what we'll configure in Packet Tracer.</strong></p>
+         </div>
+        </div>
+        <div class="rounded-lg p-4 flex items-start gap-3" style="background:#0f172a; border:1px solid #10b981;">
+         <span class="text-xl">🛡️</span>
+         <div>
+          <p class="font-semibold text-sm" style="color:#10b981;">WPA3 (Wi-Fi Protected Access 3)</p>
+          <p class="text-xs" style="color:#94a3b8;">Latest &amp; most secure. Not yet widely supported in Packet Tracer.</p>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div><!-- Key Terms -->
+     <div class="mb-8">
+      <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color:#f1f5f9;"><span class="inline-block w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:#0ea5e9;color:#0f172a;">4</span> Key Terms to Remember</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+       <div class="rounded-lg p-4" style="background:#1e293b; border:1px solid #1e3a5f;">
+        <p class="font-display text-sm font-bold" style="color:#0ea5e9;">SSID</p>
+        <p class="text-sm" style="color:#cbd5e1;">Service Set Identifier — the name of your Wi-Fi network</p>
+       </div>
+       <div class="rounded-lg p-4" style="background:#1e293b; border:1px solid #1e3a5f;">
+        <p class="font-display text-sm font-bold" style="color:#0ea5e9;">AP (Access Point)</p>
+        <p class="text-sm" style="color:#cbd5e1;">Device that creates a wireless network for others to join</p>
+       </div>
+       <div class="rounded-lg p-4" style="background:#1e293b; border:1px solid #1e3a5f;">
+        <p class="font-display text-sm font-bold" style="color:#0ea5e9;">DHCP</p>
+        <p class="text-sm" style="color:#cbd5e1;">Automatically assigns IP addresses to devices that connect</p>
+       </div>
+       <div class="rounded-lg p-4" style="background:#1e293b; border:1px solid #1e3a5f;">
+        <p class="font-display text-sm font-bold" style="color:#0ea5e9;">Channel</p>
+        <p class="text-sm" style="color:#cbd5e1;">Specific frequency "lane" your router uses (1, 6, 11 are best for 2.4 GHz)</p>
+       </div>
+       <div class="rounded-lg p-4" style="background:#1e293b; border:1px solid #1e3a5f;">
+        <p class="font-display text-sm font-bold" style="color:#0ea5e9;">WPA2-PSK</p>
+        <p class="text-sm" style="color:#cbd5e1;">Pre-Shared Key mode — everyone uses the same password (home/café use)</p>
+       </div>
+       <div class="rounded-lg p-4" style="background:#1e293b; border:1px solid #1e3a5f;">
+        <p class="font-display text-sm font-bold" style="color:#0ea5e9;">Authentication</p>
+        <p class="text-sm" style="color:#cbd5e1;">The process of verifying a device is allowed to join the network</p>
+       </div>
+      </div>
+     </div>
+     <div class="text-center pt-4">
+      <button onclick="switchTab(1)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#0ea5e9; color:#0f172a;"> Next: Packet Tracer Guide → </button>
+     </div>
+    </section><!-- TAB 1: PACKET TRACER GUIDE -->
+    <section id="tab-1" class="tab-content fade-in hidden">
+     <div class="scenario-box rounded-xl p-6 mb-8" style="background:#1e293b; border:1px solid #1e3a5f;">
+      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#0ea5e9,#10b981);"></div>
+      <div class="flex items-start gap-4">
+       <div class="text-4xl">
+        🛠️
+       </div>
+       <div>
+        <h3 class="font-display font-bold text-lg mb-2" style="color:#f1f5f9;">Guided Lab: Setting Up Wi-Fi for Brew &amp; Byte Café</h3>
+        <p class="leading-relaxed" style="color:#cbd5e1;">Follow these steps in <strong>Cisco Packet Tracer</strong> to build a working wireless network. We'll set up a wireless router, configure its SSID and security, and connect a laptop wirelessly.</p>
+       </div>
+      </div>
+     </div><!-- Network Diagram -->
+     <div class="rounded-xl p-6 mb-8 text-center" style="background:#1e293b; border:1px solid #1e3a5f;">
+      <h4 class="font-display font-bold text-sm mb-4" style="color:#0ea5e9;">Network Topology You'll Build</h4>
+      <svg width="420" height="200" viewbox="0 0 420 200" class="mx-auto">
+       <!-- Internet Cloud --> <ellipse cx="210" cy="30" rx="50" ry="20" fill="#334155" stroke="#64748b" /> <text x="210" y="34" text-anchor="middle" fill="#94a3b8" font-size="11">
+        ☁ Internet
+       </text> <!-- Line to Router --> <line x1="210" y1="50" x2="210" y2="80" stroke="#0ea5e9" stroke-width="2" /> <!-- Wireless Router --> <rect x="175" y="80" width="70" height="40" rx="8" fill="#0ea5e9" /> <text x="210" y="97" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="bold">
+        Wireless
+       </text> <text x="210" y="110" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="bold">
+        Router
+       </text> <!-- Signal waves --> <path d="M175 100 Q150 85 140 100" fill="none" stroke="#0ea5e9" stroke-width="1" opacity="0.4" /> <path d="M165 100 Q135 80 120 100" fill="none" stroke="#0ea5e9" stroke-width="1" opacity="0.25" /> <path d="M245 100 Q270 85 280 100" fill="none" stroke="#0ea5e9" stroke-width="1" opacity="0.4" /> <path d="M255 100 Q285 80 300 100" fill="none" stroke="#0ea5e9" stroke-width="1" opacity="0.25" /> <!-- Laptop 1 --> <rect x="50" y="150" width="60" height="35" rx="4" fill="#334155" stroke="#64748b" /> <text x="80" y="172" text-anchor="middle" fill="#cbd5e1" font-size="9">
+        💻 Laptop0
+       </text> <line x1="110" y1="165" x2="175" y2="110" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="5" opacity="0.5" /> <!-- Laptop 2 --> <rect x="310" y="150" width="60" height="35" rx="4" fill="#334155" stroke="#64748b" /> <text x="340" y="172" text-anchor="middle" fill="#cbd5e1" font-size="9">
+        📱 Tablet0
+       </text> <line x1="310" y1="165" x2="245" y2="110" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="5" opacity="0.5" /> <!-- Labels --> <text x="210" y="190" text-anchor="middle" fill="#64748b" font-size="9">
+        SSID: BrewByte_WiFi | Security: WPA2-PSK | Password: CafeWiFi2024
+       </text>
+      </svg>
+     </div><!-- Steps -->
+     <div class="space-y-4" id="pt-steps">
+      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#0ea5e9; border-left-color:#0ea5e9;">
+       <div class="flex items-center gap-3 mb-3">
+        <span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#0ea5e9; color:#0f172a;">1</span>
+        <h4 class="font-display font-bold" style="color:#f1f5f9;">Open Packet Tracer &amp; Add Devices</h4>
+       </div>
+       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
+        <li>1. Open Cisco Packet Tracer and create a <strong>new blank project</strong></li>
+        <li>2. From the bottom panel, click <strong>Network Devices → Wireless Devices</strong></li>
+        <li>3. Drag a <strong>WRT300N</strong> (Wireless Router) to the workspace</li>
+        <li>4. From <strong>End Devices</strong>, drag a <strong>Laptop</strong> and a <strong>Tablet (or second Laptop)</strong></li>
+       </ol>
+       <div class="mt-3 ml-11 p-3 rounded-lg text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#94a3b8;">
+        💡 <strong>Tip:</strong> The WRT300N is a home/small-office wireless router — perfect for our café scenario!
+       </div>
+      </div>
+      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#0ea5e9;">
+       <div class="flex items-center gap-3 mb-3">
+        <span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#0ea5e9; color:#0f172a;">2</span>
+        <h4 class="font-display font-bold" style="color:#f1f5f9;">Configure the Wireless Router</h4>
+       </div>
+       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
+        <li>1. <strong>Click on the Wireless Router</strong> (WRT300N) to open its config</li>
+        <li>2. Go to the <strong>GUI tab</strong> (this simulates the router's web interface)</li>
+        <li>3. Under <strong>Setup → Basic Setup</strong>: 
+         <ul class="ml-4 mt-1 space-y-1" style="color:#94a3b8;">
+          <li>• Leave Internet Connection Type as <strong>Automatic Configuration - DHCP</strong></li>
+          <li>• Router IP: <strong>192.168.0.1</strong> (default)</li>
+          <li>• DHCP Server: <strong>Enabled</strong></li>
+          <li>• Start IP: <strong>192.168.0.100</strong></li>
+          <li>• Maximum Users: <strong>50</strong></li>
+         </ul></li>
+        <li>4. Click <strong>Save Settings</strong></li>
+       </ol>
+      </div>
+      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#f59e0b;">
+       <div class="flex items-center gap-3 mb-3">
+        <span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#f59e0b; color:#0f172a;">3</span>
+        <h4 class="font-display font-bold" style="color:#f1f5f9;">Set the SSID (Network Name)</h4>
+       </div>
+       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
+        <li>1. In the router GUI, go to <strong>Wireless → Basic Wireless Settings</strong></li>
+        <li>2. Change the <strong>Network Name (SSID)</strong> from "Default" to:</li>
+       </ol>
+       <div class="ml-11 my-3 p-3 rounded-lg font-display text-center text-lg font-bold tracking-wide" style="background:#0f172a; color:#0ea5e9; border:1px dashed #0ea5e9;">
+        BrewByte_WiFi
+       </div>
+       <ol start="3" class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
+        <li>3. Set the <strong>Channel</strong> to <strong>6 - 2.437 GHz</strong></li>
+        <li>4. Click <strong>Save Settings</strong></li>
+       </ol>
+       <div class="mt-3 ml-11 p-3 rounded-lg text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#94a3b8;">
+        💡 <strong>Why Channel 6?</strong> Channels 1, 6, and 11 don't overlap with each other in 2.4 GHz. Channel 6 is a safe middle choice.
+       </div>
+      </div>
+      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#ef4444;">
+       <div class="flex items-center gap-3 mb-3">
+        <span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#ef4444; color:#fff;">4</span>
+        <h4 class="font-display font-bold" style="color:#f1f5f9;">Configure Wireless Security (WPA2)</h4>
+       </div>
+       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
+        <li>1. Go to <strong>Wireless → Wireless Security</strong></li>
+        <li>2. Set <strong>Security Mode</strong> to: <strong style="color:#0ea5e9;">WPA2 Personal</strong></li>
+        <li>3. Set <strong>Encryption</strong> to: <strong>AES</strong></li>
+        <li>4. Set the <strong>Passphrase</strong> to:</li>
+       </ol>
+       <div class="ml-11 my-3 p-3 rounded-lg font-display text-center text-lg font-bold tracking-wide" style="background:#0f172a; color:#ef4444; border:1px dashed #ef4444;">
+        CafeWiFi2024
+       </div>
+       <ol start="5" class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
+        <li>5. Click <strong>Save Settings</strong></li>
+       </ol>
+       <div class="mt-3 ml-11 p-3 rounded-lg text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#94a3b8;">
+        🔐 <strong>Important:</strong> WPA2-Personal (PSK) means everyone shares the same password. For a small café, this is appropriate. Enterprises use WPA2-Enterprise with individual logins.
+       </div>
+      </div>
+      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#10b981;">
+       <div class="flex items-center gap-3 mb-3">
+        <span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#10b981; color:#0f172a;">5</span>
+        <h4 class="font-display font-bold" style="color:#f1f5f9;">Prepare the Laptop for Wireless</h4>
+       </div>
+       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
+        <li>1. <strong>Click on the Laptop</strong> → go to the <strong>Physical tab</strong></li>
+        <li>2. <strong>Power off</strong> the laptop (click the power button)</li>
+        <li>3. Remove the <strong>Ethernet module</strong> (drag it out from the side panel)</li>
+        <li>4. Drag the <strong>WPC300N</strong> wireless module into the empty slot</li>
+        <li>5. <strong>Power on</strong> the laptop</li>
+       </ol>
+       <div class="mt-3 ml-11 p-3 rounded-lg text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#94a3b8;">
+        💡 <strong>Why swap modules?</strong> By default, Packet Tracer laptops have an Ethernet (wired) module. We need to replace it with a wireless card (WPC300N) to connect via Wi-Fi.
+       </div>
+      </div>
+      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#8b5cf6;">
+       <div class="flex items-center gap-3 mb-3">
+        <span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#8b5cf6; color:#fff;">6</span>
+        <h4 class="font-display font-bold" style="color:#f1f5f9;">Connect the Laptop to Wi-Fi</h4>
+       </div>
+       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
+        <li>1. On the Laptop, go to the <strong>Desktop tab</strong></li>
+        <li>2. Click <strong>PC Wireless</strong></li>
+        <li>3. Go to the <strong>Connect tab</strong> → click <strong>Refresh</strong></li>
+        <li>4. You should see <strong style="color:#0ea5e9;">BrewByte_WiFi</strong> in the list</li>
+        <li>5. Select it and click <strong>Connect</strong></li>
+        <li>6. When prompted, enter the password: <strong style="color:#ef4444;">CafeWiFi2024</strong></li>
+        <li>7. Click <strong>Connect</strong></li>
+       </ol>
+       <div class="mt-3 ml-11 p-3 rounded-lg text-xs flex items-center gap-2" style="background:#10b981; color:#0f172a;">
+        <span class="blink">🟢</span> <strong>Success!</strong> You should see a green dot or "Connected" status. The laptop now has Wi-Fi!
+       </div>
+      </div>
+      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#0ea5e9;">
+       <div class="flex items-center gap-3 mb-3">
+        <span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#0ea5e9; color:#0f172a;">7</span>
+        <h4 class="font-display font-bold" style="color:#f1f5f9;">Verify the Connection</h4>
+       </div>
+       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
+        <li>1. On the Laptop, go to <strong>Desktop → Command Prompt</strong></li>
+        <li>2. Type: <code class="px-2 py-1 rounded text-xs font-display" style="background:#0f172a; color:#0ea5e9;">ipconfig</code></li>
+        <li>3. Verify you see an IP address like <strong>192.168.0.100</strong> (assigned by DHCP)</li>
+        <li>4. Type: <code class="px-2 py-1 rounded text-xs font-display" style="background:#0f172a; color:#0ea5e9;">ping 192.168.0.1</code></li>
+        <li>5. You should receive <strong>replies</strong> — this means you can reach the router!</li>
+       </ol>
+       <div class="mt-3 ml-11 p-4 rounded-lg font-display text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#10b981;">
+        <div>
+         C:\&gt; <span style="color:#0ea5e9;">ping 192.168.0.1</span>
+        </div>
+        <div class="mt-1">
+         Reply from 192.168.0.1: bytes=32 time&lt;1ms TTL=64
+        </div>
+        <div>
+         Reply from 192.168.0.1: bytes=32 time&lt;1ms TTL=64
+        </div>
+        <div>
+         Reply from 192.168.0.1: bytes=32 time&lt;1ms TTL=64
+        </div>
+        <div class="mt-1" style="color:#94a3b8;">
+         Ping statistics: Sent = 4, Received = 4, Lost = 0 ✅
+        </div>
+       </div>
+      </div>
+      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#10b981;">
+       <div class="flex items-center gap-3 mb-3">
+        <span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#10b981; color:#0f172a;">8</span>
+        <h4 class="font-display font-bold" style="color:#f1f5f9;">Repeat for the Tablet/Second Device</h4>
+       </div>
+       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
+        <li>1. Repeat steps 5-7 for the <strong>Tablet</strong> (or second laptop)</li>
+        <li>2. After connecting both, <strong>ping between the two devices</strong> to confirm they're on the same network</li>
+        <li>3. From Laptop: <code class="px-2 py-1 rounded text-xs font-display" style="background:#0f172a; color:#0ea5e9;">ping 192.168.0.101</code> (the Tablet's IP)</li>
+       </ol>
+      </div>
+     </div>
+     <div class="text-center pt-8 flex justify-center gap-4">
+      <button onclick="switchTab(0)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#334155; color:#cbd5e1;"> ← Back to Lesson </button> <button onclick="switchTab(2)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#0ea5e9; color:#0f172a;"> Next: Student Activity → </button>
+     </div>
+    </section><!-- TAB 2: STUDENT ACTIVITY -->
+    <section id="tab-2" class="tab-content fade-in hidden">
+     <div class="scenario-box rounded-xl p-6 mb-8" style="background:#1e293b; border:1px solid #1e3a5f;">
+      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#8b5cf6,#ec4899);"></div>
+      <div class="flex items-start gap-4">
+       <div class="text-4xl">
+        🎯
+       </div>
+       <div>
+        <h3 class="font-display font-bold text-lg mb-2" style="color:#f1f5f9;">Student Activity: Campus Library Wi-Fi Setup</h3>
+        <p class="leading-relaxed" style="color:#cbd5e1;">Your university library wants to set up a new Wi-Fi network for students. You've been hired as the IT student assistant to configure it. Follow the requirements below and build the network in Packet Tracer — <strong>on your own</strong>.</p>
+       </div>
+      </div>
+     </div><!-- Requirements -->
+     <div class="rounded-xl p-6 mb-6" style="background:#1e293b; border:1px solid #1e3a5f;">
+      <h4 class="font-display font-bold text-base mb-4 flex items-center gap-2" style="color:#8b5cf6;"><i data-lucide="list-checks" style="width:18px;height:18px;"></i> Network Requirements</h4>
+      <div class="overflow-x-auto rounded-lg" style="border:1px solid #1e3a5f;">
+       <table class="w-full text-sm">
+        <thead style="background:#0f172a;">
+         <tr>
+          <th class="text-left font-display text-xs tracking-wider" style="color:#8b5cf6;">Setting</th>
+          <th class="text-left font-display text-xs tracking-wider" style="color:#8b5cf6;">Value</th>
+         </tr>
+        </thead>
+        <tbody style="color:#cbd5e1;">
+         <tr style="border-top:1px solid #1e3a5f;">
+          <td class="font-semibold">SSID</td>
+          <td><code style="color:#0ea5e9;">LibraryNet_2024</code></td>
+         </tr>
+         <tr style="border-top:1px solid #1e3a5f; background:#0f172a40;">
+          <td class="font-semibold">Security Mode</td>
+          <td>WPA2 Personal</td>
+         </tr>
+         <tr style="border-top:1px solid #1e3a5f;">
+          <td class="font-semibold">Encryption</td>
+          <td>AES</td>
+         </tr>
+         <tr style="border-top:1px solid #1e3a5f; background:#0f172a40;">
+          <td class="font-semibold">Password</td>
+          <td><code style="color:#ef4444;">ReadBooks@2024</code></td>
+         </tr>
+         <tr style="border-top:1px solid #1e3a5f;">
+          <td class="font-semibold">Router IP</td>
+          <td>192.168.1.1</td>
+         </tr>
+         <tr style="border-top:1px solid #1e3a5f; background:#0f172a40;">
+          <td class="font-semibold">DHCP Range</td>
+          <td>192.168.1.100 - 192.168.1.200</td>
+         </tr>
+         <tr style="border-top:1px solid #1e3a5f;">
+          <td class="font-semibold">Channel</td>
+          <td>11</td>
+         </tr>
+         <tr style="border-top:1px solid #1e3a5f; background:#0f172a40;">
+          <td class="font-semibold">Devices to Connect</td>
+          <td>3 laptops (wirelessly)</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div><!-- Tasks Checklist -->
+     <div class="rounded-xl p-6 mb-6" style="background:#1e293b; border:1px solid #1e3a5f;">
+      <h4 class="font-display font-bold text-base mb-4 flex items-center gap-2" style="color:#8b5cf6;"><i data-lucide="check-square" style="width:18px;height:18px;"></i> Task Checklist</h4>
+      <p class="text-sm mb-4" style="color:#94a3b8;">Check off each task as you complete it:</p>
+      <div class="space-y-3" id="checklist">
+       <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 1:</strong> Place a WRT300N wireless router and 3 laptops in the workspace</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 2:</strong> Configure the router's SSID to <code style="color:#0ea5e9;">LibraryNet_2024</code> and set channel to 11</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 3:</strong> Set security to WPA2 Personal with AES encryption and the given password</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 4:</strong> Configure DHCP with starting IP 192.168.1.100 and max 100 users</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 5:</strong> Replace the Ethernet module in each laptop with a WPC300N wireless module</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 6:</strong> Connect all 3 laptops to <code style="color:#0ea5e9;">LibraryNet_2024</code> using the password</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 7:</strong> Use <code>ipconfig</code> on each laptop to verify they received an IP via DHCP</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 8:</strong> Ping from Laptop0 to Laptop1 and Laptop2 — all pings should succeed</span> </label>
+      </div>
+      <div class="mt-4 flex items-center gap-3">
+       <div class="flex-1 h-3 rounded-full overflow-hidden" style="background:#0f172a;">
+        <div id="checklist-bar" class="h-full rounded-full progress-fill" style="background:#8b5cf6; width:0%;"></div>
+       </div><span id="checklist-pct" class="font-display text-sm font-bold" style="color:#8b5cf6;">0%</span>
+      </div>
+     </div><!-- Bonus Challenge -->
+     <div class="rounded-xl p-6 mb-6" style="background:linear-gradient(135deg, #1e1b4b 0%, #1e293b 100%); border:1px solid #4c1d95;">
+      <h4 class="font-display font-bold text-base mb-3 flex items-center gap-2" style="color:#c4b5fd;">⭐ Bonus Challenge (Extra Credit)</h4>
+      <ol class="space-y-2 text-sm" style="color:#cbd5e1;">
+       <li><strong>1.</strong> Add a <strong>second wireless router</strong> (for the library's second floor)</li>
+       <li style="margin-left:1rem; color:#94a3b8;">• SSID: <code style="color:#0ea5e9;">LibraryNet_2F</code> | Channel: <strong>1</strong> (avoid overlap with channel 11)</li>
+       <li><strong>2.</strong> Connect the two routers via an <strong>Ethernet cable</strong> (LAN port to LAN port)</li>
+       <li><strong>3.</strong> Connect a laptop to the second router and <strong>ping a laptop on the first router</strong></li>
+       <li><strong>4.</strong> Take a screenshot of successful pings between floors</li>
+      </ol>
+     </div><!-- Submission Requirements -->
+     <div class="rounded-xl p-6 mb-6" style="background:#1e293b; border:1px solid #1e3a5f;">
+      <h4 class="font-display font-bold text-base mb-3 flex items-center gap-2" style="color:#f59e0b;"><i data-lucide="upload" style="width:18px;height:18px;"></i> What to Submit</h4>
+      <ol class="space-y-2 text-sm" style="color:#cbd5e1;">
+       <li><strong>1.</strong> The Packet Tracer file (<code>.pkt</code>)</li>
+       <li><strong>2.</strong> Screenshot of the router's wireless settings showing SSID and security</li>
+       <li><strong>3.</strong> Screenshot of <code>ipconfig</code> on any connected laptop showing the DHCP-assigned IP</li>
+       <li><strong>4.</strong> Screenshot of a successful <strong>ping</strong> between two wireless laptops</li>
+      </ol>
+     </div>
+     <div class="text-center pt-4 flex justify-center gap-4">
+      <button onclick="switchTab(1)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#334155; color:#cbd5e1;"> ← Back to Guide </button> <button onclick="switchTab(3)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#0ea5e9; color:#0f172a;"> Take the Quiz → </button>
+     </div>
+    </section><!-- TAB 3: QUIZ -->
+    <section id="tab-3" class="tab-content fade-in hidden">
+     <div class="scenario-box rounded-xl p-6 mb-8" style="background:#1e293b; border:1px solid #1e3a5f;">
+      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#10b981,#0ea5e9);"></div>
+      <div class="flex items-start gap-4">
+       <div class="text-4xl">
+        🧠
+       </div>
+       <div>
+        <h3 class="font-display font-bold text-lg mb-2" style="color:#f1f5f9;">Knowledge Check</h3>
+        <p class="leading-relaxed" style="color:#cbd5e1;">Test your understanding of wireless networking concepts. Click on the correct answer for each question.</p>
+       </div>
+      </div>
+     </div>
+     <div id="quiz-container" class="space-y-6"></div>
+     <div id="quiz-result" class="hidden rounded-xl p-6 mt-6 text-center" style="background:#1e293b; border:1px solid #1e3a5f;">
+      <div id="quiz-score" class="font-display text-3xl font-bold mb-2" style="color:#0ea5e9;"></div>
+      <p id="quiz-msg" class="text-sm" style="color:#cbd5e1;"></p><button onclick="resetQuiz()" class="mt-4 px-6 py-2 rounded-lg font-semibold text-sm" style="background:#0ea5e9; color:#0f172a;">Try Again</button>
+     </div>
+     <div class="text-center pt-8">
+      <button onclick="switchTab(0)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#334155; color:#cbd5e1;"> ← Back to Lesson </button>
+     </div>
+    </section>
+   </main><!-- Footer -->
+   <footer class="w-full py-6 text-center text-xs" style="color:#475569; border-top:1px solid #1e3a5f;">
+    IS103 - IT Infrastructure and Network Technologies | Prof. MKDB | Finals Week 1
+   </footer>
+  </div>
+  <script>
+  // Quiz Data
+  const quizData = [
+    {
+      q: "What does SSID stand for?",
+      opts: ["Secure System ID", "Service Set Identifier", "Signal Strength Indicator Data", "System Security ID"],
+      correct: 1
+    },
+    {
+      q: "Which wireless standard is also known as 'Wi-Fi 5'?",
+      opts: ["802.11n", "802.11g", "802.11ac", "802.11ax"],
+      correct: 2
+    },
+    {
+      q: "What is the main advantage of the 5 GHz band over 2.4 GHz?",
+      opts: ["Longer range", "Better wall penetration", "Faster speeds with less interference", "Lower cost equipment"],
+      correct: 2
+    },
+    {
+      q: "Which security protocol should you NEVER use because it can be cracked in minutes?",
+      opts: ["WPA2", "WPA3", "WEP", "AES"],
+      correct: 2
+    },
+    {
+      q: "In Packet Tracer, what wireless module do you install in a laptop to enable Wi-Fi?",
+      opts: ["WRT300N", "WPC300N", "PT-WIRELESS", "NIC-300"],
+      correct: 1
+    },
+    {
+      q: "Which 2.4 GHz channels do NOT overlap with each other?",
+      opts: ["1, 3, 5", "2, 4, 8", "1, 6, 11", "5, 10, 15"],
+      correct: 2
+    },
+    {
+      q: "What does DHCP do in a wireless network?",
+      opts: ["Encrypts wireless traffic", "Assigns IP addresses automatically", "Boosts signal strength", "Blocks unauthorized users"],
+      correct: 1
+    },
+    {
+      q: "In our café scenario, why did we choose WPA2-Personal instead of WPA2-Enterprise?",
+      opts: ["It's more secure", "It's faster", "Everyone shares the same password (simpler for a café)", "It supports more devices"],
+      correct: 2
+    }
+  ];
+
+  let quizAnswered = new Array(quizData.length).fill(null);
+
+  function buildQuiz() {
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = '';
+    quizData.forEach((item, i) => {
+      const card = document.createElement('div');
+      card.className = 'rounded-xl p-5';
+      card.style.cssText = 'background:#1e293b; border:1px solid #1e3a5f;';
+      card.innerHTML = `
+        <p class="font-display font-bold text-sm mb-3" style="color:#f1f5f9;">
+          <span style="color:#0ea5e9;">${i + 1}.</span> ${item.q}
+        </p>
+        <div class="space-y-2" id="quiz-q-${i}">
+          ${item.opts.map((opt, j) => `
+            <div class="quiz-option rounded-lg p-3 text-sm cursor-pointer" style="background:#0f172a; border:2px solid #1e3a5f; color:#cbd5e1;" data-q="${i}" data-o="${j}" onclick="selectAnswer(${i},${j})">
+              <span class="font-semibold" style="color:#64748b;">${String.fromCharCode(65 + j)}.</span> ${opt}
+            </div>
+          `).join('')}
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function selectAnswer(qi, oi) {
+    if (quizAnswered[qi] !== null) return;
+    quizAnswered[qi] = oi;
+    const opts = document.querySelectorAll(`#quiz-q-${qi} .quiz-option`);
+    opts.forEach((el, j) => {
+      el.style.cursor = 'default';
+      if (j === quizData[qi].correct) {
+        el.classList.add('correct');
+        el.innerHTML = el.innerHTML + ' ✅';
+      } else if (j === oi && oi !== quizData[qi].correct) {
+        el.classList.add('incorrect');
+        el.innerHTML = el.innerHTML + ' ❌';
+      }
+    });
+    checkQuizDone();
+  }
+
+  function checkQuizDone() {
+    if (quizAnswered.every(a => a !== null)) {
+      const score = quizAnswered.filter((a, i) => a === quizData[i].correct).length;
+      document.getElementById('quiz-result').classList.remove('hidden');
+      document.getElementById('quiz-score').textContent = `${score} / ${quizData.length}`;
+      const pct = Math.round((score / quizData.length) * 100);
+      let msg = pct >= 88 ? "🎉 Excellent! You've mastered wireless networking!" : pct >= 63 ? "👍 Good job! Review the topics you missed." : "📖 Keep studying! Re-read the lesson and try again.";
+      document.getElementById('quiz-msg').textContent = msg;
+    }
+  }
+
+  function resetQuiz() {
+    quizAnswered = new Array(quizData.length).fill(null);
+    document.getElementById('quiz-result').classList.add('hidden');
+    buildQuiz();
+  }
+
+  // Tabs
+  let currentTab = 0;
+  function switchTab(idx) {
+    currentTab = idx;
+    document.querySelectorAll('.tab-content').forEach((el, i) => {
+      el.classList.toggle('hidden', i !== idx);
+    });
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+      if (i === idx) {
+        btn.classList.add('tab-active');
+        btn.style.color = '#0ea5e9';
+        btn.style.borderColor = '#0ea5e9';
+      } else {
+        btn.classList.remove('tab-active');
+        btn.style.color = '#64748b';
+        btn.style.borderColor = 'transparent';
+      }
+    });
+    updateProgressBar();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateProgressBar() {
+    const pct = ((currentTab + 1) / 4) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  }
+
+  // Checklist
+  function updateProgress() {
+    const checks = document.querySelectorAll('#checklist input[type="checkbox"]');
+    const done = [...checks].filter(c => c.checked).length;
+    const pct = Math.round((done / checks.length) * 100);
+    document.getElementById('checklist-bar').style.width = pct + '%';
+    document.getElementById('checklist-pct').textContent = pct + '%';
+  }
+
+  // Element SDK
+  const defaultConfig = {
+    course_title: 'IS103 - IT Infrastructure and Network Technologies',
+    professor_name: 'Prof. MKDB',
+    week_label: 'Finals Week 1',
+    background_color: '#0f172a',
+    surface_color: '#1e293b',
+    text_color: '#e2e8f0',
+    accent_color: '#0ea5e9',
+    secondary_accent: '#8b5cf6',
+    font_family: 'DM Sans',
+    font_size: 16
+  };
+
+  async function onConfigChange(config) {
+    const c = { ...defaultConfig, ...config };
+    document.getElementById('el-course').textContent = c.course_title;
+    document.getElementById('el-prof').innerHTML = `<i data-lucide="user" style="width:14px;height:14px;"></i> ${c.professor_name}`;
+    document.getElementById('el-week').innerHTML = `<i data-lucide="calendar" style="width:14px;height:14px;"></i> ${c.week_label}`;
+
+    // Colors
+    document.getElementById('app').style.background = c.background_color;
+    document.body.style.background = c.background_color;
+    document.querySelectorAll('.tab-btn.tab-active').forEach(el => { el.style.color = c.accent_color; el.style.borderColor = c.accent_color; });
+
+    // Font
+    const font = c.font_family || defaultConfig.font_family;
+    document.body.style.fontFamily = `${font}, DM Sans, sans-serif`;
+
+    // Font size
+    const base = c.font_size || defaultConfig.font_size;
+    document.body.style.fontSize = base + 'px';
+
+    lucide.createIcons();
+  }
+
+  if (window.elementSdk) {
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange,
+      mapToCapabilities: (config) => ({
+        recolorables: [
+          { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+          { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+          { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+          { get: () => config.accent_color || defaultConfig.accent_color, set: (v) => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); } },
+          { get: () => config.secondary_accent || defaultConfig.secondary_accent, set: (v) => { config.secondary_accent = v; window.elementSdk.setConfig({ secondary_accent: v }); } }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => config.font_family || defaultConfig.font_family,
+          set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
+        },
+        fontSizeable: {
+          get: () => config.font_size || defaultConfig.font_size,
+          set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
+        }
+      }),
+      mapToEditPanelValues: (config) => new Map([
+        ['course_title', config.course_title || defaultConfig.course_title],
+        ['professor_name', config.professor_name || defaultConfig.professor_name],
+        ['week_label', config.week_label || defaultConfig.week_label]
+      ])
+    });
+  }
+
+  // Init
+  buildQuiz();
+  updateProgressBar();
+  lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9eb8e174501111d9',t:'MTc3NjA2NjYzNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
