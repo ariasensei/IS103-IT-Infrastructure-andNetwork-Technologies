@@ -3,1531 +3,875 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Network Monitoring &amp; Performance Tools Lesson</title>
+  <title>Network Security Lesson</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="/_sdk/element_sdk.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&amp;family=Poppins:ital,wght@0,400;0,600;0,700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet">
   <style>
-  html, body { height: 100%; margin: 0; }
   * { box-sizing: border-box; }
-  .font-display { font-family: 'JetBrains Mono', monospace; }
-  .font-body { font-family: 'Poppins', sans-serif; }
-  .tab-active { border-bottom: 3px solid; }
-  .step-card { border-left: 3px solid; transition: all 0.3s ease; }
-  .step-card:hover { transform: translateX(4px); }
-  .fade-in { animation: fadeIn 0.4s ease-out; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-  .quiz-option { transition: all 0.2s ease; cursor: pointer; }
-  .quiz-option:hover { transform: scale(1.02); }
-  .quiz-option.correct { background: #d1fae5 !important; border-color: #10b981 !important; }
-  .quiz-option.incorrect { background: #fee2e2 !important; border-color: #ef4444 !important; }
-  .metric-chart { position: relative; height: 150px; }
-  .checklist-item input:checked + span { text-decoration: line-through; opacity: 0.6; }
-  .progress-fill { transition: width 0.5s ease; }
-  table { border-collapse: collapse; }
-  td, th { padding: 10px 14px; }
-  .tool-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
-  .scenario-box { position: relative; overflow: hidden; }
-  .scenario-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
-  .code-block { font-family: 'JetBrains Mono', monospace; }
-  </style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
- </head>
- <body class="h-full font-body overflow-auto" style="background:#0f172a; color:#e2e8f0;">
-  <div id="app" class="w-full min-h-full" style="background:#0f172a;"><!-- Header -->
-   <header class="w-full" style="background:linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-bottom:1px solid #1e3a5f;">
-    <div class="max-w-5xl mx-auto px-6 py-8">
-     <div class="flex items-center gap-3 mb-2">
-      <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:#10b981;"><i data-lucide="activity" style="width:22px;height:22px;color:#0f172a;"></i>
-      </div><span id="el-course" class="text-sm font-display tracking-wider" style="color:#10b981;">IS103 - IT Infrastructure and Network Technologies</span>
-     </div>
-     <h1 id="el-title" class="font-display text-3xl md:text-4xl font-bold mb-2" style="color:#f1f5f9;">Network Security Principles</h1>
-     <div class="flex flex-wrap items-center gap-4 text-sm" style="color:#94a3b8;"><span id="el-prof" class="flex items-center gap-1"><i data-lucide="user" style="width:14px;height:14px;"></i> Prof. MKDB</span> <span id="el-week" class="flex items-center gap-1"><i data-lucide="calendar" style="width:14px;height:14px;"></i> Finals Week 3</span> <span class="flex items-center gap-1"><i data-lucide="target" style="width:14px;height:14px;"></i> ILO: Apply basic network security principles</span>
-     </div>
-    </div>
-   </header><!-- Progress Bar -->
-   <div class="w-full" style="background:#1e293b; height:4px;">
-    <div id="progress-bar" class="progress-fill h-full" style="background:#10b981; width:0%;"></div>
-   </div><!-- Navigation Tabs -->
-   <nav class="w-full sticky top-0 z-30" style="background:#0f172a; border-bottom:1px solid #1e3a5f;">
-    <div class="max-w-5xl mx-auto px-6 flex gap-1 overflow-x-auto" id="tab-nav"><button onclick="switchTab(0)" class="tab-btn tab-active px-4 py-3 text-sm font-semibold whitespace-nowrap" style="color:#10b981; border-color:#10b981;" data-idx="0"> <i data-lucide="book-open" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Lesson </button> <button onclick="switchTab(1)" class="tab-btn px-4 py-3 text-sm font-semibold whitespace-nowrap" style="color:#64748b;" data-idx="1"> <i data-lucide="monitor" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Packet Tracer Guide </button> <button onclick="switchTab(2)" class="tab-btn px-4 py-3 text-sm font-semibold whitespace-nowrap" style="color:#64748b;" data-idx="2"> <i data-lucide="clipboard-list" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Student Activity </button> <button onclick="switchTab(3)" class="tab-btn px-4 py-3 text-sm font-semibold whitespace-nowrap" style="color:#64748b;" data-idx="3"> <i data-lucide="help-circle" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Quiz </button>
-    </div>
-   </nav><!-- Content Area -->
-   <main class="max-w-5xl mx-auto px-6 py-8"><!-- TAB 0: LESSON -->
-    <section id="tab-0" class="tab-content fade-in"><!-- Real Life Scenario -->
-     <div class="scenario-box rounded-xl p-6 mb-8" style="background:#1e293b; border:1px solid #1e3a5f;">
-      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#10b981,#0ea5e9);"></div>
-      <div class="flex items-start gap-4">
-       <div class="text-4xl">
-        🏢
-       </div>
-       <div>
-        <h3 class="font-display font-bold text-lg mb-2" style="color:#f1f5f9;">Real-Life Scenario: Corporate Network Slowdown</h3>
-        <p class="leading-relaxed" style="color:#cbd5e1;">You work at <strong style="color:#10b981;">TechCorp Inc.</strong>, a 50-employee company. Suddenly, employees report the network is <em>"slow and laggy"</em> — files upload slowly, video calls drop, and productivity suffers. The boss asks: <em>"What's wrong with our network?"</em> To find out, you need network monitoring tools to measure performance, identify bottlenecks, and troubleshoot. That's what this lesson teaches you.</p>
-       </div>
-      </div>
-     </div><!-- What is Network Monitoring -->
-     <div class="mb-8">
-      <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color:#f1f5f9;"><span class="inline-block w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:#10b981;color:#0f172a;">1</span> What is Network Monitoring?</h2>
-      <div class="rounded-xl p-6" style="background:#1e293b; border:1px solid #1e3a5f;">
-       <p class="mb-4 leading-relaxed" style="color:#cbd5e1;">Network monitoring is the process of <strong style="color:#10b981;">continuously observing and measuring</strong> your network to ensure it's healthy, fast, and reliable. It's like having a doctor check your vital signs — if something's wrong, you catch it early.</p>
-       <p class="mb-4 leading-relaxed" style="color:#cbd5e1;"><strong>Think of it this way:</strong> Your network is like a highway. Without monitoring, you wouldn't know if traffic is backed up, if an accident occurred, or if a lane is closed. With monitoring, you see exactly what's happening in real-time.</p>
-       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-        <div class="rounded-lg p-4 text-center" style="background:#0f172a; border:1px solid #1e3a5f;">
-         <div class="text-3xl mb-2">
-          📊
-         </div>
-         <p class="text-sm font-semibold" style="color:#10b981;">Bandwidth Usage</p>
-         <p class="text-xs mt-1" style="color:#94a3b8;">How much data flows through your network</p>
-        </div>
-        <div class="rounded-lg p-4 text-center" style="background:#0f172a; border:1px solid #1e3a5f;">
-         <div class="text-3xl mb-2">
-          ⏱️
-         </div>
-         <p class="text-sm font-semibold" style="color:#10b981;">Latency/Delay</p>
-         <p class="text-xs mt-1" style="color:#94a3b8;">Time it takes for data to travel from A to B</p>
-        </div>
-        <div class="rounded-lg p-4 text-center" style="background:#0f172a; border:1px solid #1e3a5f;">
-         <div class="text-3xl mb-2">
-          📉
-         </div>
-         <p class="text-sm font-semibold" style="color:#10b981;">Packet Loss</p>
-         <p class="text-xs mt-1" style="color:#94a3b8;">Percentage of data that fails to reach destination</p>
-        </div>
-       </div>
-      </div>
-     </div><!-- Key Monitoring Concepts -->
-     <div class="mb-8">
-      <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color:#f1f5f9;"><span class="inline-block w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:#10b981;color:#0f172a;">2</span> Key Monitoring Concepts</h2>
-      <div class="space-y-3">
-       <div class="rounded-lg p-4" style="background:#1e293b; border-left:3px solid #10b981;">
-        <p class="font-display font-bold text-sm mb-2" style="color:#10b981;">🔗 Bandwidth (Throughput)</p>
-        <p class="text-sm" style="color:#cbd5e1;">Maximum data transmission rate. Example: "Your internet connection is 100 Mbps" means max 100 megabits per second.</p>
-        <p class="text-xs mt-2" style="color:#94a3b8;">💡 Think: The width of the highway — wider = more cars can pass</p>
-       </div>
-       <div class="rounded-lg p-4" style="background:#1e293b; border-left:3px solid #f59e0b;">
-        <p class="font-display font-bold text-sm mb-2" style="color:#f59e0b;">⏱️ Latency (Ping Time)</p>
-        <p class="text-sm" style="color:#cbd5e1;">Time delay for data to travel from source to destination, measured in milliseconds (ms). Lower is better. Normal: &lt;50ms. Slow: &gt;100ms.</p>
-        <p class="text-xs mt-2" style="color:#94a3b8;">💡 Think: How long it takes a driver to reach their destination</p>
-       </div>
-       <div class="rounded-lg p-4" style="background:#1e293b; border-left:3px solid #ef4444;">
-        <p class="font-display font-bold text-sm mb-2" style="color:#ef4444;">📉 Packet Loss</p>
-        <p class="text-sm" style="color:#cbd5e1;">Percentage of data packets that never reach their destination. Normal: 0%. Bad: &gt;1% causes noticeable issues (video freezes, dropouts).</p>
-        <p class="text-xs mt-2" style="color:#94a3b8;">💡 Think: Percentage of mail that gets lost in transit</p>
-       </div>
-       <div class="rounded-lg p-4" style="background:#1e293b; border-left:3px solid #0ea5e9;">
-        <p class="font-display font-bold text-sm mb-2" style="color:#0ea5e9;">💾 Jitter</p>
-        <p class="text-sm" style="color:#cbd5e1;">Variation in latency over time. Inconsistent delay causes choppy video calls and lag in gaming. Should be &lt;20ms.</p>
-        <p class="text-xs mt-2" style="color:#94a3b8;">💡 Think: A bumpy vs. smooth ride — smoothness = low jitter</p>
-       </div>
-      </div>
-     </div><!-- Network Performance Tools -->
-     <div class="mb-8">
-      <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color:#f1f5f9;"><span class="inline-block w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:#10b981;color:#0f172a;">3</span> Essential Network Performance Tools</h2>
-      <div class="space-y-3">
-       <div class="rounded-lg p-5 border-l-4" style="background:#1e293b; border-color:#10b981; border-left-width:4px;">
-        <div class="flex items-start justify-between mb-2">
-         <div>
-          <p class="font-display font-bold text-sm" style="color:#10b981;">PING (Packet InterNet Groper)</p>
-          <p class="text-xs mt-1" style="color:#94a3b8;">Command: <code style="background:#0f172a;padding:2px 6px;border-radius:3px;">ping 8.8.8.8</code></p>
-         </div><span class="tool-badge" style="background:#d1fae5;color:#065f46;">Basic</span>
-        </div>
-        <p class="text-sm mb-3" style="color:#cbd5e1;">Tests <strong>connectivity</strong> and <strong>latency</strong>. Sends small packets to a host and waits for replies.</p>
-        <div class="text-xs" style="background:#0f172a;padding:3px 6px;border-radius:3px;color:#94a3b8;font-family:'JetBrains Mono';">
-         C:&gt; ping 8.8.8.8<br>
-          Reply from 8.8.8.8: bytes=32 time=15ms TTL=53<br><span style="color:#10b981;">✓ Success! Latency = 15ms</span>
-        </div>
-       </div>
-       <div class="rounded-lg p-5 border-l-4" style="background:#1e293b; border-color:#0ea5e9; border-left-width:4px;">
-        <div class="flex items-start justify-between mb-2">
-         <div>
-          <p class="font-display font-bold text-sm" style="color:#0ea5e9;">TRACERT / TRACEROUTE</p>
-          <p class="text-xs mt-1" style="color:#94a3b8;">Command: <code style="background:#0f172a;padding:2px 6px;border-radius:3px;">tracert google.com</code></p>
-         </div><span class="tool-badge" style="background:#dbeafe;color:#0c4a6e;">Intermediate</span>
-        </div>
-        <p class="text-sm mb-3" style="color:#cbd5e1;">Shows the <strong>path</strong> your data takes to reach a destination, hop by hop. Identifies where slowdown or failure occurs.</p>
-        <p class="text-xs" style="color:#94a3b8;">Use when: Data reaches the server but takes forever. Helps find problematic router or network segment.</p>
-       </div>
-       <div class="rounded-lg p-5 border-l-4" style="background:#1e293b; border-color:#f59e0b; border-left-width:4px;">
-        <div class="flex items-start justify-between mb-2">
-         <div>
-          <p class="font-display font-bold text-sm" style="color:#f59e0b;">IPCONFIG / IFCONFIG</p>
-          <p class="text-xs mt-1" style="color:#94a3b8;">Windows: <code style="background:#0f172a;padding:2px 6px;border-radius:3px;">ipconfig</code> | Linux: <code style="background:#0f172a;padding:2px 6px;border-radius:3px;">ifconfig</code></p>
-         </div><span class="tool-badge" style="background:#fed7aa;color:#7c2d12;">Basic</span>
-        </div>
-        <p class="text-sm mb-3" style="color:#cbd5e1;">Shows your device's <strong>network configuration</strong> — IP address, subnet mask, gateway, DNS server.</p>
-        <p class="text-xs" style="color:#94a3b8;">Use when: Need to check if DHCP assigned correct IP, or manually set static IP for testing.</p>
-       </div>
-       <div class="rounded-lg p-5 border-l-4" style="background:#1e293b; border-color:#8b5cf6; border-left-width:4px;">
-        <div class="flex items-start justify-between mb-2">
-         <div>
-          <p class="font-display font-bold text-sm" style="color:#8b5cf6;">NSLOOKUP / DIG</p>
-          <p class="text-xs mt-1" style="color:#94a3b8;">Command: <code style="background:#0f172a;padding:2px 6px;border-radius:3px;">nslookup google.com</code></p>
-         </div><span class="tool-badge" style="background:#ede9fe;color:#5b21b6;">Intermediate</span>
-        </div>
-        <p class="text-sm mb-3" style="color:#cbd5e1;">Performs <strong>DNS lookups</strong> — translates domain names (google.com) to IP addresses (142.250.185.46).</p>
-        <p class="text-xs" style="color:#94a3b8;">Use when: Websites don't load. Verify DNS is working and resolving correctly.</p>
-       </div>
-       <div class="rounded-lg p-5 border-l-4" style="background:#1e293b; border-color:#ec4899; border-left-width:4px;">
-        <div class="flex items-start justify-between mb-2">
-         <div>
-          <p class="font-display font-bold text-sm" style="color:#ec4899;">IPERF / SPEEDTEST</p>
-          <p class="text-xs mt-1" style="color:#94a3b8;">Tool: Dedicated apps or websites</p>
-         </div><span class="tool-badge" style="background:#fbcfe8;color:#831843;">Advanced</span>
-        </div>
-        <p class="text-sm mb-3" style="color:#cbd5e1;">Measures actual <strong>bandwidth/throughput</strong> — how much data can be transferred in a time period.</p>
-        <p class="text-xs" style="color:#94a3b8;">Use when: Need to verify "you get what you paid for" from ISP or identify bottlenecks in data transfer speed.</p>
-       </div>
-      </div>
-     </div><!-- Performance Thresholds Table -->
-     <div class="mb-8">
-      <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color:#f1f5f9;"><span class="inline-block w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:#10b981;color:#0f172a;">4</span> Performance Benchmarks</h2>
-      <div class="rounded-xl p-6 overflow-x-auto" style="background:#1e293b; border:1px solid #1e3a5f;">
-       <table class="w-full text-sm">
-        <thead style="background:#0f172a;">
-         <tr>
-          <th class="text-left font-display text-xs tracking-wider" style="color:#10b981; padding:10px;">Metric</th>
-          <th class="text-left font-display text-xs tracking-wider" style="color:#10b981; padding:10px;">Excellent ✅</th>
-          <th class="text-left font-display text-xs tracking-wider" style="color:#f59e0b; padding:10px;">Good ⚠️</th>
-          <th class="text-left font-display text-xs tracking-wider" style="color:#ef4444; padding:10px;">Poor ❌</th>
-         </tr>
-        </thead>
-        <tbody style="color:#cbd5e1;">
-         <tr style="border-top:1px solid #1e3a5f;">
-          <td style="padding:10px;"><strong>Ping (Latency)</strong></td>
-          <td style="padding:10px;">&lt;20ms</td>
-          <td style="padding:10px;">20-50ms</td>
-          <td style="padding:10px;">&gt;100ms</td>
-         </tr>
-         <tr style="border-top:1px solid #1e3a5f;background:#0f172a40;">
-          <td style="padding:10px;"><strong>Jitter</strong></td>
-          <td style="padding:10px;">&lt;5ms</td>
-          <td style="padding:10px;">5-20ms</td>
-          <td style="padding:10px;">&gt;30ms</td>
-         </tr>
-         <tr style="border-top:1px solid #1e3a5f;">
-          <td style="padding:10px;"><strong>Packet Loss</strong></td>
-          <td style="padding:10px;">0%</td>
-          <td style="padding:10px;">0-1%</td>
-          <td style="padding:10px;">&gt;1%</td>
-         </tr>
-         <tr style="border-top:1px solid #1e3a5f;background:#0f172a40;">
-          <td style="padding:10px;"><strong>Download Speed</strong></td>
-          <td style="padding:10px;">&gt;100 Mbps</td>
-          <td style="padding:10px;">50-100 Mbps</td>
-          <td style="padding:10px;">&lt;25 Mbps</td>
-         </tr>
-         <tr style="border-top:1px solid #1e3a5f;">
-          <td style="padding:10px;"><strong>Upload Speed</strong></td>
-          <td style="padding:10px;">&gt;25 Mbps</td>
-          <td style="padding:10px;">10-25 Mbps</td>
-          <td style="padding:10px;">&lt;5 Mbps</td>
-         </tr>
-        </tbody>
-       </table>
-      </div>
-     </div>
-     <div class="text-center pt-4"><button onclick="switchTab(1)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#10b981; color:#0f172a;"> Next: Packet Tracer Guide → </button>
-     </div>
-    </section><!-- TAB 1: PACKET TRACER GUIDE -->
-    <section id="tab-1" class="tab-content fade-in hidden">
-     <div class="scenario-box rounded-xl p-6 mb-8" style="background:#1e293b; border:1px solid #1e3a5f;">
-      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#10b981,#0ea5e9);"></div>
-      <div class="flex items-start gap-4">
-       <div class="text-4xl">
-        🛠️
-       </div>
-       <div>
-        <h3 class="font-display font-bold text-lg mb-2" style="color:#f1f5f9;">Guided Lab: Monitoring TechCorp Network Performance</h3>
-        <p class="leading-relaxed" style="color:#cbd5e1;">Follow these steps in <strong>Cisco Packet Tracer</strong> to set up a corporate network and use monitoring tools to measure performance, identify latency issues, and verify connectivity between departments.</p>
-       </div>
-      </div>
-     </div><!-- Network Diagram -->
-     <div class="rounded-xl p-6 mb-8 text-center" style="background:#1e293b; border:1px solid #1e3a5f;">
-      <h4 class="font-display font-bold text-sm mb-4" style="color:#10b981;">Network Topology: TechCorp Multi-Office Setup</h4>
-      <svg width="500" height="240" viewbox="0 0 500 240" class="mx-auto"><!-- Internet --> <ellipse cx="250" cy="30" rx="50" ry="20" fill="#334155" stroke="#64748b" /> <text x="250" y="34" text-anchor="middle" fill="#94a3b8" font-size="11">
-        ☁ Internet
-       </text> <!-- HQ Router --> <rect x="150" y="70" width="90" height="40" rx="8" fill="#10b981" /> <text x="195" y="90" text-anchor="middle" fill="#0f172a" font-size="9" font-weight="bold">
-        HQ Router
-       </text> <text x="195" y="102" text-anchor="middle" fill="#0f172a" font-size="8">
-        (HQ)
-       </text> <!-- Branch Router --> <rect x="310" y="70" width="90" height="40" rx="8" fill="#10b981" /> <text x="355" y="90" text-anchor="middle" fill="#0f172a" font-size="9" font-weight="bold">
-        Branch Router
-       </text> <text x="355" y="102" text-anchor="middle" fill="#0f172a" font-size="8">
-        (Branch)
-       </text> <!-- Internet connections --> <line x1="250" y1="50" x2="195" y2="70" stroke="#0ea5e9" stroke-width="2" /> <line x1="250" y1="50" x2="355" y2="70" stroke="#0ea5e9" stroke-width="2" /> <!-- WAN Link (slow) --> <line x1="240" y1="95" x2="310" y2="95" stroke="#ef4444" stroke-width="2" stroke-dasharray="5" /> <text x="275" y="85" text-anchor="middle" fill="#ef4444" font-size="8" font-weight="bold">
-        WAN Link
-       </text> <!-- HQ Workstations --> <rect x="50" y="160" width="50" height="30" rx="4" fill="#334155" stroke="#64748b" /> <text x="75" y="178" text-anchor="middle" fill="#cbd5e1" font-size="9">
-        PC0 (Sales)
-       </text> <line x1="100" y1="175" x2="150" y2="95" stroke="#64748b" stroke-width="1" stroke-dasharray="3" /> <rect x="130" y="160" width="50" height="30" rx="4" fill="#334155" stroke="#64748b" /> <text x="155" y="178" text-anchor="middle" fill="#cbd5e1" font-size="9">
-        PC1 (HR)
-       </text> <line x1="155" y1="160" x2="175" y2="110" stroke="#64748b" stroke-width="1" stroke-dasharray="3" /> <!-- Branch Workstations --> <rect x="300" y="160" width="50" height="30" rx="4" fill="#334155" stroke="#64748b" /> <text x="325" y="178" text-anchor="middle" fill="#cbd5e1" font-size="9">
-        PC2 (IT)
-       </text> <line x1="325" y1="160" x2="340" y2="110" stroke="#64748b" stroke-width="1" stroke-dasharray="3" /> <rect x="380" y="160" width="50" height="30" rx="4" fill="#334155" stroke="#64748b" /> <text x="405" y="178" text-anchor="middle" fill="#cbd5e1" font-size="9">
-        PC3 (Eng)
-       </text> <line x1="405" y1="160" x2="390" y2="110" stroke="#64748b" stroke-width="1" stroke-dasharray="3" /> <!-- Legend --> <text x="250" y="225" text-anchor="middle" fill="#64748b" font-size="10">
-        WAN Link slow on purpose—simulates real office bottleneck
-       </text>
-      </svg>
-     </div><!-- Steps -->
-     <div class="space-y-4" id="pt-steps">
-      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#10b981; border-left-color:#10b981;">
-       <div class="flex items-center gap-3 mb-3"><span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#10b981; color:#0f172a;">1</span>
-        <h4 class="font-display font-bold" style="color:#f1f5f9;">Set Up the Network Topology</h4>
-       </div>
-       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
-        <li>1. Open Cisco Packet Tracer and create a <strong>new blank project</strong></li>
-        <li>2. From <strong>Routers → Cisco 2901</strong>, drag <strong>2 routers</strong> to the workspace</li>
-        <li>3. From <strong>End Devices → Computers</strong>, drag <strong>4 PCs</strong> to the workspace</li>
-        <li>4. From <strong>Network Devices → Switches</strong>, drag <strong>2 Ethernet Switches</strong></li>
-        <li>5. Arrange: Place routers in center, switches below them, and PCs around switches</li>
-       </ol>
-       <div class="mt-3 ml-11 p-3 rounded-lg text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#94a3b8;">
-        💡 <strong>Naming:</strong> Rename routers to "HQ-Router" and "Branch-Router" for clarity (right-click → Edit Config)
-       </div>
-      </div>
-      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#10b981;">
-       <div class="flex items-center gap-3 mb-3"><span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#10b981; color:#0f172a;">2</span>
-        <h4 class="font-display font-bold" style="color:#f1f5f9;">Connect Devices with Cables</h4>
-       </div>
-       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
-        <li>1. Go to the <strong>Connections panel</strong> (bottom left) → select <strong>Copper Straight-Through cable</strong></li>
-        <li>2. Connect <strong>PC0 → Switch0</strong> (LAN port)</li>
-        <li>3. Connect <strong>PC1 → Switch0</strong> (LAN port)</li>
-        <li>4. Connect <strong>Switch0 → HQ-Router (Fa0/0)</strong> (FastEthernet port)</li>
-        <li>5. Repeat for Branch: PC2, PC3 → Switch1 → Branch-Router (Fa0/0)</li>
-        <li>6. Connect <strong>HQ-Router (Fa0/1) ↔ Branch-Router (Fa0/1)</strong> — this is your WAN link</li>
-       </ol>
-       <div class="mt-3 ml-11 p-3 rounded-lg text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#94a3b8;">
-        💡 <strong>Tip:</strong> Cables turn green when properly connected, red if there's an error.
-       </div>
-      </div>
-      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#f59e0b;">
-       <div class="flex items-center gap-3 mb-3"><span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#f59e0b; color:#0f172a;">3</span>
-        <h4 class="font-display font-bold" style="color:#f1f5f9;">Configure IP Addresses on Routers</h4>
-       </div>
-       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
-        <li><strong>HQ-Router Configuration:</strong>
-         <ul class="ml-4 mt-1 space-y-1" style="color:#94a3b8;">
-          <li>• Click <strong>HQ-Router → CLI tab</strong></li>
-          <li>• Type: <code style="color:#0ea5e9;">enable</code> → <code style="color:#0ea5e9;">configure terminal</code></li>
-          <li>• <code style="color:#0ea5e9;">interface Fa0/0</code> → <code style="color:#0ea5e9;">ip address 192.168.1.1 255.255.255.0</code> → <code style="color:#0ea5e9;">no shutdown</code></li>
-          <li>• <code style="color:#0ea5e9;">interface Fa0/1</code> → <code style="color:#0ea5e9;">ip address 192.168.12.1 255.255.255.0</code> → <code style="color:#0ea5e9;">no shutdown</code></li>
-         </ul></li>
-        <li><strong>Branch-Router Configuration:</strong>
-         <ul class="ml-4 mt-1 space-y-1" style="color:#94a3b8;">
-          <li>• Same process for Branch-Router</li>
-          <li>• Fa0/0: <code style="color:#0ea5e9;">192.168.2.1 255.255.255.0</code></li>
-          <li>• Fa0/1: <code style="color:#0ea5e9;">192.168.12.2 255.255.255.0</code></li>
-         </ul></li>
-       </ol>
-       <div class="mt-3 ml-11 p-3 rounded-lg text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#94a3b8;">
-        💡 <strong>Note:</strong> The Fa0/1 addresses (192.168.12.x) form the WAN link between routers.
-       </div>
-      </div>
-      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#0ea5e9;">
-       <div class="flex items-center gap-3 mb-3"><span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#0ea5e9; color:#0f172a;">4</span>
-        <h4 class="font-display font-bold" style="color:#f1f5f9;">Enable DHCP on Routers (for PCs)</h4>
-       </div>
-       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
-        <li>1. Click <strong>HQ-Router → GUI tab</strong></li>
-        <li>2. Go to <strong>Services → DHCP</strong></li>
-        <li>3. Enable <strong>DHCP</strong> with these settings: 
-         <ul class="ml-4 mt-1 space-y-1" style="color:#94a3b8;">
-          <li>• Network: <code style="color:#0ea5e9;">192.168.1.0</code></li>
-          <li>• Subnet Mask: <code style="color:#0ea5e9;">255.255.255.0</code></li>
-          <li>• Default Gateway: <code style="color:#0ea5e9;">192.168.1.1</code></li>
-         </ul></li>
-        <li>4. Repeat for <strong>Branch-Router</strong> (Network: 192.168.2.0)</li>
-       </ol>
-      </div>
-      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#10b981;">
-       <div class="flex items-center gap-3 mb-3"><span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#10b981; color:#0f172a;">5</span>
-        <h4 class="font-display font-bold" style="color:#f1f5f9;">Configure PCs to Get IP via DHCP</h4>
-       </div>
-       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
-        <li>1. Click <strong>PC0 → Desktop tab → IP Configuration</strong></li>
-        <li>2. Select <strong>DHCP</strong> (NOT Static)</li>
-        <li>3. Wait a few seconds — you should see PC0 get an IP like <strong>192.168.1.100</strong></li>
-        <li>4. Repeat for <strong>PC1, PC2, PC3</strong></li>
-       </ol>
-       <div class="mt-3 ml-11 p-3 rounded-lg text-xs" style="background:#10b981; color:#0f172a;"><strong>✓ Success!</strong> All PCs should now have IPs. Green lights on cables = good connection.
-       </div>
-      </div>
-      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#8b5cf6;">
-       <div class="flex items-center gap-3 mb-3"><span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#8b5cf6; color:#fff;">6</span>
-        <h4 class="font-display font-bold" style="color:#f1f5f9;">Set Up Routing Between HQ and Branch</h4>
-       </div>
-       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
-        <li>1. Click <strong>HQ-Router → CLI</strong> and type: 
-         <div class="mt-1 p-2 rounded font-display text-xs" style="background:#0f172a;color:#0ea5e9;">
-          configure terminal<br>
-           ip route 192.168.2.0 255.255.255.0 192.168.12.2
-         </div></li>
-        <li>2. Click <strong>Branch-Router → CLI</strong> and type: 
-         <div class="mt-1 p-2 rounded font-display text-xs" style="background:#0f172a;color:#0ea5e9;">
-          configure terminal<br>
-           ip route 192.168.1.0 255.255.255.0 192.168.12.1
-         </div></li>
-       </ol>
-       <div class="mt-3 ml-11 p-3 rounded-lg text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#94a3b8;">
-        💡 <strong>What this does:</strong> Tells routers how to reach the other office's network.
-       </div>
-      </div>
-      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#ef4444;">
-       <div class="flex items-center gap-3 mb-3"><span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#ef4444; color:#fff;">7</span>
-        <h4 class="font-display font-bold" style="color:#f1f5f9;">Test Connectivity with PING</h4>
-       </div>
-       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
-        <li>1. Click <strong>PC0 → Desktop → Command Prompt</strong></li>
-        <li>2. Type: <code style="color:#0ea5e9;">ping 192.168.2.1</code> (ping the Branch router)</li>
-        <li>3. You should see replies like: <code style="color:#10b981;">Reply from 192.168.2.1: bytes=32 time=30ms</code></li>
-        <li>4. Now type: <code style="color:#0ea5e9;">ping 192.168.2.100</code> (ping a PC in the Branch office)</li>
-        <li>5. Note the <strong>latency (time=XXms)</strong> — this simulates the WAN delay between offices</li>
-       </ol>
-       <div class="mt-3 ml-11 p-4 rounded-lg font-display text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#cbd5e1;">
-        <div style="color:#10b981;">
-         C:\&gt; ping 192.168.2.1
-        </div>
-        <div style="color:#94a3b8;">
-         Pinging 192.168.2.1 with 32 bytes of data:
-        </div>
-        <div style="color:#10b981;">
-         Reply from 192.168.2.1: bytes=32 time=30ms TTL=63
-        </div>
-        <div style="color:#10b981;">
-         Reply from 192.168.2.1: bytes=32 time=28ms TTL=63
-        </div>
-        <div style="color:#10b981;">
-         Ping statistics: Sent=4, Received=4, Lost=0 (0% loss)
-        </div>
-       </div>
-      </div>
-      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#10b981;">
-       <div class="flex items-center gap-3 mb-3"><span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#10b981; color:#0f172a;">8</span>
-        <h4 class="font-display font-bold" style="color:#f1f5f9;">Trace the Route with TRACERT</h4>
-       </div>
-       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
-        <li>1. Still in <strong>PC0 Command Prompt</strong>, type: <code style="color:#0ea5e9;">tracert 192.168.2.100</code></li>
-        <li>2. You'll see the path: PC0 → HQ-Router (192.168.1.1) → Branch-Router (192.168.12.2) → PC3 (192.168.2.100)</li>
-        <li>3. Note each <strong>hop's latency</strong> — this shows where delay occurs</li>
-       </ol>
-       <div class="mt-3 ml-11 p-4 rounded-lg font-display text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#cbd5e1;">
-        <div style="color:#94a3b8;">
-         C:\&gt; tracert 192.168.2.100
-        </div>
-        <div style="color:#f59e0b;">
-         Hop 1: 192.168.1.1 (HQ-Router) — 2ms ✓
-        </div>
-        <div style="color:#ef4444;">
-         Hop 2: 192.168.12.2 (WAN Link) — 25ms ⚠️ (slow!)
-        </div>
-        <div style="color:#f59e0b;">
-         Hop 3: 192.168.2.100 (PC3) — 5ms ✓
-        </div>
-       </div>
-      </div>
-     </div>
-     <div class="text-center pt-8 flex justify-center gap-4"><button onclick="switchTab(0)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#334155; color:#cbd5e1;"> ← Back to Lesson </button> <button onclick="switchTab(2)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#10b981; color:#0f172a;"> Next: Student Activity → </button>
-     </div>
-    </section><!-- TAB 2: STUDENT ACTIVITY -->
-    <section id="tab-2" class="tab-content fade-in hidden">
-     <div class="scenario-box rounded-xl p-6 mb-8" style="background:#1e293b; border:1px solid #1e3a5f;">
-      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#8b5cf6,#ec4899);"></div>
-      <div class="flex items-start gap-4">
-       <div class="text-4xl">
-        🎯
-       </div>
-       <div>
-        <h3 class="font-display font-bold text-lg mb-2" style="color:#f1f5f9;">Student Activity: Troubleshoot CloudSync Data Center</h3>
-        <p class="leading-relaxed" style="color:#cbd5e1;">CloudSync Inc. has 3 data center locations (HQ, East, West) connected by WAN links. Users report slow file transfers and video conference delays. YOU must set up the network, monitor performance, and identify the bottleneck. Build and troubleshoot this network on your own.</p>
-       </div>
-      </div>
-     </div><!-- Requirements -->
-     <div class="rounded-xl p-6 mb-6" style="background:#1e293b; border:1px solid #1e3a5f;">
-      <h4 class="font-display font-bold text-base mb-4 flex items-center gap-2" style="color:#8b5cf6;"><i data-lucide="list-checks" style="width:18px;height:18px;"></i> Setup Requirements</h4>
-      <div class="overflow-x-auto rounded-lg" style="border:1px solid #1e3a5f;">
-       <table class="w-full text-sm">
-        <thead style="background:#0f172a;">
-         <tr>
-          <th class="text-left font-display text-xs tracking-wider" style="color:#8b5cf6;">Component</th>
-          <th class="text-left font-display text-xs tracking-wider" style="color:#8b5cf6;">Configuration</th>
-         </tr>
-        </thead>
-        <tbody style="color:#cbd5e1;">
-         <tr style="border-top:1px solid #1e3a5f;">
-          <td class="font-semibold">3 Routers</td>
-          <td>HQ (192.168.1.x), East (192.168.2.x), West (192.168.3.x)</td>
-         </tr>
-         <tr style="border-top:1px solid #1e3a5f; background:#0f172a40;">
-          <td class="font-semibold">6 PCs Total</td>
-          <td>2 per location (get IPs via DHCP)</td>
-         </tr>
-         <tr style="border-top:1px solid #1e3a5f;">
-          <td class="font-semibold">3 Switches</td>
-          <td>One per location for local network</td>
-         </tr>
-         <tr style="border-top:1px solid #1e3a5f; background:#0f172a40;">
-          <td class="font-semibold">Routing</td>
-          <td>All 3 routers can reach each other's networks</td>
-         </tr>
-         <tr style="border-top:1px solid #1e3a5f;">
-          <td class="font-semibold">WAN Performance</td>
-          <td>WAN links should have 15-40ms latency (simulate real delay)</td>
-         </tr>
-        </tbody>
-       </table>
-      </div>
-     </div><!-- Tasks Checklist -->
-     <div class="rounded-xl p-6 mb-6" style="background:#1e293b; border:1px solid #1e3a5f;">
-      <h4 class="font-display font-bold text-base mb-4 flex items-center gap-2" style="color:#8b5cf6;"><i data-lucide="check-square" style="width:18px;height:18px;"></i> Task Checklist</h4>
-      <p class="text-sm mb-4" style="color:#94a3b8;">Check off each task as you complete it:</p>
-      <div class="space-y-3" id="checklist"><label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 1:</strong> Create topology: 3 routers, 3 switches, 6 PCs (2 per location)</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 2:</strong> Connect all devices with cables (all green lights)</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 3:</strong> Configure router IPs (HQ: 192.168.1.1, East: 192.168.2.1, West: 192.168.3.1) and WAN links</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 4:</strong> Enable DHCP on all 3 routers for their local networks</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 5:</strong> Set all 6 PCs to use DHCP (verify they get IPs)</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 6:</strong> Configure static routing on all routers so they can reach other locations</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" type="checkbox" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 7:</strong> PING from HQ PC to East PC — measure latency</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" type="checkbox" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 8:</strong> PING from HQ PC to West PC — measure latency</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" type="checkbox" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 9:</strong> Run TRACERT from HQ PC to West PC — document the hops and latencies</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" type="checkbox" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 10:</strong> Verify 0% packet loss on all PINGs — all connections work</span> </label>
-      </div>
-      <div class="mt-4 flex items-center gap-3">
-       <div class="flex-1 h-3 rounded-full overflow-hidden" style="background:#0f172a;">
-        <div id="checklist-bar" class="h-full rounded-full progress-fill" style="background:#8b5cf6; width:0%;"></div>
-       </div><span id="checklist-pct" class="font-display text-sm font-bold" style="color:#8b5cf6;">0%</span>
-      </div>
-     </div><!-- Performance Analysis Challenge -->
-     <div class="rounded-xl p-6 mb-6" style="background:linear-gradient(135deg, #1e1b4b 0%, #1e293b 100%); border:1px solid #4c1d95;">
-      <h4 class="font-display font-bold text-base mb-3 flex items-center gap-2" style="color:#c4b5fd;">⭐ Analysis Challenge (Extra Credit)</h4>
-      <ol class="space-y-3 text-sm" style="color:#cbd5e1;">
-       <li><strong>1. Identify the Bottleneck:</strong>
-        <ul class="ml-4 mt-1 space-y-1" style="color:#94a3b8;">
-         <li>• Which WAN link has the highest latency?</li>
-         <li>• Use TRACERT to compare HQ→East vs HQ→West</li>
-         <li>• Which one would cause video conference lag?</li>
-        </ul></li>
-       <li><strong>2. Document Performance:</strong>
-        <ul class="ml-4 mt-1 space-y-1" style="color:#94a3b8;">
-         <li>• Create a table showing: From Location → To Location → Latency (ms) → Status (Good/Poor)</li>
-         <li>• Use the benchmarks from the lesson (≤20ms = Excellent, ≤50ms = Good, &gt;100ms = Poor)</li>
-        </ul></li>
-       <li><strong>3. Recommendations:</strong>
-        <ul class="ml-4 mt-1 space-y-1" style="color:#94a3b8;">
-         <li>• If West has high latency (40+ms), what would you recommend to the CEO?</li>
-         <li>• Would this be acceptable for: email? File transfers? Video calls? VoIP?</li>
-        </ul></li>
-      </ol>
-     </div><!-- Submission Requirements -->
-     <div class="rounded-xl p-6 mb-6" style="background:#1e293b; border:1px solid #1e3a5f;">
-      <h4 class="font-display font-bold text-base mb-3 flex items-center gap-2" style="color:#f59e0b;"><i data-lucide="upload" style="width:18px;height:18px;"></i> What to Submit</h4>
-      <ol class="space-y-2 text-sm" style="color:#cbd5e1;">
-       <li><strong>1.</strong> The Packet Tracer file (<code>.pkt</code>) with full working network</li>
-       <li><strong>2.</strong> Screenshot of network topology showing all 3 locations</li>
-       <li><strong>3.</strong> Screenshot of successful PING from HQ to East (show latency)</li>
-       <li><strong>4.</strong> Screenshot of TRACERT output from HQ to West (show all hops)</li>
-       <li><strong>5.</strong> Document: Performance analysis table (From → To → Latency → Status)</li>
-       <li><strong>6.</strong> One-paragraph answer to: "If you were the network admin, what would you tell the CEO about data center performance?"</li>
-      </ol>
-     </div>
-     <div class="text-center pt-4 flex justify-center gap-4"><button onclick="switchTab(1)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#334155; color:#cbd5e1;"> ← Back to Guide </button> <button onclick="switchTab(3)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#10b981; color:#0f172a;"> Take the Quiz → </button>
-     </div>
-    </section><!-- TAB 3: QUIZ -->
-    <section id="tab-3" class="tab-content fade-in hidden">
-     <div class="scenario-box rounded-xl p-6 mb-8" style="background:#1e293b; border:1px solid #1e3a5f;">
-      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#10b981,#0ea5e9);"></div>
-      <div class="flex items-start gap-4">
-       <div class="text-4xl">
-        🧠
-       </div>
-       <div>
-        <h3 class="font-display font-bold text-lg mb-2" style="color:#f1f5f9;">Knowledge Check</h3>
-        <p class="leading-relaxed" style="color:#cbd5e1;">Test your understanding of network monitoring concepts. Click the correct answer for each question.</p>
-       </div>
-      </div>
-     </div>
-     <div id="quiz-container" class="space-y-6"></div>
-     <div id="quiz-result" class="hidden rounded-xl p-6 mt-6 text-center" style="background:#1e293b; border:1px solid #1e3a5f;">
-      <div id="quiz-score" class="font-display text-3xl font-bold mb-2" style="color:#10b981;"></div>
-      <p id="quiz-msg" class="text-sm" style="color:#cbd5e1;"></p><button onclick="resetQuiz()" class="mt-4 px-6 py-2 rounded-lg font-semibold text-sm" style="background:#10b981; color:#0f172a;">Try Again</button>
-     </div>
-     <div class="text-center pt-8"><button onclick="switchTab(0)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#334155; color:#cbd5e1;"> ← Back to Lesson </button>
-     </div>
-    </section>
-   </main><!-- Footer -->
-   <footer class="w-full py-6 text-center text-xs" style="color:#475569; border-top:1px solid #1e3a5f;">
-    IS103 - IT Infrastructure and Network Technologies | Prof. MKDB | Finals Week 2
-   </footer>
-  </div>
-  <script>
-  // Quiz Data
-  const quizData = [
-    {
-      q: "What does PING measure in a network?",
-      opts: ["Bandwidth available", "Connectivity and latency (response time)", "Number of devices connected", "Data transfer speed"],
-      correct: 1
-    },
-    {
-      q: "Which metric shows the time delay for data to travel from source to destination?",
-      opts: ["Bandwidth", "Latency (Ping time)", "Packet loss", "Throughput"],
-      correct: 1
-    },
-    {
-      q: "What is considered EXCELLENT latency performance?",
-      opts: ["50-100 ms", "<20 ms", "100-200 ms", "Any value <500 ms"],
-      correct: 1
-    },
-    {
-      q: "If your ping shows 45 packets sent, 44 received, what is your packet loss?",
-      opts: ["2.2%", "0%", "1%", "44%"],
-      correct: 0
-    },
-    {
-      q: "What does TRACERT / TRACEROUTE show?",
-      opts: ["Total bandwidth usage", "The path data takes hop-by-hop to reach destination", "Your IP address", "Internet connection speed"],
-      correct: 1
-    },
-    {
-      q: "Which command shows your device's IP address, gateway, and DNS?",
-      opts: ["ping", "tracert", "ipconfig / ifconfig", "nslookup"],
-      correct: 2
-    },
-    {
-      q: "What is jitter in network monitoring?",
-      opts: ["Loss of internet connection", "Variation in latency over time", "Speed of light delay", "Maximum possible bandwidth"],
-      correct: 1
-    },
-    {
-      q: "A video conference is choppy and users report freezing. Which metric would you check FIRST?",
-      opts: ["Total bandwidth", "Packet loss and latency consistency (jitter)", "Number of connected devices", "Router temperature"],
-      correct: 1
-    }
-  ];
-
-  let quizAnswered = new Array(quizData.length).fill(null);
-
-  function buildQuiz() {
-    const container = document.getElementById('quiz-container');
-    container.innerHTML = '';
-    quizData.forEach((item, i) => {
-      const card = document.createElement('div');
-      card.className = 'rounded-xl p-5';
-      card.style.cssText = 'background:#1e293b; border:1px solid #1e3a5f;';
-      card.innerHTML = `
-        <p class="font-display font-bold text-sm mb-3" style="color:#f1f5f9;">
-          <span style="color:#10b981;">${i + 1}.</span> ${item.q}
-        </p>
-        <div class="space-y-2" id="quiz-q-${i}">
-          ${item.opts.map((opt, j) => `
-            <div class="quiz-option rounded-lg p-3 text-sm cursor-pointer" style="background:#0f172a; border:2px solid #1e3a5f; color:#cbd5e1;" data-q="${i}" data-o="${j}" onclick="selectAnswer(${i},${j})">
-              <span class="font-semibold" style="color:#64748b;">${String.fromCharCode(65 + j)}.</span> ${opt}
-            </div>
-          `).join('')}
-        </div>
-      `;
-      container.appendChild(card);
-    });
-  }
-
-  function selectAnswer(qi, oi) {
-    if (quizAnswered[qi] !== null) return;
-    quizAnswered[qi] = oi;
-    const opts = document.querySelectorAll(`#quiz-q-${qi} .quiz-option`);
-    opts.forEach((el, j) => {
-      el.style.cursor = 'default';
-      if (j === quizData[qi].correct) {
-        el.classList.add('correct');
-        el.innerHTML = el.innerHTML + ' ✅';
-      } else if (j === oi && oi !== quizData[qi].correct) {
-        el.classList.add('incorrect');
-        el.innerHTML = el.innerHTML + ' ❌';
-      }
-    });
-    checkQuizDone();
-  }
-
-  function checkQuizDone() {
-    if (quizAnswered.every(a => a !== null)) {
-      const score = quizAnswered.filter((a, i) => a === quizData[i].correct).length;
-      document.getElementById('quiz-result').classList.remove('hidden');
-      document.getElementById('quiz-score').textContent = `${score} / ${quizData.length}`;
-      const pct = Math.round((score / quizData.length) * 100);
-      let msg = pct >= 88 ? "🎉 Excellent! You're a network monitoring pro!" : pct >= 63 ? "👍 Good job! Review the topics you missed." : "📖 Keep studying! Focus on monitoring metrics.";
-      document.getElementById('quiz-msg').textContent = msg;
-    }
-  }
-
-  function resetQuiz() {
-    quizAnswered = new Array(quizData.length).fill(null);
-    document.getElementById('quiz-result').classList.add('hidden');
-    buildQuiz();
-  }
-
-  // Tabs
-  let currentTab = 0;
-  function switchTab(idx) {
-    currentTab = idx;
-    document.querySelectorAll('.tab-content').forEach((el, i) => {
-      el.classList.toggle('hidden', i !== idx);
-    });
-    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
-      if (i === idx) {
-        btn.classList.add('tab-active');
-        btn.style.color = '#10b981';
-        btn.style.borderColor = '#10b981';
-      } else {
-        btn.classList.remove('tab-active');
-        btn.style.color = '#64748b';
-        btn.style.borderColor = 'transparent';
-      }
-    });
-    updateProgressBar();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function updateProgressBar() {
-    const pct = ((currentTab + 1) / 4) * 100;
-    document.getElementById('progress-bar').style.width = pct + '%';
-  }
-
-  // Checklist
-  function updateProgress() {
-    const checks = document.querySelectorAll('#checklist input[type="checkbox"]');
-    const done = [...checks].filter(c => c.checked).length;
-    const pct = Math.round((done / checks.length) * 100);
-    document.getElementById('checklist-bar').style.width = pct + '%';
-    document.getElementById('checklist-pct').textContent = pct + '%';
-  }
-
-  // Element SDK
-  const defaultConfig = {
-    course_title: 'IS103 - IT Infrastructure and Network Technologies',
-    professor_name: 'Prof. MKDB',
-    week_label: 'Finals Week 2',
-    background_color: '#0f172a',
-    surface_color: '#1e293b',
-    text_color: '#e2e8f0',
-    accent_color: '#10b981',
-    secondary_accent: '#8b5cf6',
-    font_family: 'Poppins',
-    font_size: 16
-  };
-
-  async function onConfigChange(config) {
-    const c = { ...defaultConfig, ...config };
-    document.getElementById('el-course').textContent = c.course_title;
-    document.getElementById('el-prof').innerHTML = `<i data-lucide="user" style="width:14px;height:14px;"></i> ${c.professor_name}`;
-    document.getElementById('el-week').innerHTML = `<i data-lucide="calendar" style="width:14px;height:14px;"></i> ${c.week_label}`;
-
-    document.getElementById('app').style.background = c.background_color;
-    document.body.style.background = c.background_color;
-    document.querySelectorAll('.tab-btn.tab-active').forEach(el => { el.style.color = c.accent_color; el.style.borderColor = c.accent_color; });
-
-    const font = c.font_family || defaultConfig.font_family;
-    document.body.style.fontFamily = `${font}, Poppins, sans-serif`;
-
-    const base = c.font_size || defaultConfig.font_size;
-    document.body.style.fontSize = base + 'px';
-
-    lucide.createIcons();
-  }
-
-  if (window.elementSdk) {
-    window.elementSdk.init({
-      defaultConfig,
-      onConfigChange,
-      mapToCapabilities: (config) => ({
-        recolorables: [
-          { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
-          { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
-          { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
-          { get: () => config.accent_color || defaultConfig.accent_color, set: (v) => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); } },
-          { get: () => config.secondary_accent || defaultConfig.secondary_accent, set: (v) => { config.secondary_accent = v; window.elementSdk.setConfig({ secondary_accent: v }); } }
-        ],
-        borderables: [],
-        fontEditable: {
-          get: () => config.font_family || defaultConfig.font_family,
-          set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
-        },
-        fontSizeable: {
-          get: () => config.font_size || defaultConfig.font_size,
-          set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
-        }
-      }),
-      mapToEditPanelValues: (config) => new Map([
-        ['course_title', config.course_title || defaultConfig.course_title],
-        ['professor_name', config.professor_name || defaultConfig.professor_name],
-        ['week_label', config.week_label || defaultConfig.week_label]
-      ])
-    });
-  }
-
-  // Init
-  buildQuiz();
-  updateProgressBar();
-  lucide.createIcons();
-</script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Network Monitoring &amp; Performance Tools Lesson</title>
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <script src="/_sdk/element_sdk.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&amp;display=swap" rel="stylesheet">
-  <style>
-  html, body { height: 100%; margin: 0; }
-  * { box-sizing: border-box; }
-  .font-display { font-family: 'Space Mono', monospace; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  .font-heading { font-family: 'Space Mono', monospace; }
   .font-body { font-family: 'DM Sans', sans-serif; }
-  .tab-active { border-bottom: 3px solid; }
-  .step-card { border-left: 3px solid; transition: all 0.3s ease; }
-  .step-card:hover { transform: translateX(4px); }
-  .fade-in { animation: fadeIn 0.4s ease-out; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-  .quiz-option { transition: all 0.2s ease; cursor: pointer; }
-  .quiz-option:hover { transform: scale(1.02); }
-  .quiz-option.correct { background: #d1fae5 !important; border-color: #10b981 !important; }
-  .quiz-option.incorrect { background: #fee2e2 !important; border-color: #ef4444 !important; }
-  .signal-ring { animation: pulse-ring 2s ease-out infinite; }
-  @keyframes pulse-ring { 0% { opacity: 0.6; transform: scale(1); } 100% { opacity: 0; transform: scale(1.8); } }
-  .blink { animation: blink 1.2s ease-in-out infinite; }
-  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-  .checklist-item input:checked + span { text-decoration: line-through; opacity: 0.6; }
-  .tooltip-trigger:hover .tooltip-box { display: block; }
-  .tooltip-box { display: none; }
-  .progress-fill { transition: width 0.5s ease; }
-  table { border-collapse: collapse; }
-  td, th { padding: 10px 14px; }
-  .scenario-box { position: relative; overflow: hidden; }
-  .scenario-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+  .tab-active { border-bottom: 3px solid var(--primary); color: var(--primary); font-weight: 700; }
+  .tab-inactive { border-bottom: 3px solid transparent; color: #94a3b8; }
+  .tab-inactive:hover { color: var(--text); }
+  .card-glow { box-shadow: 0 0 0 1px rgba(99,255,182,0.08), 0 8px 32px rgba(0,0,0,0.35); }
+  .threat-card:hover { transform: translateY(-2px); transition: transform 0.2s; }
+  .step-line::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 40px;
+    bottom: -8px;
+    width: 2px;
+    background: var(--primary);
+    opacity: 0.25;
+  }
+  .step-line:last-child::before { display: none; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  .anim-in { animation: fadeUp 0.4s ease both; }
+  .quiz-option { transition: all 0.15s; cursor: pointer; }
+  .quiz-option:hover { background: rgba(99,255,182,0.08); }
+  .quiz-correct { background: rgba(99,255,182,0.15) !important; border-color: #63ffb6 !important; }
+  .quiz-wrong { background: rgba(255,99,99,0.12) !important; border-color: #ff6363 !important; }
+  .scenario-box { border-left: 4px solid var(--primary); }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
 </style>
   <style>body { box-sizing: border-box; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
-  <div id="app" class="w-full min-h-full" style="background:#0f172a;"><!-- Header -->
-   <header class="w-full" style="background:linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-bottom:1px solid #1e3a5f;">
-    <div class="max-w-5xl mx-auto px-6 py-8">
-     <div class="flex items-center gap-3 mb-2">
-      <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:#10b981;"><i data-lucide="activity" style="width:22px;height:22px;color:#0f172a;"></i>
-      </div><span id="el-course" class="text-sm font-display tracking-wider" style="color:#10b981;">IS103 - IT Infrastructure and Network Technologies</span>
+ </head>
+ <body class="h-full font-body">
+  <div id="app" class="h-full w-full overflow-auto" style="background:var(--bg);color:var(--text);"><!-- HEADER -->
+   <header class="sticky top-0 z-30" style="background:var(--surface);backdrop-filter:blur(8px);">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+     <div>
+      <p class="text-xs tracking-widest uppercase opacity-60 font-heading" id="el-course">IS103 - IT Infrastructure and Network Technologies</p>
+      <h1 class="font-heading text-lg sm:text-xl mt-1" id="el-title" style="color:var(--primary);">🔒 Network Security Principles</h1>
      </div>
-     <h1 id="el-title" class="font-display text-3xl md:text-4xl font-bold mb-2" style="color:#f1f5f9;">Network Monitoring &amp; Performance Tools</h1>
-     <div class="flex flex-wrap items-center gap-4 text-sm" style="color:#94a3b8;"><span id="el-prof" class="flex items-center gap-1"><i data-lucide="user" style="width:14px;height:14px;"></i> Prof. MKDB</span> <span id="el-week" class="flex items-center gap-1"><i data-lucide="calendar" style="width:14px;height:14px;"></i> Finals Week 1</span> <span class="flex items-center gap-1"><i data-lucide="target" style="width:14px;height:14px;"></i> ILO: Configure basic wireless networks</span>
+     <div class="text-right">
+      <p class="text-xs opacity-60" id="el-prof">Prof. MKDB</p>
+      <p class="text-xs opacity-40" id="el-week">Finals Week 3</p>
      </div>
+    </div><!-- TABS -->
+    <div class="max-w-5xl mx-auto px-4 flex gap-1 overflow-x-auto" id="tab-bar"><button onclick="switchTab(0)" class="tab-active px-3 py-2 text-sm font-heading whitespace-nowrap" data-tab="0">📖 Lesson</button> <button onclick="switchTab(1)" class="tab-inactive px-3 py-2 text-sm font-heading whitespace-nowrap" data-tab="1">🧪 Packet Tracer</button> <button onclick="switchTab(2)" class="tab-inactive px-3 py-2 text-sm font-heading whitespace-nowrap" data-tab="2">📝 Activity</button> <button onclick="switchTab(3)" class="tab-inactive px-3 py-2 text-sm font-heading whitespace-nowrap" data-tab="3">📊 Case Analysis</button> <button onclick="switchTab(4)" class="tab-inactive px-3 py-2 text-sm font-heading whitespace-nowrap" data-tab="4">✅ Quiz</button>
     </div>
-   </header><!-- Progress Bar -->
-   <div class="w-full" style="background:#1e293b; height:4px;">
-    <div id="progress-bar" class="progress-fill h-full" style="background:#10b981; width:0%;"></div>
-   </div><!-- Navigation Tabs -->
-   <nav class="w-full sticky top-0 z-30" style="background:#0f172a; border-bottom:1px solid #1e3a5f;">
-    <div class="max-w-5xl mx-auto px-6 flex gap-1 overflow-x-auto" id="tab-nav"><button onclick="switchTab(0)" class="tab-btn tab-active px-4 py-3 text-sm font-semibold whitespace-nowrap" style="color:#10b981; border-color:#10b981;" data-idx="0"> <i data-lucide="book-open" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Lesson </button> <button onclick="switchTab(1)" class="tab-btn px-4 py-3 text-sm font-semibold whitespace-nowrap" style="color:#64748b;" data-idx="1"> <i data-lucide="monitor" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Packet Tracer Guide </button> <button onclick="switchTab(2)" class="tab-btn px-4 py-3 text-sm font-semibold whitespace-nowrap" style="color:#64748b;" data-idx="2"> <i data-lucide="clipboard-list" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Student Activity </button> <button onclick="switchTab(3)" class="tab-btn px-4 py-3 text-sm font-semibold whitespace-nowrap" style="color:#64748b;" data-idx="3"> <i data-lucide="help-circle" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Quiz </button>
-    </div>
-   </nav><!-- Content Area -->
-   <main class="max-w-5xl mx-auto px-6 py-8"><!-- TAB 0: LESSON -->
-    <section id="tab-0" class="tab-content fade-in"><!-- Real Life Scenario -->
-     <div class="scenario-box rounded-xl p-6 mb-8" style="background:#1e293b; border:1px solid #1e3a5f;">
-      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#0ea5e9,#8b5cf6);"></div>
-      <div class="flex items-start gap-4">
-       <div class="text-4xl">
-        ☕
+   </header>
+   <main class="max-w-5xl mx-auto px-4 py-6"><!-- ==================== TAB 0: LESSON ==================== -->
+    <section id="tab-content-0" class="anim-in space-y-8"><!-- ILO -->
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="text-xs uppercase tracking-widest opacity-50 font-heading mb-2">Intended Learning Outcome</p>
+      <p class="text-base font-semibold" style="color:var(--primary);">Apply basic network security principles to protect a small office network from common threats and vulnerabilities.</p>
+     </div><!-- REAL WORLD HOOK -->
+     <div class="scenario-box rounded-r-xl p-5" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-2" style="color:var(--secondary);">🏢 Real-Life Scenario</p>
+      <p class="text-sm leading-relaxed opacity-90">Imagine you just got hired as the IT staff of a small coffee shop chain called <strong>"BrewNet Café"</strong>. The owner tells you: <em>"Last month someone hacked our Wi-Fi, stole customer data, and our POS system was down for 2 days. We lost ₱150,000. Fix this."</em></p>
+      <p class="text-sm mt-3 opacity-70">By the end of this lesson, you'll know exactly what went wrong and how to prevent it. Let's go! ☕</p>
+     </div><!-- SECTION: THREATS & VULNERABILITIES -->
+     <div>
+      <h2 class="font-heading text-lg mb-4" style="color:var(--primary);"><i data-lucide="alert-triangle" style="width:20px;height:20px;display:inline;vertical-align:middle;margin-right:6px;"></i>Threats and Vulnerabilities</h2>
+      <div class="rounded-xl p-5 mb-4" style="background:var(--surface);">
+       <p class="text-sm leading-relaxed mb-3">Think of your network like your house:</p>
+       <div class="grid sm:grid-cols-2 gap-4">
+        <div class="rounded-lg p-4 border" style="border-color:var(--primary);background:rgba(99,255,182,0.04);">
+         <p class="font-heading text-sm mb-1" style="color:var(--primary);">🔓 Vulnerability</p>
+         <p class="text-sm opacity-80">A <strong>weakness</strong> that can be exploited. Like leaving your front door unlocked.</p>
+         <p class="text-xs mt-2 opacity-60 italic">Example: Using "admin/admin" as your router password</p>
+        </div>
+        <div class="rounded-lg p-4 border" style="border-color:var(--secondary);background:rgba(255,182,99,0.04);">
+         <p class="font-heading text-sm mb-1" style="color:var(--secondary);">⚡ Threat</p>
+         <p class="text-sm opacity-80">A potential <strong>danger</strong> that exploits a vulnerability. Like a burglar trying doors.</p>
+         <p class="text-xs mt-2 opacity-60 italic">Example: A hacker scanning for default passwords</p>
+        </div>
        </div>
-       <div>
-        <h3 class="font-display font-bold text-lg mb-2" style="color:#f1f5f9;">Real-Life Scenario: The Coffee Shop Problem</h3>
-        <p class="leading-relaxed" style="color:#cbd5e1;">Imagine you just opened <strong style="color:#0ea5e9;">"Brew &amp; Byte Café"</strong> — a coffee shop where students come to study. Customers keep asking: <em>"What's the Wi-Fi password?"</em> You need to set up a wireless network that's fast, secure, and covers the whole shop. But how do you choose the right equipment? What settings do you configure? That's exactly what this lesson teaches you.</p>
+      </div><!-- COMMON THREATS -->
+      <h3 class="font-heading text-sm mb-3 opacity-70">Common Network Threats (with BrewNet examples)</h3>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <div class="text-2xl mb-2">
+         🎣
+        </div>
+        <p class="font-heading text-sm mb-1">Phishing</p>
+        <p class="text-xs opacity-70 leading-relaxed">A BrewNet employee gets an email: "Your Google account is locked! Click here." They click, enter their password — now the attacker has their credentials.</p>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <div class="text-2xl mb-2">
+         🦠
+        </div>
+        <p class="font-heading text-sm mb-1">Malware / Ransomware</p>
+        <p class="text-xs opacity-70 leading-relaxed">An employee plugs in a USB found in the parking lot. It installs ransomware that encrypts the POS database. "Pay ₱50,000 in Bitcoin to unlock."</p>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <div class="text-2xl mb-2">
+         👤
+        </div>
+        <p class="font-heading text-sm mb-1">Man-in-the-Middle (MitM)</p>
+        <p class="text-xs opacity-70 leading-relaxed">A customer on BrewNet's open Wi-Fi intercepts data between the cashier's tablet and the router, capturing credit card transactions.</p>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <div class="text-2xl mb-2">
+         🌊
+        </div>
+        <p class="font-heading text-sm mb-1">DDoS Attack</p>
+        <p class="text-xs opacity-70 leading-relaxed">A competitor floods BrewNet's online ordering website with fake traffic, making it unreachable for real customers during peak hours.</p>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <div class="text-2xl mb-2">
+         🔑
+        </div>
+        <p class="font-heading text-sm mb-1">Brute Force Attack</p>
+        <p class="text-xs opacity-70 leading-relaxed">An attacker uses software to try thousands of password combinations on BrewNet's admin panel until one works: "coffee123".</p>
+       </div>
+       <div class="threat-card rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <div class="text-2xl mb-2">
+         🕵️
+        </div>
+        <p class="font-heading text-sm mb-1">Insider Threat</p>
+        <p class="text-xs opacity-70 leading-relaxed">A disgruntled ex-employee still has the Wi-Fi password and remote access credentials. They log in and delete sales records.</p>
        </div>
       </div>
-     </div><!-- What is Wireless Networking -->
-     <div class="mb-8">
-      <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color:#f1f5f9;"><span class="inline-block w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:#0ea5e9;color:#0f172a;">1</span> What is Wireless Networking?</h2>
-      <div class="rounded-xl p-6" style="background:#1e293b; border:1px solid #1e3a5f;">
-       <p class="mb-4 leading-relaxed" style="color:#cbd5e1;">A <strong style="color:#0ea5e9;">wireless network</strong> lets devices (laptops, phones, tablets) connect to the internet or each other <em>without physical cables</em> — using radio waves instead.</p>
-       <p class="mb-4 leading-relaxed" style="color:#cbd5e1;"><strong>Think of it this way:</strong> A wired network is like talking through tin cans connected by string. A wireless network is like talking through walkie-talkies — no string needed, but you need to be within range.</p><!-- Visual: How Wi-Fi Works -->
-       <div class="flex flex-col items-center my-6">
-        <svg width="360" height="140" viewbox="0 0 360 140"><!-- Router --> <rect x="150" y="50" width="60" height="40" rx="6" fill="#0ea5e9" opacity="0.9" /> <text x="180" y="75" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="bold">
-          Router
-         </text> <!-- Signal rings --> <circle cx="180" cy="70" r="50" fill="none" stroke="#0ea5e9" stroke-width="1.5" opacity="0.3" class="signal-ring" /> <circle cx="180" cy="70" r="70" fill="none" stroke="#0ea5e9" stroke-width="1" opacity="0.2" class="signal-ring" style="animation-delay:0.5s;" /> <!-- Laptop --> <rect x="20" y="55" width="45" height="30" rx="4" fill="#334155" stroke="#64748b" /> <text x="42" y="74" text-anchor="middle" fill="#94a3b8" font-size="9">
-          💻
-         </text> <line x1="65" y1="70" x2="150" y2="70" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="4" opacity="0.5" /> <!-- Phone --> <rect x="295" y="55" width="30" height="30" rx="4" fill="#334155" stroke="#64748b" /> <text x="310" y="75" text-anchor="middle" fill="#94a3b8" font-size="9">
-          📱
-         </text> <line x1="210" y1="70" x2="295" y2="70" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="4" opacity="0.5" /> <!-- Internet cloud --> <text x="180" y="25" text-anchor="middle" fill="#94a3b8" font-size="10">
-          ☁️ Internet
-         </text> <line x1="180" y1="30" x2="180" y2="50" stroke="#64748b" stroke-width="1" stroke-dasharray="3" /> <text x="180" y="125" text-anchor="middle" fill="#64748b" font-size="10">
-          Radio waves connect devices to the router
-         </text>
-        </svg>
-       </div>
-       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-        <div class="rounded-lg p-4 text-center" style="background:#0f172a; border:1px solid #1e3a5f;">
-         <div class="text-2xl mb-2">
-          📡
-         </div>
-         <p class="text-sm font-semibold" style="color:#0ea5e9;">Wireless Access Point</p>
-         <p class="text-xs mt-1" style="color:#94a3b8;">Broadcasts the Wi-Fi signal</p>
+     </div><!-- SECTION: BASIC SECURITY CONTROLS -->
+     <div>
+      <h2 class="font-heading text-lg mb-4" style="color:var(--primary);"><i data-lucide="shield" style="width:20px;height:20px;display:inline;vertical-align:middle;margin-right:6px;"></i>Basic Security Controls</h2>
+      <p class="text-sm opacity-70 mb-4">Security controls are the <strong>locks, alarms, and cameras</strong> of your network. Here's what BrewNet needs:</p>
+      <div class="space-y-3">
+       <div class="rounded-xl p-4 card-glow flex gap-4 items-start" style="background:var(--surface);">
+        <div class="text-2xl flex-shrink-0">
+         🔥
         </div>
-        <div class="rounded-lg p-4 text-center" style="background:#0f172a; border:1px solid #1e3a5f;">
-         <div class="text-2xl mb-2">
-          📶
-         </div>
-         <p class="text-sm font-semibold" style="color:#0ea5e9;">SSID</p>
-         <p class="text-xs mt-1" style="color:#94a3b8;">The network name you see (e.g., "BrewByte_WiFi")</p>
-        </div>
-        <div class="rounded-lg p-4 text-center" style="background:#0f172a; border:1px solid #1e3a5f;">
-         <div class="text-2xl mb-2">
-          🔐
-         </div>
-         <p class="text-sm font-semibold" style="color:#0ea5e9;">Security Key</p>
-         <p class="text-xs mt-1" style="color:#94a3b8;">The password to join the network</p>
+        <div>
+         <p class="font-heading text-sm" style="color:var(--primary);">1. Firewall</p>
+         <p class="text-xs opacity-80 mt-1 leading-relaxed"><strong>What:</strong> A digital bouncer that checks every packet entering or leaving your network against a set of rules.</p>
+         <p class="text-xs opacity-60 mt-1"><strong>BrewNet fix:</strong> Enable the router's built-in firewall. Block all incoming traffic except ports 80 (HTTP) and 443 (HTTPS) for the ordering system.</p>
         </div>
        </div>
-      </div>
-     </div><!-- 802.11 Standards -->
-     <div class="mb-8">
-      <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color:#f1f5f9;"><span class="inline-block w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:#0ea5e9;color:#0f172a;">2</span> IEEE 802.11 Wireless Standards</h2>
-      <div class="rounded-xl p-6" style="background:#1e293b; border:1px solid #1e3a5f;">
-       <p class="mb-4 leading-relaxed" style="color:#cbd5e1;">The <strong style="color:#0ea5e9;">IEEE 802.11</strong> is a family of standards that define how Wi-Fi works. Think of them as <em>"versions"</em> of Wi-Fi — each newer version is faster and better.</p>
-       <p class="mb-4 leading-relaxed" style="color:#cbd5e1;"><strong>☕ Back to our café:</strong> Choosing a Wi-Fi standard is like choosing a highway. 802.11b is a two-lane road. 802.11ac is a six-lane expressway. More lanes = more speed and capacity.</p><!-- Standards Table -->
-       <div class="overflow-x-auto rounded-lg mt-4" style="border:1px solid #1e3a5f;">
-        <table class="w-full text-sm">
-         <thead style="background:#0f172a;">
-          <tr>
-           <th class="text-left font-display text-xs tracking-wider" style="color:#0ea5e9;">Standard</th>
-           <th class="text-left font-display text-xs tracking-wider" style="color:#0ea5e9;">Also Called</th>
-           <th class="text-left font-display text-xs tracking-wider" style="color:#0ea5e9;">Frequency</th>
-           <th class="text-left font-display text-xs tracking-wider" style="color:#0ea5e9;">Max Speed</th>
-           <th class="text-left font-display text-xs tracking-wider" style="color:#0ea5e9;">Year</th>
+       <div class="rounded-xl p-4 card-glow flex gap-4 items-start" style="background:var(--surface);">
+        <div class="text-2xl flex-shrink-0">
+         🔐
+        </div>
+        <div>
+         <p class="font-heading text-sm" style="color:var(--primary);">2. Strong Passwords &amp; Authentication</p>
+         <p class="text-xs opacity-80 mt-1 leading-relaxed"><strong>What:</strong> Complex, unique passwords + multi-factor authentication (MFA). Think: password + SMS code.</p>
+         <p class="text-xs opacity-60 mt-1"><strong>BrewNet fix:</strong> Change router password from "admin" to a 12+ character mix. Enable MFA on the POS admin panel.</p>
+        </div>
+       </div>
+       <div class="rounded-xl p-4 card-glow flex gap-4 items-start" style="background:var(--surface);">
+        <div class="text-2xl flex-shrink-0">
+         📡
+        </div>
+        <div>
+         <p class="font-heading text-sm" style="color:var(--primary);">3. Wi-Fi Encryption (WPA3/WPA2)</p>
+         <p class="text-xs opacity-80 mt-1 leading-relaxed"><strong>What:</strong> Encrypts data traveling over Wi-Fi so eavesdroppers see gibberish instead of passwords.</p>
+         <p class="text-xs opacity-60 mt-1"><strong>BrewNet fix:</strong> Switch from open Wi-Fi to WPA2-Enterprise for staff devices. Create a separate guest network for customers.</p>
+        </div>
+       </div>
+       <div class="rounded-xl p-4 card-glow flex gap-4 items-start" style="background:var(--surface);">
+        <div class="text-2xl flex-shrink-0">
+         🔄
+        </div>
+        <div>
+         <p class="font-heading text-sm" style="color:var(--primary);">4. Regular Updates &amp; Patching</p>
+         <p class="text-xs opacity-80 mt-1 leading-relaxed"><strong>What:</strong> Software vendors constantly fix vulnerabilities. Updates close those holes.</p>
+         <p class="text-xs opacity-60 mt-1"><strong>BrewNet fix:</strong> Enable auto-updates on the router firmware, POS software, and all employee devices.</p>
+        </div>
+       </div>
+       <div class="rounded-xl p-4 card-glow flex gap-4 items-start" style="background:var(--surface);">
+        <div class="text-2xl flex-shrink-0">
+         📋
+        </div>
+        <div>
+         <p class="font-heading text-sm" style="color:var(--primary);">5. Access Control Lists (ACLs)</p>
+         <p class="text-xs opacity-80 mt-1 leading-relaxed"><strong>What:</strong> Rules that decide WHO can access WHAT. Like giving different keys to different employees.</p>
+         <p class="text-xs opacity-60 mt-1"><strong>BrewNet fix:</strong> Only the manager's laptop can access the router admin page. Cashiers can only reach the POS system.</p>
+        </div>
+       </div>
+       <div class="rounded-xl p-4 card-glow flex gap-4 items-start" style="background:var(--surface);">
+        <div class="text-2xl flex-shrink-0">
+         💾
+        </div>
+        <div>
+         <p class="font-heading text-sm" style="color:var(--primary);">6. Backup &amp; Recovery</p>
+         <p class="text-xs opacity-80 mt-1 leading-relaxed"><strong>What:</strong> Regular copies of important data stored separately, so ransomware can't hold you hostage.</p>
+         <p class="text-xs opacity-60 mt-1"><strong>BrewNet fix:</strong> Automated nightly backup of POS data to a cloud service. Test restore monthly.</p>
+        </div>
+       </div>
+      </div><!-- SUMMARY TABLE -->
+      <div class="mt-6 rounded-xl overflow-hidden card-glow" style="background:var(--surface);">
+       <p class="font-heading text-sm p-4 pb-2" style="color:var(--primary);">🗺️ Quick Reference: Threat → Control Mapping</p>
+       <div class="overflow-x-auto">
+        <table class="w-full text-xs">
+         <thead>
+          <tr style="background:rgba(99,255,182,0.08);">
+           <th class="text-left p-3 font-heading">Threat</th>
+           <th class="text-left p-3 font-heading">Vulnerability Exploited</th>
+           <th class="text-left p-3 font-heading">Security Control</th>
           </tr>
          </thead>
-         <tbody style="color:#cbd5e1;">
-          <tr style="border-top:1px solid #1e3a5f;">
-           <td class="font-semibold">802.11b</td>
-           <td>Wi-Fi 1</td>
-           <td>2.4 GHz</td>
-           <td>11 Mbps</td>
-           <td>1999</td>
+         <tbody>
+          <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+           <td class="p-3">Phishing</td>
+           <td class="p-3 opacity-70">Human error / no training</td>
+           <td class="p-3" style="color:var(--primary);">Security awareness + MFA</td>
           </tr>
-          <tr style="border-top:1px solid #1e3a5f; background:#0f172a40;">
-           <td class="font-semibold">802.11a</td>
-           <td>Wi-Fi 2</td>
-           <td>5 GHz</td>
-           <td>54 Mbps</td>
-           <td>1999</td>
+          <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+           <td class="p-3">Malware</td>
+           <td class="p-3 opacity-70">Unpatched systems / USB</td>
+           <td class="p-3" style="color:var(--primary);">Updates + Antivirus + Policy</td>
           </tr>
-          <tr style="border-top:1px solid #1e3a5f;">
-           <td class="font-semibold">802.11g</td>
-           <td>Wi-Fi 3</td>
-           <td>2.4 GHz</td>
-           <td>54 Mbps</td>
-           <td>2003</td>
+          <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+           <td class="p-3">MitM</td>
+           <td class="p-3 opacity-70">Open/unencrypted Wi-Fi</td>
+           <td class="p-3" style="color:var(--primary);">WPA2/WPA3 encryption</td>
           </tr>
-          <tr style="border-top:1px solid #1e3a5f; background:#0f172a40;">
-           <td class="font-semibold">802.11n</td>
-           <td>Wi-Fi 4</td>
-           <td>2.4 / 5 GHz</td>
-           <td>600 Mbps</td>
-           <td>2009</td>
+          <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+           <td class="p-3">DDoS</td>
+           <td class="p-3 opacity-70">No traffic filtering</td>
+           <td class="p-3" style="color:var(--primary);">Firewall + Rate limiting</td>
           </tr>
-          <tr style="border-top:1px solid #1e3a5f;">
-           <td class="font-semibold" style="color:#0ea5e9;">802.11ac</td>
-           <td style="color:#0ea5e9;">Wi-Fi 5</td>
-           <td>5 GHz</td>
-           <td>6.9 Gbps</td>
-           <td>2013</td>
+          <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+           <td class="p-3">Brute Force</td>
+           <td class="p-3 opacity-70">Weak passwords</td>
+           <td class="p-3" style="color:var(--primary);">Strong passwords + Lockout</td>
           </tr>
-          <tr style="border-top:1px solid #1e3a5f; background:#0f172a40;">
-           <td class="font-semibold">802.11ax</td>
-           <td>Wi-Fi 6</td>
-           <td>2.4 / 5 / 6 GHz</td>
-           <td>9.6 Gbps</td>
-           <td>2020</td>
+          <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+           <td class="p-3">Insider Threat</td>
+           <td class="p-3 opacity-70">No access review</td>
+           <td class="p-3" style="color:var(--primary);">ACLs + Offboarding policy</td>
           </tr>
          </tbody>
         </table>
-       </div><!-- Frequency Explanation -->
-       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-        <div class="rounded-lg p-4" style="background:#0f172a; border:1px solid #1e3a5f;">
-         <h4 class="font-display font-bold text-sm mb-2" style="color:#f59e0b;">📻 2.4 GHz Band</h4>
-         <ul class="text-sm space-y-1" style="color:#cbd5e1;">
-          <li>✅ Longer range (goes through walls better)</li>
-          <li>✅ Better for large areas</li>
-          <li>❌ Slower speeds</li>
-          <li>❌ More interference (microwaves, Bluetooth, neighbors)</li>
+       </div>
+      </div>
+     </div>
+    </section><!-- ==================== TAB 1: PACKET TRACER ==================== -->
+    <section id="tab-content-1" class="hidden anim-in space-y-6">
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-1" style="color:var(--primary);">🧪 Packet Tracer Lab: Securing BrewNet Café</p>
+      <p class="text-xs opacity-70">Follow these step-by-step instructions in Cisco Packet Tracer. This lab simulates securing the BrewNet Café network.</p>
+     </div><!-- NETWORK TOPOLOGY -->
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-3" style="color:var(--secondary);">📐 Network Topology to Build</p>
+      <div class="rounded-lg p-4 text-xs font-mono leading-loose" style="background:rgba(0,0,0,0.3);color:var(--primary);overflow-x:auto;white-space:pre;">
+       ☁️ INTERNET | [Router0] 192.168.1.1 / \ [Switch0] [Switch1] STAFF VLAN GUEST VLAN VLAN 10 VLAN 20 / \ \ [PC-Manager] [PC-Cashier] [Laptop-Guest] .10 .20 .100
+      </div>
+      <p class="text-xs opacity-50 mt-2">All devices on 192.168.1.0/24 subnet</p>
+     </div><!-- STEPS -->
+     <div>
+      <h3 class="font-heading text-sm mb-4" style="color:var(--primary);">Step-by-Step Instructions</h3>
+      <div class="space-y-1"><!-- PART 1 -->
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-xs uppercase tracking-wider mb-3" style="color:var(--secondary);">Part 1: Build the Topology (10 min)</p>
+        <div class="space-y-4">
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           1
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Open Packet Tracer → New Project</p>
+           <p class="text-xs opacity-70 mt-1">File → New or Ctrl+N</p>
+          </div>
+         </div>
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           2
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Add devices from the bottom panel</p>
+           <div class="text-xs opacity-70 mt-1 space-y-1">
+            <p>• <strong>Network Devices → Routers →</strong> 1841 (drag to workspace)</p>
+            <p>• <strong>Network Devices → Switches →</strong> 2960 × 2</p>
+            <p>• <strong>End Devices →</strong> PC × 2, Laptop × 1</p>
+           </div>
+          </div>
+         </div>
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           3
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Connect with cables</p>
+           <div class="text-xs opacity-70 mt-1 space-y-1">
+            <p>• Router Fa0/0 → Switch0 Fa0/1 (Copper Straight-Through)</p>
+            <p>• Router Fa0/1 → Switch1 Fa0/1 (Copper Straight-Through)</p>
+            <p>• Switch0 Fa0/2 → PC-Manager (Copper Straight-Through)</p>
+            <p>• Switch0 Fa0/3 → PC-Cashier (Copper Straight-Through)</p>
+            <p>• Switch1 Fa0/2 → Laptop-Guest (Copper Straight-Through)</p>
+           </div>
+          </div>
+         </div>
+         <div class="relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           4
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Rename devices</p>
+           <p class="text-xs opacity-70 mt-1">Click each device → Config tab → Display Name. Use: Router0, Switch-Staff, Switch-Guest, PC-Manager, PC-Cashier, Laptop-Guest</p>
+          </div>
+         </div>
+        </div>
+       </div><!-- PART 2 -->
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-xs uppercase tracking-wider mb-3" style="color:var(--secondary);">Part 2: Configure IP Addresses (10 min)</p>
+        <div class="space-y-4">
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           5
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Configure the Router interfaces</p>
+           <p class="text-xs opacity-70 mt-1 mb-2">Click Router0 → CLI tab → Type these commands:</p>
+           <div class="rounded-lg p-3 text-xs font-mono" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            <p>enable</p>
+            <p>configure terminal</p>
+            <p>interface fa0/0</p>
+            <p>ip address 192.168.1.1 255.255.255.128</p>
+            <p>no shutdown</p>
+            <p>exit</p>
+            <p>interface fa0/1</p>
+            <p>ip address 192.168.1.129 255.255.255.128</p>
+            <p>no shutdown</p>
+            <p>exit</p>
+           </div>
+          </div>
+         </div>
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           6
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Configure PC-Manager</p>
+           <p class="text-xs opacity-70 mt-1">Click PC-Manager → Desktop tab → IP Configuration</p>
+           <div class="rounded-lg p-3 text-xs font-mono mt-2" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            <p>IP: 192.168.1.10</p>
+            <p>Subnet: 255.255.255.128</p>
+            <p>Gateway: 192.168.1.1</p>
+           </div>
+          </div>
+         </div>
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           7
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Configure PC-Cashier</p>
+           <div class="rounded-lg p-3 text-xs font-mono mt-1" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            <p>IP: 192.168.1.20</p>
+            <p>Subnet: 255.255.255.128</p>
+            <p>Gateway: 192.168.1.1</p>
+           </div>
+          </div>
+         </div>
+         <div class="relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           8
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Configure Laptop-Guest</p>
+           <div class="rounded-lg p-3 text-xs font-mono mt-1" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            <p>IP: 192.168.1.200</p>
+            <p>Subnet: 255.255.255.128</p>
+            <p>Gateway: 192.168.1.129</p>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div><!-- PART 3 -->
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-xs uppercase tracking-wider mb-3" style="color:var(--secondary);">Part 3: Apply Security Controls (15 min)</p>
+        <div class="space-y-4">
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           9
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Set a strong router password</p>
+           <p class="text-xs opacity-70 mt-1 mb-2">On Router0 CLI:</p>
+           <div class="rounded-lg p-3 text-xs font-mono" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            <p>enable</p>
+            <p>configure terminal</p>
+            <p>enable secret Br3wN3t$ecure!</p>
+            <p>line console 0</p>
+            <p>password C0ns0le@2024</p>
+            <p>login</p>
+            <p>exit</p>
+            <p>line vty 0 4</p>
+            <p>password R3m0te#Acc3ss</p>
+            <p>login</p>
+            <p>exit</p>
+            <p>service password-encryption</p>
+           </div>
+           <p class="text-xs mt-2 opacity-50 italic">💡 "service password-encryption" encrypts all plaintext passwords in the config file</p>
+          </div>
+         </div>
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           10
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Create an Access Control List (ACL)</p>
+           <p class="text-xs opacity-70 mt-1 mb-2">Block guest network from accessing staff network:</p>
+           <div class="rounded-lg p-3 text-xs font-mono" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            <p>access-list 100 deny ip 192.168.1.128 0.0.0.127 192.168.1.0 0.0.0.127</p>
+            <p>access-list 100 permit ip any any</p>
+            <p>interface fa0/1</p>
+            <p>ip access-group 100 in</p>
+            <p>exit</p>
+           </div>
+           <p class="text-xs mt-2 opacity-50 italic">💡 This means: "Anything from guest network trying to reach staff network → DENIED"</p>
+          </div>
+         </div>
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           11
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Configure a login banner</p>
+           <div class="rounded-lg p-3 text-xs font-mono" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            <p>banner motd #WARNING: Unauthorized access is prohibited!#</p>
+           </div>
+           <p class="text-xs mt-2 opacity-50 italic">💡 Legal protection — warns unauthorized users they're being monitored</p>
+          </div>
+         </div>
+         <div class="relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           12
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Save your configuration</p>
+           <div class="rounded-lg p-3 text-xs font-mono" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            <p>end</p>
+            <p>copy running-config startup-config</p>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div><!-- PART 4: VERIFY -->
+       <div class="rounded-xl p-4 card-glow" style="background:var(--surface);">
+        <p class="font-heading text-xs uppercase tracking-wider mb-3" style="color:var(--secondary);">Part 4: Test &amp; Verify (5 min)</p>
+        <div class="space-y-4">
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           13
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Test: Staff can ping each other</p>
+           <p class="text-xs opacity-70 mt-1">PC-Manager → Desktop → Command Prompt</p>
+           <div class="rounded-lg p-3 text-xs font-mono mt-1" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            ping 192.168.1.20
+           </div>
+           <p class="text-xs mt-1" style="color:var(--primary);">✅ Expected: Reply from 192.168.1.20</p>
+          </div>
+         </div>
+         <div class="step-line relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           14
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Test: Guest CANNOT ping staff</p>
+           <p class="text-xs opacity-70 mt-1">Laptop-Guest → Desktop → Command Prompt</p>
+           <div class="rounded-lg p-3 text-xs font-mono mt-1" style="background:rgba(0,0,0,0.3);color:var(--primary);">
+            ping 192.168.1.10
+           </div>
+           <p class="text-xs mt-1" style="color:#ff6363;">❌ Expected: Request timed out (BLOCKED by ACL!)</p>
+          </div>
+         </div>
+         <div class="relative flex gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--primary);color:var(--bg);">
+           15
+          </div>
+          <div>
+           <p class="text-sm font-semibold">Verify password protection</p>
+           <p class="text-xs opacity-70 mt-1">Close and reopen Router0 CLI. You should be prompted for a password.</p>
+           <p class="text-xs mt-1" style="color:var(--primary);">✅ Expected: "User Access Verification" prompt + banner message</p>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- ==================== TAB 2: ACTIVITY ==================== -->
+    <section id="tab-content-2" class="hidden anim-in space-y-6">
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-1" style="color:var(--primary);">📝 Student Activity: Secure Your Own Network</p>
+      <p class="text-xs opacity-70">Now it's YOUR turn! Using what you learned, complete these challenges in Packet Tracer.</p>
+      <div class="flex gap-3 mt-3 flex-wrap"><span class="text-xs px-3 py-1 rounded-full" style="background:rgba(99,255,182,0.12);color:var(--primary);">Individual</span> <span class="text-xs px-3 py-1 rounded-full" style="background:rgba(255,182,99,0.12);color:var(--secondary);">40 minutes</span> <span class="text-xs px-3 py-1 rounded-full" style="background:rgba(99,182,255,0.12);color:#63b6ff;">Submit .pkt file</span>
+      </div>
+     </div><!-- SCENARIO -->
+     <div class="scenario-box rounded-r-xl p-5" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-2" style="color:var(--secondary);">📖 Your Scenario</p>
+      <p class="text-sm leading-relaxed opacity-90">You've been hired by <strong>"TechStart Co."</strong>, a small startup with 3 departments: <strong>Management</strong> (2 PCs), <strong>Development</strong> (2 PCs), and a <strong>Visitor</strong> area (1 Laptop). The CEO says: <em>"We just had a security incident — a visitor accessed our dev servers. Lock it down!"</em></p>
+     </div><!-- CHALLENGES -->
+     <div class="space-y-4">
+      <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--secondary);color:var(--bg);">
+         A
+        </div>
+        <div>
+         <p class="font-heading text-sm">Build the TechStart Network</p>
+         <p class="text-xs opacity-70 mt-1 leading-relaxed">Create a network with: 1 Router, 3 Switches (one per department), 2 PCs for Management, 2 PCs for Development, 1 Laptop for Visitors. Assign appropriate IP addresses using the <strong>10.0.0.0/8</strong> network.</p>
+         <div class="mt-3 rounded-lg p-3 text-xs" style="background:rgba(99,255,182,0.06);border:1px dashed rgba(99,255,182,0.2);">
+          <p class="font-heading" style="color:var(--primary);">Suggested Subnets:</p>
+          <p class="opacity-70 mt-1">Management: 10.0.1.0/24 &nbsp;|&nbsp; Development: 10.0.2.0/24 &nbsp;|&nbsp; Visitors: 10.0.3.0/24</p>
+         </div>
+         <p class="text-xs mt-2 opacity-50">📊 Points: 15</p>
+        </div>
+       </div>
+      </div>
+      <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--secondary);color:var(--bg);">
+         B
+        </div>
+        <div>
+         <p class="font-heading text-sm">Secure the Router</p>
+         <p class="text-xs opacity-70 mt-1 leading-relaxed">Apply these security controls:</p>
+         <ul class="text-xs opacity-70 mt-2 space-y-1 list-disc ml-4">
+          <li>Set an <strong>enable secret</strong> password (must be 10+ characters with symbols)</li>
+          <li>Set console and VTY line passwords</li>
+          <li>Enable <strong>service password-encryption</strong></li>
+          <li>Add a warning <strong>banner</strong></li>
          </ul>
-         <p class="text-xs mt-2 italic" style="color:#94a3b8;">☕ Good for reaching the café's outdoor patio</p>
-        </div>
-        <div class="rounded-lg p-4" style="background:#0f172a; border:1px solid #1e3a5f;">
-         <h4 class="font-display font-bold text-sm mb-2" style="color:#8b5cf6;">⚡ 5 GHz Band</h4>
-         <ul class="text-sm space-y-1" style="color:#cbd5e1;">
-          <li>✅ Faster speeds</li>
-          <li>✅ Less interference</li>
-          <li>❌ Shorter range</li>
-          <li>❌ Doesn't go through walls as well</li>
-         </ul>
-         <p class="text-xs mt-2 italic" style="color:#94a3b8;">☕ Perfect for streaming inside the café</p>
+         <p class="text-xs mt-2 opacity-50">📊 Points: 15</p>
         </div>
        </div>
       </div>
-     </div><!-- Wireless Security -->
-     <div class="mb-8">
-      <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color:#f1f5f9;"><span class="inline-block w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:#0ea5e9;color:#0f172a;">3</span> Wireless Security Protocols</h2>
-      <div class="rounded-xl p-6" style="background:#1e293b; border:1px solid #1e3a5f;">
-       <p class="mb-4 leading-relaxed" style="color:#cbd5e1;">Without security, anyone nearby can snoop on your network. It's like having a conversation in a crowded café — anyone can listen unless you whisper in code. 🤫</p>
-       <div class="space-y-3">
-        <div class="rounded-lg p-4 flex items-start gap-3" style="background:#0f172a; border:1px solid #ef4444;"><span class="text-xl">🚫</span>
-         <div>
-          <p class="font-semibold text-sm" style="color:#ef4444;">WEP (Wired Equivalent Privacy)</p>
-          <p class="text-xs" style="color:#94a3b8;">Old &amp; broken. Can be cracked in minutes. <strong>Never use this.</strong></p>
-         </div>
-        </div>
-        <div class="rounded-lg p-4 flex items-start gap-3" style="background:#0f172a; border:1px solid #f59e0b;"><span class="text-xl">⚠️</span>
-         <div>
-          <p class="font-semibold text-sm" style="color:#f59e0b;">WPA (Wi-Fi Protected Access)</p>
-          <p class="text-xs" style="color:#94a3b8;">Better than WEP but has known vulnerabilities. Avoid if possible.</p>
-         </div>
-        </div>
-        <div class="rounded-lg p-4 flex items-start gap-3" style="background:#0f172a; border:1px solid #0ea5e9;"><span class="text-xl">✅</span>
-         <div>
-          <p class="font-semibold text-sm" style="color:#0ea5e9;">WPA2 (Wi-Fi Protected Access 2)</p>
-          <p class="text-xs" style="color:#94a3b8;">Industry standard. Uses AES encryption. <strong>This is what we'll configure in Packet Tracer.</strong></p>
-         </div>
-        </div>
-        <div class="rounded-lg p-4 flex items-start gap-3" style="background:#0f172a; border:1px solid #10b981;"><span class="text-xl">🛡️</span>
-         <div>
-          <p class="font-semibold text-sm" style="color:#10b981;">WPA3 (Wi-Fi Protected Access 3)</p>
-          <p class="text-xs" style="color:#94a3b8;">Latest &amp; most secure. Not yet widely supported in Packet Tracer.</p>
-         </div>
-        </div>
-       </div>
-      </div>
-     </div><!-- Key Terms -->
-     <div class="mb-8">
-      <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color:#f1f5f9;"><span class="inline-block w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:#0ea5e9;color:#0f172a;">4</span> Key Terms to Remember</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-       <div class="rounded-lg p-4" style="background:#1e293b; border:1px solid #1e3a5f;">
-        <p class="font-display text-sm font-bold" style="color:#0ea5e9;">SSID</p>
-        <p class="text-sm" style="color:#cbd5e1;">Service Set Identifier — the name of your Wi-Fi network</p>
-       </div>
-       <div class="rounded-lg p-4" style="background:#1e293b; border:1px solid #1e3a5f;">
-        <p class="font-display text-sm font-bold" style="color:#0ea5e9;">AP (Access Point)</p>
-        <p class="text-sm" style="color:#cbd5e1;">Device that creates a wireless network for others to join</p>
-       </div>
-       <div class="rounded-lg p-4" style="background:#1e293b; border:1px solid #1e3a5f;">
-        <p class="font-display text-sm font-bold" style="color:#0ea5e9;">DHCP</p>
-        <p class="text-sm" style="color:#cbd5e1;">Automatically assigns IP addresses to devices that connect</p>
-       </div>
-       <div class="rounded-lg p-4" style="background:#1e293b; border:1px solid #1e3a5f;">
-        <p class="font-display text-sm font-bold" style="color:#0ea5e9;">Channel</p>
-        <p class="text-sm" style="color:#cbd5e1;">Specific frequency "lane" your router uses (1, 6, 11 are best for 2.4 GHz)</p>
-       </div>
-       <div class="rounded-lg p-4" style="background:#1e293b; border:1px solid #1e3a5f;">
-        <p class="font-display text-sm font-bold" style="color:#0ea5e9;">WPA2-PSK</p>
-        <p class="text-sm" style="color:#cbd5e1;">Pre-Shared Key mode — everyone uses the same password (home/café use)</p>
-       </div>
-       <div class="rounded-lg p-4" style="background:#1e293b; border:1px solid #1e3a5f;">
-        <p class="font-display text-sm font-bold" style="color:#0ea5e9;">Authentication</p>
-        <p class="text-sm" style="color:#cbd5e1;">The process of verifying a device is allowed to join the network</p>
-       </div>
-      </div>
-     </div>
-     <div class="text-center pt-4"><button onclick="switchTab(1)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#0ea5e9; color:#0f172a;"> Next: Packet Tracer Guide → </button>
-     </div>
-    </section><!-- TAB 1: PACKET TRACER GUIDE -->
-    <section id="tab-1" class="tab-content fade-in hidden">
-     <div class="scenario-box rounded-xl p-6 mb-8" style="background:#1e293b; border:1px solid #1e3a5f;">
-      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#0ea5e9,#10b981);"></div>
-      <div class="flex items-start gap-4">
-       <div class="text-4xl">
-        🛠️
-       </div>
-       <div>
-        <h3 class="font-display font-bold text-lg mb-2" style="color:#f1f5f9;">Guided Lab: Setting Up Wi-Fi for Brew &amp; Byte Café</h3>
-        <p class="leading-relaxed" style="color:#cbd5e1;">Follow these steps in <strong>Cisco Packet Tracer</strong> to build a working wireless network. We'll set up a wireless router, configure its SSID and security, and connect a laptop wirelessly.</p>
-       </div>
-      </div>
-     </div><!-- Network Diagram -->
-     <div class="rounded-xl p-6 mb-8 text-center" style="background:#1e293b; border:1px solid #1e3a5f;">
-      <h4 class="font-display font-bold text-sm mb-4" style="color:#0ea5e9;">Network Topology You'll Build</h4>
-      <svg width="420" height="200" viewbox="0 0 420 200" class="mx-auto"><!-- Internet Cloud --> <ellipse cx="210" cy="30" rx="50" ry="20" fill="#334155" stroke="#64748b" /> <text x="210" y="34" text-anchor="middle" fill="#94a3b8" font-size="11">
-        ☁ Internet
-       </text> <!-- Line to Router --> <line x1="210" y1="50" x2="210" y2="80" stroke="#0ea5e9" stroke-width="2" /> <!-- Wireless Router --> <rect x="175" y="80" width="70" height="40" rx="8" fill="#0ea5e9" /> <text x="210" y="97" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="bold">
-        Wireless
-       </text> <text x="210" y="110" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="bold">
-        Router
-       </text> <!-- Signal waves --> <path d="M175 100 Q150 85 140 100" fill="none" stroke="#0ea5e9" stroke-width="1" opacity="0.4" /> <path d="M165 100 Q135 80 120 100" fill="none" stroke="#0ea5e9" stroke-width="1" opacity="0.25" /> <path d="M245 100 Q270 85 280 100" fill="none" stroke="#0ea5e9" stroke-width="1" opacity="0.4" /> <path d="M255 100 Q285 80 300 100" fill="none" stroke="#0ea5e9" stroke-width="1" opacity="0.25" /> <!-- Laptop 1 --> <rect x="50" y="150" width="60" height="35" rx="4" fill="#334155" stroke="#64748b" /> <text x="80" y="172" text-anchor="middle" fill="#cbd5e1" font-size="9">
-        💻 Laptop0
-       </text> <line x1="110" y1="165" x2="175" y2="110" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="5" opacity="0.5" /> <!-- Laptop 2 --> <rect x="310" y="150" width="60" height="35" rx="4" fill="#334155" stroke="#64748b" /> <text x="340" y="172" text-anchor="middle" fill="#cbd5e1" font-size="9">
-        📱 Tablet0
-       </text> <line x1="310" y1="165" x2="245" y2="110" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="5" opacity="0.5" /> <!-- Labels --> <text x="210" y="190" text-anchor="middle" fill="#64748b" font-size="9">
-        SSID: BrewByte_WiFi | Security: WPA2-PSK | Password: CafeWiFi2024
-       </text>
-      </svg>
-     </div><!-- Steps -->
-     <div class="space-y-4" id="pt-steps">
-      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#0ea5e9; border-left-color:#0ea5e9;">
-       <div class="flex items-center gap-3 mb-3"><span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#0ea5e9; color:#0f172a;">1</span>
-        <h4 class="font-display font-bold" style="color:#f1f5f9;">Open Packet Tracer &amp; Add Devices</h4>
-       </div>
-       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
-        <li>1. Open Cisco Packet Tracer and create a <strong>new blank project</strong></li>
-        <li>2. From the bottom panel, click <strong>Network Devices → Wireless Devices</strong></li>
-        <li>3. Drag a <strong>WRT300N</strong> (Wireless Router) to the workspace</li>
-        <li>4. From <strong>End Devices</strong>, drag a <strong>Laptop</strong> and a <strong>Tablet (or second Laptop)</strong></li>
-       </ol>
-       <div class="mt-3 ml-11 p-3 rounded-lg text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#94a3b8;">
-        💡 <strong>Tip:</strong> The WRT300N is a home/small-office wireless router — perfect for our café scenario!
-       </div>
-      </div>
-      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#0ea5e9;">
-       <div class="flex items-center gap-3 mb-3"><span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#0ea5e9; color:#0f172a;">2</span>
-        <h4 class="font-display font-bold" style="color:#f1f5f9;">Configure the Wireless Router</h4>
-       </div>
-       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
-        <li>1. <strong>Click on the Wireless Router</strong> (WRT300N) to open its config</li>
-        <li>2. Go to the <strong>GUI tab</strong> (this simulates the router's web interface)</li>
-        <li>3. Under <strong>Setup → Basic Setup</strong>: 
-         <ul class="ml-4 mt-1 space-y-1" style="color:#94a3b8;">
-          <li>• Leave Internet Connection Type as <strong>Automatic Configuration - DHCP</strong></li>
-          <li>• Router IP: <strong>192.168.0.1</strong> (default)</li>
-          <li>• DHCP Server: <strong>Enabled</strong></li>
-          <li>• Start IP: <strong>192.168.0.100</strong></li>
-          <li>• Maximum Users: <strong>50</strong></li>
-         </ul></li>
-        <li>4. Click <strong>Save Settings</strong></li>
-       </ol>
-      </div>
-      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#f59e0b;">
-       <div class="flex items-center gap-3 mb-3"><span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#f59e0b; color:#0f172a;">3</span>
-        <h4 class="font-display font-bold" style="color:#f1f5f9;">Set the SSID (Network Name)</h4>
-       </div>
-       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
-        <li>1. In the router GUI, go to <strong>Wireless → Basic Wireless Settings</strong></li>
-        <li>2. Change the <strong>Network Name (SSID)</strong> from "Default" to:</li>
-       </ol>
-       <div class="ml-11 my-3 p-3 rounded-lg font-display text-center text-lg font-bold tracking-wide" style="background:#0f172a; color:#0ea5e9; border:1px dashed #0ea5e9;">
-        BrewByte_WiFi
-       </div>
-       <ol start="3" class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
-        <li>3. Set the <strong>Channel</strong> to <strong>6 - 2.437 GHz</strong></li>
-        <li>4. Click <strong>Save Settings</strong></li>
-       </ol>
-       <div class="mt-3 ml-11 p-3 rounded-lg text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#94a3b8;">
-        💡 <strong>Why Channel 6?</strong> Channels 1, 6, and 11 don't overlap with each other in 2.4 GHz. Channel 6 is a safe middle choice.
-       </div>
-      </div>
-      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#ef4444;">
-       <div class="flex items-center gap-3 mb-3"><span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#ef4444; color:#fff;">4</span>
-        <h4 class="font-display font-bold" style="color:#f1f5f9;">Configure Wireless Security (WPA2)</h4>
-       </div>
-       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
-        <li>1. Go to <strong>Wireless → Wireless Security</strong></li>
-        <li>2. Set <strong>Security Mode</strong> to: <strong style="color:#0ea5e9;">WPA2 Personal</strong></li>
-        <li>3. Set <strong>Encryption</strong> to: <strong>AES</strong></li>
-        <li>4. Set the <strong>Passphrase</strong> to:</li>
-       </ol>
-       <div class="ml-11 my-3 p-3 rounded-lg font-display text-center text-lg font-bold tracking-wide" style="background:#0f172a; color:#ef4444; border:1px dashed #ef4444;">
-        CafeWiFi2024
-       </div>
-       <ol start="5" class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
-        <li>5. Click <strong>Save Settings</strong></li>
-       </ol>
-       <div class="mt-3 ml-11 p-3 rounded-lg text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#94a3b8;">
-        🔐 <strong>Important:</strong> WPA2-Personal (PSK) means everyone shares the same password. For a small café, this is appropriate. Enterprises use WPA2-Enterprise with individual logins.
-       </div>
-      </div>
-      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#10b981;">
-       <div class="flex items-center gap-3 mb-3"><span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#10b981; color:#0f172a;">5</span>
-        <h4 class="font-display font-bold" style="color:#f1f5f9;">Prepare the Laptop for Wireless</h4>
-       </div>
-       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
-        <li>1. <strong>Click on the Laptop</strong> → go to the <strong>Physical tab</strong></li>
-        <li>2. <strong>Power off</strong> the laptop (click the power button)</li>
-        <li>3. Remove the <strong>Ethernet module</strong> (drag it out from the side panel)</li>
-        <li>4. Drag the <strong>WPC300N</strong> wireless module into the empty slot</li>
-        <li>5. <strong>Power on</strong> the laptop</li>
-       </ol>
-       <div class="mt-3 ml-11 p-3 rounded-lg text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#94a3b8;">
-        💡 <strong>Why swap modules?</strong> By default, Packet Tracer laptops have an Ethernet (wired) module. We need to replace it with a wireless card (WPC300N) to connect via Wi-Fi.
-       </div>
-      </div>
-      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#8b5cf6;">
-       <div class="flex items-center gap-3 mb-3"><span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#8b5cf6; color:#fff;">6</span>
-        <h4 class="font-display font-bold" style="color:#f1f5f9;">Connect the Laptop to Wi-Fi</h4>
-       </div>
-       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
-        <li>1. On the Laptop, go to the <strong>Desktop tab</strong></li>
-        <li>2. Click <strong>PC Wireless</strong></li>
-        <li>3. Go to the <strong>Connect tab</strong> → click <strong>Refresh</strong></li>
-        <li>4. You should see <strong style="color:#0ea5e9;">BrewByte_WiFi</strong> in the list</li>
-        <li>5. Select it and click <strong>Connect</strong></li>
-        <li>6. When prompted, enter the password: <strong style="color:#ef4444;">CafeWiFi2024</strong></li>
-        <li>7. Click <strong>Connect</strong></li>
-       </ol>
-       <div class="mt-3 ml-11 p-3 rounded-lg text-xs flex items-center gap-2" style="background:#10b981; color:#0f172a;"><span class="blink">🟢</span> <strong>Success!</strong> You should see a green dot or "Connected" status. The laptop now has Wi-Fi!
-       </div>
-      </div>
-      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#0ea5e9;">
-       <div class="flex items-center gap-3 mb-3"><span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#0ea5e9; color:#0f172a;">7</span>
-        <h4 class="font-display font-bold" style="color:#f1f5f9;">Verify the Connection</h4>
-       </div>
-       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
-        <li>1. On the Laptop, go to <strong>Desktop → Command Prompt</strong></li>
-        <li>2. Type: <code class="px-2 py-1 rounded text-xs font-display" style="background:#0f172a; color:#0ea5e9;">ipconfig</code></li>
-        <li>3. Verify you see an IP address like <strong>192.168.0.100</strong> (assigned by DHCP)</li>
-        <li>4. Type: <code class="px-2 py-1 rounded text-xs font-display" style="background:#0f172a; color:#0ea5e9;">ping 192.168.0.1</code></li>
-        <li>5. You should receive <strong>replies</strong> — this means you can reach the router!</li>
-       </ol>
-       <div class="mt-3 ml-11 p-4 rounded-lg font-display text-xs" style="background:#0f172a; border:1px solid #1e3a5f; color:#10b981;">
-        <div>
-         C:\&gt; <span style="color:#0ea5e9;">ping 192.168.0.1</span>
-        </div>
-        <div class="mt-1">
-         Reply from 192.168.0.1: bytes=32 time&lt;1ms TTL=64
+      <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--secondary);color:var(--bg);">
+         C
         </div>
         <div>
-         Reply from 192.168.0.1: bytes=32 time&lt;1ms TTL=64
+         <p class="font-heading text-sm">Create ACLs (Access Control Lists)</p>
+         <p class="text-xs opacity-70 mt-1 leading-relaxed">Write and apply ACLs that enforce these rules:</p>
+         <div class="mt-2 space-y-2">
+          <div class="flex items-center gap-2 text-xs">
+           <span style="color:#ff6363;">❌</span><span class="opacity-80">Visitors CANNOT access Management network</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+           <span style="color:#ff6363;">❌</span><span class="opacity-80">Visitors CANNOT access Development network</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+           <span style="color:var(--primary);">✅</span><span class="opacity-80">Management CAN access Development</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+           <span style="color:var(--primary);">✅</span><span class="opacity-80">Development CAN access Management</span>
+          </div>
+         </div>
+         <p class="text-xs mt-2 opacity-50">📊 Points: 20</p>
+        </div>
+       </div>
+      </div>
+      <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 font-heading text-sm" style="background:var(--secondary);color:var(--bg);">
+         D
         </div>
         <div>
-         Reply from 192.168.0.1: bytes=32 time&lt;1ms TTL=64
+         <p class="font-heading text-sm">Test and Document</p>
+         <p class="text-xs opacity-70 mt-1 leading-relaxed">Take screenshots of these ping tests and paste into a Word document:</p>
+         <div class="mt-2 space-y-2">
+          <div class="flex items-center gap-2 text-xs">
+           <span style="color:var(--primary);">✅</span><span class="opacity-80">Management PC → Development PC (should SUCCEED)</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+           <span style="color:#ff6363;">❌</span><span class="opacity-80">Visitor Laptop → Management PC (should FAIL)</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+           <span style="color:#ff6363;">❌</span><span class="opacity-80">Visitor Laptop → Development PC (should FAIL)</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+           <span style="color:var(--primary);">✅</span><span class="opacity-80">Router login prompt shows banner and requires password</span>
+          </div>
+         </div>
+         <p class="text-xs mt-2 opacity-50">📊 Points: 10</p>
         </div>
-        <div class="mt-1" style="color:#94a3b8;">
-         Ping statistics: Sent = 4, Received = 4, Lost = 0 ✅
-        </div>
        </div>
       </div>
-      <div class="step-card rounded-lg p-5" style="background:#1e293b; border-color:#10b981;">
-       <div class="flex items-center gap-3 mb-3"><span class="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm" style="background:#10b981; color:#0f172a;">8</span>
-        <h4 class="font-display font-bold" style="color:#f1f5f9;">Repeat for the Tablet/Second Device</h4>
-       </div>
-       <ol class="space-y-2 text-sm ml-11" style="color:#cbd5e1;">
-        <li>1. Repeat steps 5-7 for the <strong>Tablet</strong> (or second laptop)</li>
-        <li>2. After connecting both, <strong>ping between the two devices</strong> to confirm they're on the same network</li>
-        <li>3. From Laptop: <code class="px-2 py-1 rounded text-xs font-display" style="background:#0f172a; color:#0ea5e9;">ping 192.168.0.101</code> (the Tablet's IP)</li>
-       </ol>
-      </div>
-     </div>
-     <div class="text-center pt-8 flex justify-center gap-4"><button onclick="switchTab(0)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#334155; color:#cbd5e1;"> ← Back to Lesson </button> <button onclick="switchTab(2)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#0ea5e9; color:#0f172a;"> Next: Student Activity → </button>
-     </div>
-    </section><!-- TAB 2: STUDENT ACTIVITY -->
-    <section id="tab-2" class="tab-content fade-in hidden">
-     <div class="scenario-box rounded-xl p-6 mb-8" style="background:#1e293b; border:1px solid #1e3a5f;">
-      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#8b5cf6,#ec4899);"></div>
-      <div class="flex items-start gap-4">
-       <div class="text-4xl">
-        🎯
-       </div>
-       <div>
-        <h3 class="font-display font-bold text-lg mb-2" style="color:#f1f5f9;">Student Activity: Campus Library Wi-Fi Setup</h3>
-        <p class="leading-relaxed" style="color:#cbd5e1;">Your university library wants to set up a new Wi-Fi network for students. You've been hired as the IT student assistant to configure it. Follow the requirements below and build the network in Packet Tracer — <strong>on your own</strong>.</p>
-       </div>
-      </div>
-     </div><!-- Requirements -->
-     <div class="rounded-xl p-6 mb-6" style="background:#1e293b; border:1px solid #1e3a5f;">
-      <h4 class="font-display font-bold text-base mb-4 flex items-center gap-2" style="color:#8b5cf6;"><i data-lucide="list-checks" style="width:18px;height:18px;"></i> Network Requirements</h4>
-      <div class="overflow-x-auto rounded-lg" style="border:1px solid #1e3a5f;">
-       <table class="w-full text-sm">
-        <thead style="background:#0f172a;">
-         <tr>
-          <th class="text-left font-display text-xs tracking-wider" style="color:#8b5cf6;">Setting</th>
-          <th class="text-left font-display text-xs tracking-wider" style="color:#8b5cf6;">Value</th>
+     </div><!-- RUBRIC -->
+     <div class="rounded-xl overflow-hidden card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm p-4 pb-2" style="color:var(--primary);">📊 Grading Rubric (Total: 60 pts)</p>
+      <div class="overflow-x-auto">
+       <table class="w-full text-xs">
+        <thead>
+         <tr style="background:rgba(99,255,182,0.08);">
+          <th class="text-left p-3 font-heading">Criteria</th>
+          <th class="text-center p-3 font-heading">Points</th>
          </tr>
         </thead>
-        <tbody style="color:#cbd5e1;">
-         <tr style="border-top:1px solid #1e3a5f;">
-          <td class="font-semibold">SSID</td>
-          <td><code style="color:#0ea5e9;">LibraryNet_2024</code></td>
+        <tbody>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Correct topology and IP addressing</td>
+          <td class="text-center p-3">15</td>
          </tr>
-         <tr style="border-top:1px solid #1e3a5f; background:#0f172a40;">
-          <td class="font-semibold">Security Mode</td>
-          <td>WPA2 Personal</td>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Router secured (passwords + encryption + banner)</td>
+          <td class="text-center p-3">15</td>
          </tr>
-         <tr style="border-top:1px solid #1e3a5f;">
-          <td class="font-semibold">Encryption</td>
-          <td>AES</td>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">ACLs correctly implemented and applied</td>
+          <td class="text-center p-3">20</td>
          </tr>
-         <tr style="border-top:1px solid #1e3a5f; background:#0f172a40;">
-          <td class="font-semibold">Password</td>
-          <td><code style="color:#ef4444;">ReadBooks@2024</code></td>
+         <tr class="border-t" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3">Testing documentation with screenshots</td>
+          <td class="text-center p-3">10</td>
          </tr>
-         <tr style="border-top:1px solid #1e3a5f;">
-          <td class="font-semibold">Router IP</td>
-          <td>192.168.1.1</td>
-         </tr>
-         <tr style="border-top:1px solid #1e3a5f; background:#0f172a40;">
-          <td class="font-semibold">DHCP Range</td>
-          <td>192.168.1.100 - 192.168.1.200</td>
-         </tr>
-         <tr style="border-top:1px solid #1e3a5f;">
-          <td class="font-semibold">Channel</td>
-          <td>11</td>
-         </tr>
-         <tr style="border-top:1px solid #1e3a5f; background:#0f172a40;">
-          <td class="font-semibold">Devices to Connect</td>
-          <td>3 laptops (wirelessly)</td>
+         <tr class="border-t font-semibold" style="border-color:rgba(255,255,255,0.06);">
+          <td class="p-3" style="color:var(--primary);">TOTAL</td>
+          <td class="text-center p-3" style="color:var(--primary);">60</td>
          </tr>
         </tbody>
        </table>
       </div>
-     </div><!-- Tasks Checklist -->
-     <div class="rounded-xl p-6 mb-6" style="background:#1e293b; border:1px solid #1e3a5f;">
-      <h4 class="font-display font-bold text-base mb-4 flex items-center gap-2" style="color:#8b5cf6;"><i data-lucide="check-square" style="width:18px;height:18px;"></i> Task Checklist</h4>
-      <p class="text-sm mb-4" style="color:#94a3b8;">Check off each task as you complete it:</p>
-      <div class="space-y-3" id="checklist"><label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 1:</strong> Place a WRT300N wireless router and 3 laptops in the workspace</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 2:</strong> Configure the router's SSID to <code style="color:#0ea5e9;">LibraryNet_2024</code> and set channel to 11</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 3:</strong> Set security to WPA2 Personal with AES encryption and the given password</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 4:</strong> Configure DHCP with starting IP 192.168.1.100 and max 100 users</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 5:</strong> Replace the Ethernet module in each laptop with a WPC300N wireless module</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 6:</strong> Connect all 3 laptops to <code style="color:#0ea5e9;">LibraryNet_2024</code> using the password</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 7:</strong> Use <code>ipconfig</code> on each laptop to verify they received an IP via DHCP</span> </label> <label class="checklist-item flex items-start gap-3 p-3 rounded-lg cursor-pointer" style="background:#0f172a; border:1px solid #1e3a5f;"> <input type="checkbox" class="mt-1 w-4 h-4 rounded" style="accent-color:#8b5cf6;" onchange="updateProgress()"> <span class="text-sm" style="color:#cbd5e1;"><strong>Task 8:</strong> Ping from Laptop0 to Laptop1 and Laptop2 — all pings should succeed</span> </label>
-      </div>
-      <div class="mt-4 flex items-center gap-3">
-       <div class="flex-1 h-3 rounded-full overflow-hidden" style="background:#0f172a;">
-        <div id="checklist-bar" class="h-full rounded-full progress-fill" style="background:#8b5cf6; width:0%;"></div>
-       </div><span id="checklist-pct" class="font-display text-sm font-bold" style="color:#8b5cf6;">0%</span>
-      </div>
-     </div><!-- Bonus Challenge -->
-     <div class="rounded-xl p-6 mb-6" style="background:linear-gradient(135deg, #1e1b4b 0%, #1e293b 100%); border:1px solid #4c1d95;">
-      <h4 class="font-display font-bold text-base mb-3 flex items-center gap-2" style="color:#c4b5fd;">⭐ Bonus Challenge (Extra Credit)</h4>
-      <ol class="space-y-2 text-sm" style="color:#cbd5e1;">
-       <li><strong>1.</strong> Add a <strong>second wireless router</strong> (for the library's second floor)</li>
-       <li style="margin-left:1rem; color:#94a3b8;">• SSID: <code style="color:#0ea5e9;">LibraryNet_2F</code> | Channel: <strong>1</strong> (avoid overlap with channel 11)</li>
-       <li><strong>2.</strong> Connect the two routers via an <strong>Ethernet cable</strong> (LAN port to LAN port)</li>
-       <li><strong>3.</strong> Connect a laptop to the second router and <strong>ping a laptop on the first router</strong></li>
-       <li><strong>4.</strong> Take a screenshot of successful pings between floors</li>
-      </ol>
-     </div><!-- Submission Requirements -->
-     <div class="rounded-xl p-6 mb-6" style="background:#1e293b; border:1px solid #1e3a5f;">
-      <h4 class="font-display font-bold text-base mb-3 flex items-center gap-2" style="color:#f59e0b;"><i data-lucide="upload" style="width:18px;height:18px;"></i> What to Submit</h4>
-      <ol class="space-y-2 text-sm" style="color:#cbd5e1;">
-       <li><strong>1.</strong> The Packet Tracer file (<code>.pkt</code>)</li>
-       <li><strong>2.</strong> Screenshot of the router's wireless settings showing SSID and security</li>
-       <li><strong>3.</strong> Screenshot of <code>ipconfig</code> on any connected laptop showing the DHCP-assigned IP</li>
-       <li><strong>4.</strong> Screenshot of a successful <strong>ping</strong> between two wireless laptops</li>
-      </ol>
      </div>
-     <div class="text-center pt-4 flex justify-center gap-4"><button onclick="switchTab(1)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#334155; color:#cbd5e1;"> ← Back to Guide </button> <button onclick="switchTab(3)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#0ea5e9; color:#0f172a;"> Take the Quiz → </button>
-     </div>
-    </section><!-- TAB 3: QUIZ -->
-    <section id="tab-3" class="tab-content fade-in hidden">
-     <div class="scenario-box rounded-xl p-6 mb-8" style="background:#1e293b; border:1px solid #1e3a5f;">
-      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#10b981,#0ea5e9);"></div>
-      <div class="flex items-start gap-4">
-       <div class="text-4xl">
-        🧠
+    </section><!-- ==================== TAB 3: CASE ANALYSIS ==================== -->
+    <section id="tab-content-3" class="hidden anim-in space-y-6">
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-1" style="color:var(--primary);">📊 Case Analysis: The BrewNet Breach</p>
+      <p class="text-xs opacity-70">Read the case study below and answer the analysis questions. Submit as a written document.</p>
+      <div class="flex gap-3 mt-3 flex-wrap"><span class="text-xs px-3 py-1 rounded-full" style="background:rgba(99,255,182,0.12);color:var(--primary);">Groups of 3-4</span> <span class="text-xs px-3 py-1 rounded-full" style="background:rgba(255,182,99,0.12);color:var(--secondary);">30 minutes</span> <span class="text-xs px-3 py-1 rounded-full" style="background:rgba(99,182,255,0.12);color:#63b6ff;">Written Report</span>
+      </div>
+     </div><!-- CASE STUDY -->
+     <div class="scenario-box rounded-r-xl p-5 space-y-4" style="background:var(--surface);">
+      <p class="font-heading text-sm" style="color:var(--secondary);">📖 The Incident Report</p>
+      <p class="text-sm leading-relaxed opacity-90">On March 15, BrewNet Café's manager arrived to find the POS system displaying a ransomware message demanding ₱50,000 in Bitcoin. Here's what the investigation revealed:</p>
+      <div class="space-y-3 text-sm leading-relaxed opacity-85">
+       <div class="rounded-lg p-3" style="background:rgba(255,99,99,0.06);border-left:3px solid #ff6363;">
+        <p class="font-heading text-xs" style="color:#ff6363;">Finding 1: Weak Credentials</p>
+        <p class="text-xs mt-1">The router admin panel was accessible at 192.168.1.1 with username "admin" and password "admin". It had never been changed since installation 2 years ago.</p>
        </div>
-       <div>
-        <h3 class="font-display font-bold text-lg mb-2" style="color:#f1f5f9;">Knowledge Check</h3>
-        <p class="leading-relaxed" style="color:#cbd5e1;">Test your understanding of wireless networking concepts. Click on the correct answer for each question.</p>
+       <div class="rounded-lg p-3" style="background:rgba(255,99,99,0.06);border-left:3px solid #ff6363;">
+        <p class="font-heading text-xs" style="color:#ff6363;">Finding 2: Open Wi-Fi</p>
+        <p class="text-xs mt-1">The café's Wi-Fi had no password. Both customers and staff devices connected to the same network. There was no separation between guest and business traffic.</p>
+       </div>
+       <div class="rounded-lg p-3" style="background:rgba(255,99,99,0.06);border-left:3px solid #ff6363;">
+        <p class="font-heading text-xs" style="color:#ff6363;">Finding 3: Phishing Email</p>
+        <p class="text-xs mt-1">A cashier received an email appearing to be from "Google Security" asking them to verify their account. They clicked the link on the POS computer and entered their password. Logs show the attacker used these credentials to access the router remotely.</p>
+       </div>
+       <div class="rounded-lg p-3" style="background:rgba(255,99,99,0.06);border-left:3px solid #ff6363;">
+        <p class="font-heading text-xs" style="color:#ff6363;">Finding 4: No Backups</p>
+        <p class="text-xs mt-1">The POS database had not been backed up in over 6 months. All recent sales data, inventory records, and customer information were encrypted by the ransomware.</p>
+       </div>
+       <div class="rounded-lg p-3" style="background:rgba(255,99,99,0.06);border-left:3px solid #ff6363;">
+        <p class="font-heading text-xs" style="color:#ff6363;">Finding 5: Outdated Firmware</p>
+        <p class="text-xs mt-1">The router was running firmware from 2021 with 3 known critical vulnerabilities. The POS software hadn't been updated in 8 months.</p>
        </div>
       </div>
+      <div class="rounded-lg p-3 text-xs" style="background:rgba(0,0,0,0.2);">
+       <p class="font-heading" style="color:var(--secondary);">💰 Total Damage</p>
+       <p class="opacity-70 mt-1">₱50,000 ransom (unpaid) + ₱60,000 lost revenue (2 days closed) + ₱40,000 IT recovery costs = <strong style="color:#ff6363;">₱150,000 total loss</strong></p>
+      </div>
+     </div><!-- QUESTIONS -->
+     <div class="rounded-xl p-5 card-glow space-y-5" style="background:var(--surface);">
+      <p class="font-heading text-sm" style="color:var(--primary);">❓ Analysis Questions (Answer all 5)</p>
+      <div class="space-y-4">
+       <div class="rounded-lg p-4" style="background:rgba(99,255,182,0.04);border:1px solid rgba(99,255,182,0.1);">
+        <p class="font-heading text-xs mb-1" style="color:var(--primary);">Question 1 — Identify (10 pts)</p>
+        <p class="text-xs opacity-80">List ALL vulnerabilities present in BrewNet's network before the attack. For each vulnerability, identify which security principle it violates (Confidentiality, Integrity, or Availability from the CIA Triad).</p>
+       </div>
+       <div class="rounded-lg p-4" style="background:rgba(99,255,182,0.04);border:1px solid rgba(99,255,182,0.1);">
+        <p class="font-heading text-xs mb-1" style="color:var(--primary);">Question 2 — Trace the Attack (10 pts)</p>
+        <p class="text-xs opacity-80">Write a step-by-step timeline of how you think the attacker compromised BrewNet's network, from initial entry to ransomware deployment. Use the findings as evidence.</p>
+       </div>
+       <div class="rounded-lg p-4" style="background:rgba(99,255,182,0.04);border:1px solid rgba(99,255,182,0.1);">
+        <p class="font-heading text-xs mb-1" style="color:var(--primary);">Question 3 — Prevent (10 pts)</p>
+        <p class="text-xs opacity-80">For EACH vulnerability you identified in Q1, recommend a specific security control that would have prevented or mitigated the attack. Explain why each control works.</p>
+       </div>
+       <div class="rounded-lg p-4" style="background:rgba(99,255,182,0.04);border:1px solid rgba(99,255,182,0.1);">
+        <p class="font-heading text-xs mb-1" style="color:var(--primary);">Question 4 — Prioritize (5 pts)</p>
+        <p class="text-xs opacity-80">If BrewNet could only implement THREE security controls due to budget constraints, which three would you recommend and why? Rank them by importance.</p>
+       </div>
+       <div class="rounded-lg p-4" style="background:rgba(99,255,182,0.04);border:1px solid rgba(99,255,182,0.1);">
+        <p class="font-heading text-xs mb-1" style="color:var(--primary);">Question 5 — Reflect (5 pts)</p>
+        <p class="text-xs opacity-80">Should BrewNet pay the ransom? Defend your answer with at least 2 reasons. What should they do instead?</p>
+       </div>
+      </div>
+      <div class="rounded-lg p-3 text-xs" style="background:rgba(99,255,182,0.06);border:1px dashed rgba(99,255,182,0.2);">
+       <p class="font-heading" style="color:var(--primary);">📊 Total Case Analysis Points: 40</p>
+      </div>
      </div>
-     <div id="quiz-container" class="space-y-6"></div>
-     <div id="quiz-result" class="hidden rounded-xl p-6 mt-6 text-center" style="background:#1e293b; border:1px solid #1e3a5f;">
-      <div id="quiz-score" class="font-display text-3xl font-bold mb-2" style="color:#0ea5e9;"></div>
-      <p id="quiz-msg" class="text-sm" style="color:#cbd5e1;"></p><button onclick="resetQuiz()" class="mt-4 px-6 py-2 rounded-lg font-semibold text-sm" style="background:#0ea5e9; color:#0f172a;">Try Again</button>
+    </section><!-- ==================== TAB 4: QUIZ ==================== -->
+    <section id="tab-content-4" class="hidden anim-in space-y-6">
+     <div class="rounded-xl p-5 card-glow" style="background:var(--surface);">
+      <p class="font-heading text-sm mb-1" style="color:var(--primary);">✅ Knowledge Check</p>
+      <p class="text-xs opacity-70">Test your understanding! Click an answer to check. Score shown at the bottom.</p>
+      <div class="flex items-center gap-3 mt-3">
+       <div class="text-xs px-3 py-1 rounded-full" style="background:rgba(99,255,182,0.12);color:var(--primary);" id="quiz-score">
+        Score: 0 / 10
+       </div><button onclick="resetQuiz()" class="text-xs px-3 py-1 rounded-full cursor-pointer" style="background:rgba(255,255,255,0.06);color:var(--text);border:1px solid rgba(255,255,255,0.1);">Reset</button>
+      </div>
      </div>
-     <div class="text-center pt-8"><button onclick="switchTab(0)" class="px-6 py-3 rounded-lg font-semibold text-sm" style="background:#334155; color:#cbd5e1;"> ← Back to Lesson </button>
-     </div>
+     <div id="quiz-container" class="space-y-4"></div>
     </section>
-   </main><!-- Footer -->
-   <footer class="w-full py-6 text-center text-xs" style="color:#475569; border-top:1px solid #1e3a5f;">
-    IS103 - IT Infrastructure and Network Technologies | Prof. MKDB | Finals Week 1
+   </main><!-- FOOTER -->
+   <footer class="max-w-5xl mx-auto px-4 py-6 text-center">
+    <p class="text-xs opacity-30 font-heading" id="el-footer">IS103 — IT Infrastructure and Network Technologies | Finals Week 3</p>
    </footer>
   </div>
   <script>
-  // Quiz Data
-  const quizData = [
-    {
-      q: "What does SSID stand for?",
-      opts: ["Secure System ID", "Service Set Identifier", "Signal Strength Indicator Data", "System Security ID"],
-      correct: 1
-    },
-    {
-      q: "Which wireless standard is also known as 'Wi-Fi 5'?",
-      opts: ["802.11n", "802.11g", "802.11ac", "802.11ax"],
-      correct: 2
-    },
-    {
-      q: "What is the main advantage of the 5 GHz band over 2.4 GHz?",
-      opts: ["Longer range", "Better wall penetration", "Faster speeds with less interference", "Lower cost equipment"],
-      correct: 2
-    },
-    {
-      q: "Which security protocol should you NEVER use because it can be cracked in minutes?",
-      opts: ["WPA2", "WPA3", "WEP", "AES"],
-      correct: 2
-    },
-    {
-      q: "In Packet Tracer, what wireless module do you install in a laptop to enable Wi-Fi?",
-      opts: ["WRT300N", "WPC300N", "PT-WIRELESS", "NIC-300"],
-      correct: 1
-    },
-    {
-      q: "Which 2.4 GHz channels do NOT overlap with each other?",
-      opts: ["1, 3, 5", "2, 4, 8", "1, 6, 11", "5, 10, 15"],
-      correct: 2
-    },
-    {
-      q: "What does DHCP do in a wireless network?",
-      opts: ["Encrypts wireless traffic", "Assigns IP addresses automatically", "Boosts signal strength", "Blocks unauthorized users"],
-      correct: 1
-    },
-    {
-      q: "In our café scenario, why did we choose WPA2-Personal instead of WPA2-Enterprise?",
-      opts: ["It's more secure", "It's faster", "Everyone shares the same password (simpler for a café)", "It supports more devices"],
-      correct: 2
-    }
-  ];
+// ---- CONFIG & SDK ----
+const defaultConfig = {
+  background_color: '#0f172a',
+  surface_color: '#1e293b',
+  text_color: '#e2e8f0',
+  primary_color: '#63ffb6',
+  secondary_color: '#ffb663',
+  font_family: 'DM Sans',
+  font_size: 14,
+  course_title: 'IS103 - IT Infrastructure and Network Technologies',
+  professor_name: 'Prof. MKDB',
+  week_label: 'Finals Week 3'
+};
 
-  let quizAnswered = new Array(quizData.length).fill(null);
+function applyConfig(cfg) {
+  const c = { ...defaultConfig, ...cfg };
+  const root = document.getElementById('app');
+  root.style.setProperty('--bg', c.background_color);
+  root.style.setProperty('--surface', c.surface_color);
+  root.style.setProperty('--text', c.text_color);
+  root.style.setProperty('--primary', c.primary_color);
+  root.style.setProperty('--secondary', c.secondary_color);
+  root.style.background = c.background_color;
+  root.style.color = c.text_color;
+  root.style.fontFamily = `${c.font_family}, DM Sans, sans-serif`;
 
-  function buildQuiz() {
-    const container = document.getElementById('quiz-container');
-    container.innerHTML = '';
-    quizData.forEach((item, i) => {
-      const card = document.createElement('div');
-      card.className = 'rounded-xl p-5';
-      card.style.cssText = 'background:#1e293b; border:1px solid #1e3a5f;';
-      card.innerHTML = `
-        <p class="font-display font-bold text-sm mb-3" style="color:#f1f5f9;">
-          <span style="color:#0ea5e9;">${i + 1}.</span> ${item.q}
-        </p>
-        <div class="space-y-2" id="quiz-q-${i}">
-          ${item.opts.map((opt, j) => `
-            <div class="quiz-option rounded-lg p-3 text-sm cursor-pointer" style="background:#0f172a; border:2px solid #1e3a5f; color:#cbd5e1;" data-q="${i}" data-o="${j}" onclick="selectAnswer(${i},${j})">
-              <span class="font-semibold" style="color:#64748b;">${String.fromCharCode(65 + j)}.</span> ${opt}
-            </div>
-          `).join('')}
-        </div>
-      `;
-      container.appendChild(card);
-    });
+  const base = c.font_size || 14;
+  document.querySelectorAll('.font-heading').forEach(el => {
+    if (el.classList.contains('text-lg') || el.classList.contains('text-xl')) return;
+  });
+  root.style.fontSize = base + 'px';
+
+  document.getElementById('el-course').textContent = c.course_title;
+  document.getElementById('el-title').textContent = '🔒 Network Security Principles';
+  document.getElementById('el-prof').textContent = c.professor_name;
+  document.getElementById('el-week').textContent = c.week_label;
+  document.getElementById('el-footer').textContent = `${c.course_title} | ${c.week_label}`;
+
+  // Update tab active color
+  document.querySelectorAll('.tab-active').forEach(t => t.style.borderColor = c.primary_color);
+}
+
+applyConfig(defaultConfig);
+
+if (window.elementSdk) {
+  window.elementSdk.init({
+    defaultConfig,
+    onConfigChange: async (cfg) => applyConfig(cfg),
+    mapToCapabilities: (cfg) => ({
+      recolorables: [
+        { get: () => cfg.background_color || defaultConfig.background_color, set: v => { cfg.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+        { get: () => cfg.surface_color || defaultConfig.surface_color, set: v => { cfg.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+        { get: () => cfg.text_color || defaultConfig.text_color, set: v => { cfg.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+        { get: () => cfg.primary_color || defaultConfig.primary_color, set: v => { cfg.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); } },
+        { get: () => cfg.secondary_color || defaultConfig.secondary_color, set: v => { cfg.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); } },
+      ],
+      borderables: [],
+      fontEditable: { get: () => cfg.font_family || defaultConfig.font_family, set: v => { cfg.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+      fontSizeable: { get: () => cfg.font_size || defaultConfig.font_size, set: v => { cfg.font_size = v; window.elementSdk.setConfig({ font_size: v }); } },
+    }),
+    mapToEditPanelValues: (cfg) => new Map([
+      ['course_title', cfg.course_title || defaultConfig.course_title],
+      ['professor_name', cfg.professor_name || defaultConfig.professor_name],
+      ['week_label', cfg.week_label || defaultConfig.week_label],
+    ])
+  });
+}
+
+// ---- TABS ----
+let activeTab = 0;
+function switchTab(idx) {
+  document.getElementById(`tab-content-${activeTab}`).classList.add('hidden');
+  document.getElementById(`tab-content-${idx}`).classList.remove('hidden');
+  const tabs = document.querySelectorAll('#tab-bar button');
+  tabs[activeTab].className = tabs[activeTab].className.replace('tab-active', 'tab-inactive');
+  tabs[idx].className = tabs[idx].className.replace('tab-inactive', 'tab-active');
+  const cfg = window.elementSdk ? window.elementSdk.config : defaultConfig;
+  tabs[idx].style.borderColor = cfg.primary_color || defaultConfig.primary_color;
+  tabs[activeTab].style.borderColor = 'transparent';
+  activeTab = idx;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ---- QUIZ ----
+const quizData = [
+  { q: "A weakness in a system that can be exploited by a threat is called a:", opts: ["Threat", "Vulnerability", "Risk", "Exploit"], ans: 1 },
+  { q: "Which security control acts as a 'digital bouncer' filtering network traffic?", opts: ["Antivirus", "VPN", "Firewall", "Encryption"], ans: 2 },
+  { q: "What does ACL stand for in network security?", opts: ["Automatic Control Layer", "Access Control List", "Advanced Crypto Lock", "Application Control Log"], ans: 1 },
+  { q: "BrewNet's open Wi-Fi allowed a Man-in-the-Middle attack. Which control would prevent this?", opts: ["Stronger passwords", "WPA2/WPA3 encryption", "Regular backups", "Login banner"], ans: 1 },
+  { q: "The command 'service password-encryption' does what?", opts: ["Locks the router permanently", "Encrypts plaintext passwords in config", "Enables Wi-Fi encryption", "Creates an ACL"], ans: 1 },
+  { q: "Why should guest and staff networks be separated?", opts: ["It's faster", "Guests need different IP addresses", "To prevent unauthorized access to business systems", "It's required by law everywhere"], ans: 2 },
+  { q: "A phishing attack primarily exploits which vulnerability?", opts: ["Outdated firmware", "Weak encryption", "Human error / lack of awareness", "Open ports"], ans: 2 },
+  { q: "Which Packet Tracer command saves the running configuration?", opts: ["save config", "write memory", "copy running-config startup-config", "backup now"], ans: 2 },
+  { q: "The CIA Triad stands for:", opts: ["Control, Internet, Access", "Confidentiality, Integrity, Availability", "Cybersecurity, Infrastructure, Authentication", "Compliance, Identity, Authorization"], ans: 1 },
+  { q: "An employee plugging in a random USB drive found outside could introduce:", opts: ["A firewall", "Malware / Ransomware", "A software update", "Better network speed"], ans: 1 },
+];
+
+let quizScore = 0;
+let answered = new Set();
+
+function buildQuiz() {
+  const c = document.getElementById('quiz-container');
+  c.innerHTML = '';
+  quizData.forEach((item, qi) => {
+    const div = document.createElement('div');
+    div.className = 'rounded-xl p-5 card-glow';
+    div.style.background = 'var(--surface)';
+    div.innerHTML = `
+      <p class="font-heading text-xs opacity-50 mb-1">Question ${qi+1} of ${quizData.length}</p>
+      <p class="text-sm font-semibold mb-3">${item.q}</p>
+      <div class="space-y-2" id="q${qi}-opts">
+        ${item.opts.map((o,oi) => `
+          <button onclick="checkAnswer(${qi},${oi})" class="quiz-option w-full text-left text-xs p-3 rounded-lg border" style="border-color:rgba(255,255,255,0.08);" id="q${qi}-o${oi}">
+            <span class="font-heading mr-2">${String.fromCharCode(65+oi)}.</span>${o}
+          </button>
+        `).join('')}
+      </div>
+      <p class="text-xs mt-2 hidden" id="q${qi}-fb"></p>
+    `;
+    c.appendChild(div);
+  });
+}
+
+function checkAnswer(qi, oi) {
+  if (answered.has(qi)) return;
+  answered.add(qi);
+  const correct = quizData[qi].ans;
+  const fb = document.getElementById(`q${qi}-fb`);
+  const chosen = document.getElementById(`q${qi}-o${oi}`);
+  const correctEl = document.getElementById(`q${qi}-o${correct}`);
+
+  if (oi === correct) {
+    chosen.classList.add('quiz-correct');
+    fb.textContent = '✅ Correct!';
+    fb.style.color = '#63ffb6';
+    quizScore++;
+  } else {
+    chosen.classList.add('quiz-wrong');
+    correctEl.classList.add('quiz-correct');
+    fb.textContent = `❌ Incorrect. The answer is ${String.fromCharCode(65+correct)}.`;
+    fb.style.color = '#ff6363';
   }
+  fb.classList.remove('hidden');
 
-  function selectAnswer(qi, oi) {
-    if (quizAnswered[qi] !== null) return;
-    quizAnswered[qi] = oi;
-    const opts = document.querySelectorAll(`#quiz-q-${qi} .quiz-option`);
-    opts.forEach((el, j) => {
-      el.style.cursor = 'default';
-      if (j === quizData[qi].correct) {
-        el.classList.add('correct');
-        el.innerHTML = el.innerHTML + ' ✅';
-      } else if (j === oi && oi !== quizData[qi].correct) {
-        el.classList.add('incorrect');
-        el.innerHTML = el.innerHTML + ' ❌';
-      }
-    });
-    checkQuizDone();
-  }
+  // Disable all options for this question
+  quizData[qi].opts.forEach((_, i) => {
+    document.getElementById(`q${qi}-o${i}`).style.pointerEvents = 'none';
+  });
 
-  function checkQuizDone() {
-    if (quizAnswered.every(a => a !== null)) {
-      const score = quizAnswered.filter((a, i) => a === quizData[i].correct).length;
-      document.getElementById('quiz-result').classList.remove('hidden');
-      document.getElementById('quiz-score').textContent = `${score} / ${quizData.length}`;
-      const pct = Math.round((score / quizData.length) * 100);
-      let msg = pct >= 88 ? "🎉 Excellent! You've mastered wireless networking!" : pct >= 63 ? "👍 Good job! Review the topics you missed." : "📖 Keep studying! Re-read the lesson and try again.";
-      document.getElementById('quiz-msg').textContent = msg;
-    }
-  }
+  document.getElementById('quiz-score').textContent = `Score: ${quizScore} / ${quizData.length}`;
+}
 
-  function resetQuiz() {
-    quizAnswered = new Array(quizData.length).fill(null);
-    document.getElementById('quiz-result').classList.add('hidden');
-    buildQuiz();
-  }
-
-  // Tabs
-  let currentTab = 0;
-  function switchTab(idx) {
-    currentTab = idx;
-    document.querySelectorAll('.tab-content').forEach((el, i) => {
-      el.classList.toggle('hidden', i !== idx);
-    });
-    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
-      if (i === idx) {
-        btn.classList.add('tab-active');
-        btn.style.color = '#0ea5e9';
-        btn.style.borderColor = '#0ea5e9';
-      } else {
-        btn.classList.remove('tab-active');
-        btn.style.color = '#64748b';
-        btn.style.borderColor = 'transparent';
-      }
-    });
-    updateProgressBar();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function updateProgressBar() {
-    const pct = ((currentTab + 1) / 4) * 100;
-    document.getElementById('progress-bar').style.width = pct + '%';
-  }
-
-  // Checklist
-  function updateProgress() {
-    const checks = document.querySelectorAll('#checklist input[type="checkbox"]');
-    const done = [...checks].filter(c => c.checked).length;
-    const pct = Math.round((done / checks.length) * 100);
-    document.getElementById('checklist-bar').style.width = pct + '%';
-    document.getElementById('checklist-pct').textContent = pct + '%';
-  }
-
-  // Element SDK
-  const defaultConfig = {
-    course_title: 'IS103 - IT Infrastructure and Network Technologies',
-    professor_name: 'Prof. MKDB',
-    week_label: 'Finals Week 1',
-    background_color: '#0f172a',
-    surface_color: '#1e293b',
-    text_color: '#e2e8f0',
-    accent_color: '#0ea5e9',
-    secondary_accent: '#8b5cf6',
-    font_family: 'DM Sans',
-    font_size: 16
-  };
-
-  async function onConfigChange(config) {
-    const c = { ...defaultConfig, ...config };
-    document.getElementById('el-course').textContent = c.course_title;
-    document.getElementById('el-prof').innerHTML = `<i data-lucide="user" style="width:14px;height:14px;"></i> ${c.professor_name}`;
-    document.getElementById('el-week').innerHTML = `<i data-lucide="calendar" style="width:14px;height:14px;"></i> ${c.week_label}`;
-
-    // Colors
-    document.getElementById('app').style.background = c.background_color;
-    document.body.style.background = c.background_color;
-    document.querySelectorAll('.tab-btn.tab-active').forEach(el => { el.style.color = c.accent_color; el.style.borderColor = c.accent_color; });
-
-    // Font
-    const font = c.font_family || defaultConfig.font_family;
-    document.body.style.fontFamily = `${font}, DM Sans, sans-serif`;
-
-    // Font size
-    const base = c.font_size || defaultConfig.font_size;
-    document.body.style.fontSize = base + 'px';
-
-    lucide.createIcons();
-  }
-
-  if (window.elementSdk) {
-    window.elementSdk.init({
-      defaultConfig,
-      onConfigChange,
-      mapToCapabilities: (config) => ({
-        recolorables: [
-          { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
-          { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
-          { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
-          { get: () => config.accent_color || defaultConfig.accent_color, set: (v) => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); } },
-          { get: () => config.secondary_accent || defaultConfig.secondary_accent, set: (v) => { config.secondary_accent = v; window.elementSdk.setConfig({ secondary_accent: v }); } }
-        ],
-        borderables: [],
-        fontEditable: {
-          get: () => config.font_family || defaultConfig.font_family,
-          set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
-        },
-        fontSizeable: {
-          get: () => config.font_size || defaultConfig.font_size,
-          set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
-        }
-      }),
-      mapToEditPanelValues: (config) => new Map([
-        ['course_title', config.course_title || defaultConfig.course_title],
-        ['professor_name', config.professor_name || defaultConfig.professor_name],
-        ['week_label', config.week_label || defaultConfig.week_label]
-      ])
-    });
-  }
-
-  // Init
+function resetQuiz() {
+  quizScore = 0;
+  answered.clear();
+  document.getElementById('quiz-score').textContent = `Score: 0 / ${quizData.length}`;
   buildQuiz();
-  updateProgressBar();
-  lucide.createIcons();
+}
+
+buildQuiz();
+lucide.createIcons();
 </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9eb8e601e38a11d9',t:'MTc3NjA2NjgyMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9eb8f83c639811d9',t:'MTc3NjA2NzU2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
